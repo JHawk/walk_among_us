@@ -31,8 +31,8 @@ THREE.Controls = function ( camera, domElement ) {
   this.rotationVector = new THREE.Vector3( 0, 0, 0 );
 
   this.keydown = function( event ) {
+    var keyHandled = true;
     if ( event.altKey ) {
-      event.preventDefault();
       switch ( event.keyCode ) {
         case 87: /*W*/ self.moveState.rollForward = 1; break;
         case 83: /*S*/ self.moveState.rollBack = 1; break;
@@ -40,10 +40,15 @@ THREE.Controls = function ( camera, domElement ) {
         case 68: /*D*/ self.moveState.turnRight = 1; break;
         case 69: /*E*/ self.moveState.turnUp = 1; break;
         case 81: /*Q*/ self.moveState.turnDown = 1; break;
+        default: keyHandled = false;
       }
-      self.updateRotationVector();
+
+      if (keyHandled)
+      {
+        event.preventDefault(); 
+        self.updateRotationVector();
+      }
     } else {
-      event.preventDefault();
       switch ( event.keyCode ) {
         case 87: /*W*/ self.moveState.forward = 1; break;
         case 83: /*S*/ self.moveState.back = 1; break;
@@ -51,12 +56,20 @@ THREE.Controls = function ( camera, domElement ) {
         case 68: /*D*/ self.moveState.right = 1; break;
         case 69: /*E*/ self.moveState.up = 1; break;
         case 81: /*Q*/ self.moveState.down = 1; break;
+        default: keyHandled = false; 
       }
-      self.updateMovementVector();
+
+      if (keyHandled)
+      {
+        event.preventDefault(); 
+        self.updateMovementVector();
+      }     
     }
   };
 
   this.keyup = function( event ) {
+    var keyHandled = true;
+
     switch( event.keyCode ) {
       case 87: /*W*/ self.moveState.forward = 0; self.moveState.rollForward = 0; break;
       case 83: /*S*/ self.moveState.back = 0; self.moveState.rollBack = 0; break;
@@ -64,10 +77,17 @@ THREE.Controls = function ( camera, domElement ) {
       case 68: /*D*/ self.moveState.right = 0; self.moveState.turnRight = 0; break;
       case 69: /*E*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
       case 81: /*Q*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
+      default: keyHandled = false;
     }
 
-    self.updateMovementVector();
-    self.updateRotationVector();
+
+    if (keyHandled)
+    {
+      event.preventDefault(); 
+      
+      self.updateMovementVector();
+      self.updateRotationVector();
+    }     
   };
 
   this.mousedown = function( event ) {
