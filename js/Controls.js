@@ -140,23 +140,6 @@ THREE.Controls = function ( camera, domElement ) {
     self.camera.rotation.setFromQuaternion( self.camera.quaternion, self.camera.rotation.order );
   };
 
-  this.getContainerDimensions = function() {
-    if ( self.domElement != document ) {
-
-      return {
-        size  : [ self.domElement.offsetWidth, self.domElement.offsetHeight ],
-        offset  : [ self.domElement.offsetLeft,  self.domElement.offsetTop ]
-      };
-
-    } else {
-
-      return {
-        size  : [ window.innerWidth, window.innerHeight ],
-        offset  : [ 0, 0 ]
-      };
-    }
-  };
-
   this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 
   this.domElement.addEventListener( 'mousemove', self.mousemove, false );
