@@ -1,4 +1,5 @@
 THREE.Controls = function ( camera, domElement ) {
+  var self = this;
 
   this.camera = camera;
 
@@ -7,7 +8,6 @@ THREE.Controls = function ( camera, domElement ) {
 
   this.movementSpeed = 1.0;
   this.rollSpeed = 0.005;
-  this.autoForward = false;
   this.tmpQuaternion = new THREE.Quaternion();
   this.mouseStatus = 0;
 
@@ -17,27 +17,11 @@ THREE.Controls = function ( camera, domElement ) {
     left: 0, 
     right: 0, 
     forward: 0, 
-    back: 0, 
-    pitchUp: 0, 
-    pitchDown: 0, 
-    yawLeft: 0, 
-    yawRight: 0, 
-    rollLeft: 0, 
-    rollRight: 0 
+    back: 0 
   };
 
   this.moveVector = new THREE.Vector3( 0, 0, 0 );
   this.rotationVector = new THREE.Vector3( 0, 0, 0 );
-
-  this.handleEvent = function ( event ) {
-
-    if ( typeof this[ event.type ] == 'function' ) {
-
-      this[ event.type ]( event );
-
-    }
-
-  };
 
   this.keydown = function( event ) {
     if ( event.altKey ) {
@@ -47,63 +31,57 @@ THREE.Controls = function ( camera, domElement ) {
     // event.preventDefault();
 
     switch ( event.keyCode ) {
-      case 87: /*W*/ this.moveState.forward = 1; break;
-      case 83: /*S*/ this.moveState.back = 1; break;
-      case 65: /*A*/ this.moveState.left = 1; break;
-      case 68: /*D*/ this.moveState.right = 1; break;
-      case 82: /*R*/ this.moveState.up = 1; break;
-      case 70: /*F*/ this.moveState.down = 1; break;
+      case 87: /*W*/ self.moveState.forward = 1; break;
+      case 83: /*S*/ self.moveState.back = 1; break;
+      case 65: /*A*/ self.moveState.left = 1; break;
+      case 68: /*D*/ self.moveState.right = 1; break;
+
+      case 82: /*R*/ self.moveState.up = 1; break;
+      case 70: /*F*/ self.moveState.down = 1; break;
+
+      case 38: /*up*/ self.moveState.forward = 1; break;
+      case 40: /*down*/ self.moveState.back = 1; break;
+      case 37: /*left*/ self.moveState.left = 1; break;
+      case 39: /*right*/ self.moveState.right = 1; break;
     }
 
-    this.updateMovementVector();
-    this.updateRotationVector();
+    self.updateMovementVector();
   };
 
   this.keyup = function( event ) {
 
     switch( event.keyCode ) {
-      case 87: /*W*/ this.moveState.forward = 0; break;
-      case 83: /*S*/ this.moveState.back = 0; break;
-      case 65: /*A*/ this.moveState.left = 0; break;
-      case 68: /*D*/ this.moveState.right = 0; break;
-      case 82: /*R*/ this.moveState.up = 0; break;
-      case 70: /*F*/ this.moveState.down = 0; break;
+      case 87: /*W*/ self.moveState.forward = 0; break;
+      case 83: /*S*/ self.moveState.back = 0; break;
+      case 65: /*A*/ self.moveState.left = 0; break;
+      case 68: /*D*/ self.moveState.right = 0; break;
+     
+      case 82: /*R*/ self.moveState.up = 0; break;
+      case 70: /*F*/ self.moveState.down = 0; break;
+
+      case 38: /*up*/ self.moveState.forward = 0; break;
+      case 40: /*down*/ self.moveState.back = 0; break;
+      case 37: /*left*/ self.moveState.left = 0; break;
+      case 39: /*right*/ self.moveState.right = 0; break;
     }
 
-    this.updateMovementVector();
-    this.updateRotationVector();
+    self.updateMovementVector();
   };
 
   this.mousedown = function( event ) {
-
-
-    if ( this.domElement !== document ) {
-      this.domElement.focus();
+    if ( self.domElement !== document ) {
+      self.domElement.focus();
     }
 
     event.preventDefault();
     event.stopPropagation();
 
     switch ( event.button ) {
-      case 0: /*Left*/ this.moveState.forward = 1; break;
-      case 2: /*Right*/ this.moveState.back = 1; break;
+      case 0: /*Left*/ self.moveState.forward = 1; break;
+      case 2: /*Right*/ self.moveState.back = 1; break;
     }
 
-    this.updateMovementVector();
-  };
-
-  this.mousemove = function( event ) {
-    if ( this.mouseStatus > 0 ) {
-
-      var container = this.getContainerDimensions();
-      var halfWidth  = container.size[ 0 ] / 2;
-      var halfHeight = container.size[ 1 ] / 2;
-
-      this.moveState.yawLeft   = - ( ( event.pageX - container.offset[ 0 ] ) - halfWidth  ) / halfWidth;
-      this.moveState.pitchDown =   ( ( event.pageY - container.offset[ 1 ] ) - halfHeight ) / halfHeight;
-
-      this.updateRotationVector();
-    }
+    self.updateMovementVector();
   };
 
   this.mouseup = function( event ) {
@@ -113,39 +91,40 @@ THREE.Controls = function ( camera, domElement ) {
 
     switch ( event.button ) {
 
-      case 0: /*Left*/ this.moveState.forward = 0; break;
-      case 2: /*Right*/ this.moveState.back = 0; break;
+      case 0: /*Left*/ self.moveState.forward = 0; break;
+      case 2: /*Right*/ self.moveState.back = 0; break;
     }
 
-    this.updateMovementVector();
-    this.updateRotationVector();
+    self.updateMovementVector();
   };
 
-  this.update = function( delta ) {
+  this.mousemove = function( event ) {
+    if ( self.mouseStatus > 0 ) {
+      // mouse move events
+    }
+  };
 
-    var moveMult = delta * this.movementSpeed;
-    var rotMult = delta * this.rollSpeed;
+  this.update = function() {
 
-    this.camera.translateX( this.moveVector.x * moveMult );
-    this.camera.translateY( this.moveVector.y * moveMult );
-    this.camera.translateZ( this.moveVector.z * moveMult );
+    var moveMult = self.movementSpeed;
+    var rotMult = self.rollSpeed;
 
-    this.tmpQuaternion.set( this.rotationVector.x * rotMult, this.rotationVector.y * rotMult, this.rotationVector.z * rotMult, 1 ).normalize();
-    this.camera.quaternion.multiply( this.tmpQuaternion );
+    self.camera.translateX( self.moveVector.x * moveMult );
+    self.camera.translateY( self.moveVector.y * moveMult );
+    self.camera.translateZ( self.moveVector.z * moveMult );
 
-    this.camera.rotation.setFromQuaternion( this.camera.quaternion, this.camera.rotation.order );
+    self.tmpQuaternion.set( self.rotationVector.x * rotMult, self.rotationVector.y * rotMult, self.rotationVector.z * rotMult, 1 ).normalize();
+    self.camera.quaternion.multiply( self.tmpQuaternion );
+
+    self.camera.rotation.setFromQuaternion( self.camera.quaternion, self.camera.rotation.order );
   };
 
   this.updateMovementVector = function() {
+    self.moveVector.x = ( -self.moveState.left    + self.moveState.right );
+    self.moveVector.y = ( -self.moveState.down    + self.moveState.up );
+    self.moveVector.z = ( -self.moveState.forward + self.moveState.back );
 
-    var forward = ( this.moveState.forward || ( this.autoForward && !this.moveState.back ) ) ? 1 : 0;
-
-    this.moveVector.x = ( -this.moveState.left    + this.moveState.right );
-    this.moveVector.y = ( -this.moveState.down    + this.moveState.up );
-    this.moveVector.z = ( -forward + this.moveState.back );
-
-    //console.log( 'move:', [ this.moveVector.x, this.moveVector.y, this.moveVector.z ] );
-    
+    console.log( 'move:', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
   };
 
   this.updateRotationVector = function() {
@@ -154,17 +133,16 @@ THREE.Controls = function ( camera, domElement ) {
     // this.rotationVector.y = ( -this.moveState.yawRight  + this.moveState.yawLeft );
     // this.rotationVector.z = ( -this.moveState.rollRight + this.moveState.rollLeft );
 
-    //console.log( 'rotate:', [ this.rotationVector.x, this.rotationVector.y, this.rotationVector.z ] );
+    console.log( 'rotate:', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
     
   };
 
   this.getContainerDimensions = function() {
-
-    if ( this.domElement != document ) {
+    if ( self.domElement != document ) {
 
       return {
-        size  : [ this.domElement.offsetWidth, this.domElement.offsetHeight ],
-        offset  : [ this.domElement.offsetLeft,  this.domElement.offsetTop ]
+        size  : [ self.domElement.offsetWidth, self.domElement.offsetHeight ],
+        offset  : [ self.domElement.offsetLeft,  self.domElement.offsetTop ]
       };
 
     } else {
@@ -173,29 +151,17 @@ THREE.Controls = function ( camera, domElement ) {
         size  : [ window.innerWidth, window.innerHeight ],
         offset  : [ 0, 0 ]
       };
-
     }
-
-  };
-
-  function bind( scope, fn ) {
-
-    return function () {
-
-      fn.apply( scope, arguments );
-
-    };
-
   };
 
   this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 
-  this.domElement.addEventListener( 'mousemove', bind( this, this.mousemove ), false );
-  this.domElement.addEventListener( 'mousedown', bind( this, this.mousedown ), false );
-  this.domElement.addEventListener( 'mouseup',   bind( this, this.mouseup ), false );
+  this.domElement.addEventListener( 'mousemove', self.mousemove, false );
+  this.domElement.addEventListener( 'mousedown', self.mousedown, false );
+  this.domElement.addEventListener( 'mouseup',   self.mouseup, false );
 
-  this.domElement.addEventListener( 'keydown', bind( this, this.keydown ), false );
-  this.domElement.addEventListener( 'keyup',   bind( this, this.keyup ), false );
+  this.domElement.addEventListener( 'keydown', self.keydown, false );
+  this.domElement.addEventListener( 'keyup',   self.keyup, false );
 
   this.updateMovementVector();
   this.updateRotationVector();

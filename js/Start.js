@@ -53,27 +53,25 @@ function start() {
   var degree_45 = 45 * degree;
 
   camera.position.z = 5;
-  camera.rotateY(-degree_45);
-  camera.rotateX(degree_45);
-  camera.rotateZ(-degree_45);
+  // camera.rotateY(-degree_45);
+  // camera.rotateX(degree_45);
+  // camera.rotateZ(-degree_45);
+
+
+  // camera.rotate.y = -45 * Math.PI / 180
+  // camera.rotate.x = 45 * Math.PI / 180
+  // camera.rotate.z = -45 * Math.PI / 180
 
   new SetupStats();
 
   var controls;
-
-  // In the init() function :
   controls = new THREE.Controls( camera );
-  // controls.addEventListener( 'change', render );
-
-  // // In the animate() function, before the call to render() :
-  // controls.update();
-
-  // Camera.orthoCamera.rotateOnAxis(X_AXIS, -90 * TO_RADIANS);
 
   function render() {
     requestAnimationFrame(render);
-    controls.update(1);
+    controls.update();
     renderer.render(scene, camera);
   }
+
   render();
 }
