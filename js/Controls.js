@@ -17,55 +17,57 @@ THREE.Controls = function ( camera, domElement ) {
     left: 0, 
     right: 0, 
     forward: 0, 
-    back: 0 
-  };
+    back: 0, 
 
+    turnUp: 0, 
+    turnDown: 0, 
+    turnLeft: 0, 
+    turnRight: 0, 
+    rollForward: 0, 
+    rollBack: 0 
+  };
+  
   this.moveVector = new THREE.Vector3( 0, 0, 0 );
   this.rotationVector = new THREE.Vector3( 0, 0, 0 );
 
   this.keydown = function( event ) {
     if ( event.altKey ) {
-      return;
+      event.preventDefault();
+      switch ( event.keyCode ) {
+        case 87: /*W*/ self.moveState.rollForward = 1; break;
+        case 83: /*S*/ self.moveState.rollBack = 1; break;
+        case 65: /*A*/ self.moveState.turnLeft = 1; break;
+        case 68: /*D*/ self.moveState.turnRight = 1; break;
+        case 82: /*R*/ self.moveState.turnUp = 1; break;
+        case 70: /*F*/ self.moveState.turnDown = 1; break;
+      }
+      self.updateRotationVector();
+    } else {
+      event.preventDefault();
+      switch ( event.keyCode ) {
+        case 87: /*W*/ self.moveState.forward = 1; break;
+        case 83: /*S*/ self.moveState.back = 1; break;
+        case 65: /*A*/ self.moveState.left = 1; break;
+        case 68: /*D*/ self.moveState.right = 1; break;
+        case 82: /*R*/ self.moveState.up = 1; break;
+        case 70: /*F*/ self.moveState.down = 1; break;
+      }
+      self.updateMovementVector();
     }
-
-    // event.preventDefault();
-
-    switch ( event.keyCode ) {
-      case 87: /*W*/ self.moveState.forward = 1; break;
-      case 83: /*S*/ self.moveState.back = 1; break;
-      case 65: /*A*/ self.moveState.left = 1; break;
-      case 68: /*D*/ self.moveState.right = 1; break;
-
-      case 82: /*R*/ self.moveState.up = 1; break;
-      case 70: /*F*/ self.moveState.down = 1; break;
-
-      case 38: /*up*/ self.moveState.forward = 1; break;
-      case 40: /*down*/ self.moveState.back = 1; break;
-      case 37: /*left*/ self.moveState.left = 1; break;
-      case 39: /*right*/ self.moveState.right = 1; break;
-    }
-
-    self.updateMovementVector();
   };
 
   this.keyup = function( event ) {
-
     switch( event.keyCode ) {
-      case 87: /*W*/ self.moveState.forward = 0; break;
-      case 83: /*S*/ self.moveState.back = 0; break;
-      case 65: /*A*/ self.moveState.left = 0; break;
-      case 68: /*D*/ self.moveState.right = 0; break;
-     
-      case 82: /*R*/ self.moveState.up = 0; break;
-      case 70: /*F*/ self.moveState.down = 0; break;
-
-      case 38: /*up*/ self.moveState.forward = 0; break;
-      case 40: /*down*/ self.moveState.back = 0; break;
-      case 37: /*left*/ self.moveState.left = 0; break;
-      case 39: /*right*/ self.moveState.right = 0; break;
+      case 87: /*W*/ self.moveState.forward = 0; self.moveState.rollForward = 0; break;
+      case 83: /*S*/ self.moveState.back = 0; self.moveState.rollBack = 0; break;
+      case 65: /*A*/ self.moveState.left = 0; self.moveState.turnLeft = 0; break;
+      case 68: /*D*/ self.moveState.right = 0; self.moveState.turnRight = 0; break;
+      case 82: /*R*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
+      case 70: /*F*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
     }
 
     self.updateMovementVector();
+    self.updateRotationVector();
   };
 
   this.mousedown = function( event ) {
@@ -104,6 +106,25 @@ THREE.Controls = function ( camera, domElement ) {
     }
   };
 
+  this.updateMovementVector = function() {
+    self.moveVector.x = ( -self.moveState.left    + self.moveState.right );
+    self.moveVector.y = ( -self.moveState.down    + self.moveState.up );
+    self.moveVector.z = ( -self.moveState.forward + self.moveState.back );
+
+    console.log( 'move: ', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
+    console.log( 'camera: ', [self.camera.position.x, self.camera.position.y, self.camera.position.z] );
+  };
+
+  this.updateRotationVector = function() {
+
+    self.rotationVector.x = ( -self.moveState.turnDown + self.moveState.turnUp );
+    self.rotationVector.y = ( -self.moveState.turnRight  + self.moveState.turnLeft );
+    self.rotationVector.z = ( -self.moveState.rollBack + self.moveState.rollForward );
+
+    console.log( 'rotate: ', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
+    console.log( 'camera: ', [self.camera.rotation.x, self.camera.rotation.y, self.camera.rotation.z] );
+  };
+
   this.update = function() {
 
     var moveMult = self.movementSpeed;
@@ -117,24 +138,6 @@ THREE.Controls = function ( camera, domElement ) {
     self.camera.quaternion.multiply( self.tmpQuaternion );
 
     self.camera.rotation.setFromQuaternion( self.camera.quaternion, self.camera.rotation.order );
-  };
-
-  this.updateMovementVector = function() {
-    self.moveVector.x = ( -self.moveState.left    + self.moveState.right );
-    self.moveVector.y = ( -self.moveState.down    + self.moveState.up );
-    self.moveVector.z = ( -self.moveState.forward + self.moveState.back );
-
-    console.log( 'move:', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
-  };
-
-  this.updateRotationVector = function() {
-
-    // this.rotationVector.x = ( -this.moveState.pitchDown + this.moveState.pitchUp );
-    // this.rotationVector.y = ( -this.moveState.yawRight  + this.moveState.yawLeft );
-    // this.rotationVector.z = ( -this.moveState.rollRight + this.moveState.rollLeft );
-
-    console.log( 'rotate:', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
-    
   };
 
   this.getContainerDimensions = function() {
