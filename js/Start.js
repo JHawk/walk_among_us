@@ -1,10 +1,10 @@
 function start() {
+  var self = this;
+
+  new SetupStats();
 
   var scene = new THREE.Scene();
   var width = window.innerWidth, height = window.innerHeight;
-
-  // var camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
-  // scene.add( camera );
 
   var camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
   var renderer = new THREE.WebGLRenderer();
@@ -16,7 +16,7 @@ function start() {
   var whiteMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
   var blueMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
 
-  var gridWidth = 10, gridHeight = 10;
+  var gridWidth = 20, gridHeight = 20;
 
   _(gridWidth).times(function(x) {
     _(gridHeight).times(function(y) {
@@ -47,22 +47,21 @@ function start() {
     });
   });
   
-  var self = this;
+  this.radians = function (degrees) {
+    return degrees * (Math.PI/180)
+  }
 
-  var degree = 0.0174532925;
-  var degree_45 = 45 * degree;
+  this.degrees = function (radians) {
+    return radians * (180/Math.PI)
+  }
 
-  camera.position.z = 5;
-  // camera.rotateY(-degree_45);
-  // camera.rotateX(degree_45);
-  // camera.rotateZ(-degree_45);
+  camera.position.x = -3;
+  camera.position.y = -3;
+  camera.position.z = 7;
 
-
-  // camera.rotate.y = -45 * Math.PI / 180
-  // camera.rotate.x = 45 * Math.PI / 180
-  // camera.rotate.z = -45 * Math.PI / 180
-
-  new SetupStats();
+  camera.rotateX(self.radians(45));
+  camera.rotateY(self.radians(-35));
+  camera.rotateZ(self.radians(-30));
 
   var controls;
   controls = new THREE.Controls( camera );

@@ -7,7 +7,7 @@ THREE.Controls = function ( camera, domElement ) {
   if ( domElement ) this.domElement.setAttribute( 'tabindex', -1 );
 
   this.movementSpeed = 1.0;
-  this.rollSpeed = 0.005;
+  this.rotationSpeed = 0.01;
   this.tmpQuaternion = new THREE.Quaternion();
   this.mouseStatus = 0;
 
@@ -38,8 +38,8 @@ THREE.Controls = function ( camera, domElement ) {
         case 83: /*S*/ self.moveState.rollBack = 1; break;
         case 65: /*A*/ self.moveState.turnLeft = 1; break;
         case 68: /*D*/ self.moveState.turnRight = 1; break;
-        case 82: /*R*/ self.moveState.turnUp = 1; break;
-        case 70: /*F*/ self.moveState.turnDown = 1; break;
+        case 69: /*E*/ self.moveState.turnUp = 1; break;
+        case 81: /*Q*/ self.moveState.turnDown = 1; break;
       }
       self.updateRotationVector();
     } else {
@@ -49,8 +49,8 @@ THREE.Controls = function ( camera, domElement ) {
         case 83: /*S*/ self.moveState.back = 1; break;
         case 65: /*A*/ self.moveState.left = 1; break;
         case 68: /*D*/ self.moveState.right = 1; break;
-        case 82: /*R*/ self.moveState.up = 1; break;
-        case 70: /*F*/ self.moveState.down = 1; break;
+        case 69: /*E*/ self.moveState.up = 1; break;
+        case 81: /*Q*/ self.moveState.down = 1; break;
       }
       self.updateMovementVector();
     }
@@ -62,8 +62,8 @@ THREE.Controls = function ( camera, domElement ) {
       case 83: /*S*/ self.moveState.back = 0; self.moveState.rollBack = 0; break;
       case 65: /*A*/ self.moveState.left = 0; self.moveState.turnLeft = 0; break;
       case 68: /*D*/ self.moveState.right = 0; self.moveState.turnRight = 0; break;
-      case 82: /*R*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
-      case 70: /*F*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
+      case 69: /*E*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
+      case 81: /*Q*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
     }
 
     self.updateMovementVector();
@@ -79,8 +79,8 @@ THREE.Controls = function ( camera, domElement ) {
     event.stopPropagation();
 
     switch ( event.button ) {
-      case 0: /*Left*/ self.moveState.forward = 1; break;
-      case 2: /*Right*/ self.moveState.back = 1; break;
+      // case 0: /*Left*/ self.moveState.forward = 1; break;
+      // case 2: /*Right*/ self.moveState.back = 1; break;
     }
 
     self.updateMovementVector();
@@ -92,9 +92,8 @@ THREE.Controls = function ( camera, domElement ) {
     event.stopPropagation();
 
     switch ( event.button ) {
-
-      case 0: /*Left*/ self.moveState.forward = 0; break;
-      case 2: /*Right*/ self.moveState.back = 0; break;
+      // case 0: /*Left*/ self.moveState.forward = 0; break;
+      // case 2: /*Right*/ self.moveState.back = 0; break;
     }
 
     self.updateMovementVector();
@@ -126,9 +125,8 @@ THREE.Controls = function ( camera, domElement ) {
   };
 
   this.update = function() {
-
     var moveMult = self.movementSpeed;
-    var rotMult = self.rollSpeed;
+    var rotMult = self.rotationSpeed;
 
     self.camera.translateX( self.moveVector.x * moveMult );
     self.camera.translateY( self.moveVector.y * moveMult );
