@@ -11,41 +11,22 @@ function start() {
   renderer.setSize( width, height );
   document.body.appendChild( renderer.domElement );
 
-  var greenMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  var redMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-  var whiteMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-  var blueMaterial = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-
   var gridWidth = 20, gridHeight = 20;
 
-  _(gridWidth).times(function(x) {
-    _(gridHeight).times(function(y) {
-      var cube;
 
-      var geometry = new THREE.CubeGeometry(1,1,2);
+  var grayMaterial = new THREE.MeshLambertMaterial( { color: 0xB0A6A4 } );
 
-      if (x >= gridWidth / 2 && y >= gridHeight / 2) // 1
-        {
-          cube = new THREE.Mesh( geometry, greenMaterial );
-        }
-        else if (x >= gridWidth / 2) // 2
-        {
-          cube = new THREE.Mesh( geometry, redMaterial );
-        }
-        else if (y >= gridHeight / 2) // 4
-        {
-          cube = new THREE.Mesh( geometry, blueMaterial );
-        }
-        else // 3
-        {
-          cube = new THREE.Mesh( geometry, whiteMaterial);
-        }
-      scene.add( cube );
-      cube.name = "cube-x:" + x + "-y:" + y;
-      cube.position.setX(x);
-      cube.position.setY(y);
-    });
-  });
+  var plane = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), grayMaterial);
+  plane.overdraw = true;
+  scene.add(plane);
+
+  var blocks = new BlocksGeometry().generate(20,20);
+  _.each(blocks, function (mesh) { scene.add(mesh); })
+
+  var directionalLight = new THREE.DirectionalLight(0xffffff);
+  directionalLight.position.set(1, 1, 1).normalize();
+  scene.add(directionalLight);
+
   
   this.radians = function (degrees) {
     return degrees * (Math.PI/180)
