@@ -18,7 +18,7 @@ BlocksGeometry = function () {
         cube.name = "cube-x:" + x + "-y:" + y;
         cube.position.setX(blockSize * x);
         cube.position.setY(blockSize * y);
-        cube.position.setZ(1);
+        cube.position.setZ(blockSize / 2);
         cube.castShadow = true;
 
         return cube;

@@ -6,7 +6,9 @@ function start() {
   var scene = new THREE.Scene();
   var width = window.innerWidth, height = window.innerHeight;
 
-  var camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
+  var cameraNear = 0.1;
+  var cameraFar = 1000;
+  var camera = new THREE.PerspectiveCamera( 75, width / height, cameraNear, cameraFar );
   // var camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 0.1, 10000 );
 
   var renderer = new THREE.WebGLRenderer();
@@ -32,7 +34,7 @@ function start() {
   scene.add(plane);
 
 
-  var gridWidth = 40, gridHeight = 40;
+  var gridWidth = 20, gridHeight = 20;
 
   var blocks = new BlocksGeometry().generate(gridWidth,gridHeight);
   _.each(blocks, function (mesh) { scene.add(mesh); })
@@ -40,16 +42,17 @@ function start() {
   var ambientLight = new THREE.AmbientLight(0x001100);
   scene.add(ambientLight);
 
+  var shadowDistance = 1024;
   var pointColor = "#ffffff";
   var directionalLight = new THREE.DirectionalLight(pointColor);
   directionalLight.position.set(-40, 60, 30);
   directionalLight.castShadow = true;
-  directionalLight.shadowCameraNear = 2;
-  directionalLight.shadowCameraFar = 200;
-  directionalLight.shadowCameraLeft = -50;
-  directionalLight.shadowCameraRight = 50;
-  directionalLight.shadowCameraTop = 50;
-  directionalLight.shadowCameraBottom = -50;
+  directionalLight.shadowCameraNear = cameraNear;
+  directionalLight.shadowCameraFar = cameraFar;
+  directionalLight.shadowCameraLeft = -shadowDistance;
+  directionalLight.shadowCameraRight = shadowDistance;
+  directionalLight.shadowCameraTop = shadowDistance;
+  directionalLight.shadowCameraBottom = -shadowDistance;
 
   directionalLight.distance = 0;
   directionalLight.intensity = 1.0;
@@ -67,9 +70,9 @@ function start() {
     return radians * (180/Math.PI)
   }
 
-  camera.position.x = -30;
-  camera.position.y = -30;
-  camera.position.z = 30;
+  camera.position.x = -60;
+  camera.position.y = -60;
+  camera.position.z = 60;
 
   camera.rotateX(self.radians(45));
   camera.rotateY(self.radians(-35));
