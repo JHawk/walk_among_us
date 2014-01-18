@@ -1,4 +1,4 @@
-THREE.Controls = function ( camera, domElement ) {
+THREE.Controls = function ( camera, objects, domElement ) {
   var self = this;
 
   this.camera = camera;
@@ -90,6 +90,37 @@ THREE.Controls = function ( camera, domElement ) {
     }     
   };
 
+  var projector = new THREE.Projector();
+
+  this.selectElement = function (event) {
+    event.preventDefault();
+
+    var vector = new THREE.Vector3(
+        ( event.clientX / window.innerWidth ) * 2 - 1,
+      - ( event.clientY / window.innerHeight ) * 2 + 1,
+        0.5
+    );
+
+    projector.unprojectVector( vector, camera );
+
+    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+
+    var intersects = raycaster.intersectObjects( objects );
+
+    if ( intersects.length > 0 ) {
+
+        var selectionColor = self.randomColor();
+        console.log(selectionColor);
+        intersects[0].object.material.color.setHex( selectionColor );
+
+    }
+
+  };
+
+  this.randomColor = function () {
+    return Math.random() * 0xffffff; 
+  };
+
   this.mousedown = function( event ) {
     if ( self.domElement !== document ) {
       self.domElement.focus();
@@ -99,7 +130,7 @@ THREE.Controls = function ( camera, domElement ) {
     event.stopPropagation();
 
     switch ( event.button ) {
-      // case 0: /*Left*/ self.moveState.forward = 1; break;
+      case 0: /*Left*/ self.selectElement(event); break;
       // case 2: /*Right*/ self.moveState.back = 1; break;
     }
 

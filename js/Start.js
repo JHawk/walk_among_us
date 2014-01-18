@@ -79,7 +79,7 @@ function start() {
   camera.rotateZ(self.radians(-30));
 
   var controls;
-  controls = new THREE.Controls( camera );
+  controls = new THREE.Controls( camera, blocks );
 
   function render() {
     requestAnimationFrame(render);

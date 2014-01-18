@@ -1,6 +1,4 @@
 BlocksGeometry = function () {
-
-  var brownMaterial = new THREE.MeshLambertMaterial( { color: 0xB3432B } );
   var blockSize = 20;
 
   this.generate = function ( width, height ) {
@@ -9,6 +7,9 @@ BlocksGeometry = function () {
 
     var blocks = _width.map(function(x) {
       return _height.map(function(y) {
+
+        var brownMaterial = new THREE.MeshLambertMaterial( { color: 0xB3432B } );
+
         var cube;
 
         var geometry = new THREE.CubeGeometry(blockSize,blockSize,blockSize);
