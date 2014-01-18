@@ -7,24 +7,55 @@ function start() {
   var width = window.innerWidth, height = window.innerHeight;
 
   var camera = new THREE.PerspectiveCamera( 75, width / height, 0.1, 1000 );
+  // var camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 0.1, 10000 );
+
   var renderer = new THREE.WebGLRenderer();
   renderer.setSize( width, height );
+  renderer.shadowMapEnabled = true;
+  renderer.shadowMapSoft = true;
+
+  renderer.shadowCameraNear = 3;
+  renderer.shadowCameraFar = camera.far;
+  renderer.shadowCameraFov = 50;
+
+  renderer.shadowMapBias = 0.0039;
+  renderer.shadowMapDarkness = 0.5;
+  renderer.shadowMapWidth = 1024;
+  renderer.shadowMapHeight = 1024;
   document.body.appendChild( renderer.domElement );
-
-  var gridWidth = 20, gridHeight = 20;
-
 
   var grayMaterial = new THREE.MeshLambertMaterial( { color: 0xB0A6A4 } );
 
-  var plane = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), grayMaterial);
+  var plane = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), grayMaterial);
   plane.overdraw = true;
+  plane.receiveShadow = true;
   scene.add(plane);
 
-  var blocks = new BlocksGeometry().generate(20,20);
+
+  var gridWidth = 40, gridHeight = 40;
+
+  var blocks = new BlocksGeometry().generate(gridWidth,gridHeight);
   _.each(blocks, function (mesh) { scene.add(mesh); })
 
-  var directionalLight = new THREE.DirectionalLight(0xffffff);
-  directionalLight.position.set(1, 1, 1).normalize();
+  var ambientLight = new THREE.AmbientLight(0x001100);
+  scene.add(ambientLight);
+
+  var pointColor = "#ffffff";
+  var directionalLight = new THREE.DirectionalLight(pointColor);
+  directionalLight.position.set(-40, 60, 30);
+  directionalLight.castShadow = true;
+  directionalLight.shadowCameraNear = 2;
+  directionalLight.shadowCameraFar = 200;
+  directionalLight.shadowCameraLeft = -50;
+  directionalLight.shadowCameraRight = 50;
+  directionalLight.shadowCameraTop = 50;
+  directionalLight.shadowCameraBottom = -50;
+
+  directionalLight.distance = 0;
+  directionalLight.intensity = 1.0;
+  directionalLight.shadowMapHeight = 1024;
+  directionalLight.shadowMapWidth = 1024;
+
   scene.add(directionalLight);
 
   
@@ -36,9 +67,9 @@ function start() {
     return radians * (180/Math.PI)
   }
 
-  camera.position.x = -3;
-  camera.position.y = -3;
-  camera.position.z = 7;
+  camera.position.x = -30;
+  camera.position.y = -30;
+  camera.position.z = 30;
 
   camera.rotateX(self.radians(45));
   camera.rotateY(self.radians(-35));
