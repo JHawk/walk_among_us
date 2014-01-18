@@ -1,5 +1,6 @@
 THREE.Controls = function ( camera, objects, domElement ) {
   var self = this;
+  var colors = new Colors();
 
   this.camera = camera;
 
@@ -108,17 +109,8 @@ THREE.Controls = function ( camera, objects, domElement ) {
     var intersects = raycaster.intersectObjects( objects );
 
     if ( intersects.length > 0 ) {
-
-        var selectionColor = self.randomColor();
-        console.log(selectionColor);
-        intersects[0].object.material.color.setHex( selectionColor );
-
+        intersects[0].object.material.color.setHex( colors.selectionColor );
     }
-
-  };
-
-  this.randomColor = function () {
-    return Math.random() * 0xffffff; 
   };
 
   this.mousedown = function( event ) {

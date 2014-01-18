@@ -1,7 +1,8 @@
-function start() {
+function Start() {
   var self = this;
 
   new SetupStats();
+  var colors = new Colors();
 
   var scene = new THREE.Scene();
   var width = window.innerWidth, height = window.innerHeight;
@@ -26,7 +27,7 @@ function start() {
   renderer.shadowMapHeight = 1024;
   document.body.appendChild( renderer.domElement );
 
-  var grayMaterial = new THREE.MeshLambertMaterial( { color: 0xB0A6A4 } );
+  var grayMaterial = new THREE.MeshLambertMaterial( { color: colors.floor } );
 
   var plane = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), grayMaterial);
   plane.overdraw = true;
@@ -39,11 +40,11 @@ function start() {
   var blocks = new BlocksGeometry().generate(gridWidth,gridHeight);
   _.each(blocks, function (mesh) { scene.add(mesh); })
 
-  var ambientLight = new THREE.AmbientLight(0x001100);
+  var ambientLight = new THREE.AmbientLight(colors.ambientLight);
   scene.add(ambientLight);
 
   var shadowDistance = 1024;
-  var pointColor = "#ffffff";
+  var pointColor = colors.directionalLight;
   var directionalLight = new THREE.DirectionalLight(pointColor);
   directionalLight.position.set(-40, 60, 30);
   directionalLight.castShadow = true;
@@ -61,7 +62,6 @@ function start() {
 
   scene.add(directionalLight);
 
-  
   this.radians = function (degrees) {
     return degrees * (Math.PI/180)
   }
