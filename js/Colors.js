@@ -22,4 +22,17 @@ Colors = function () {
   this.ambientLight = 0x001100;
   this.floor = 0xB0A6A4;
   this.selectionColor = 11784241.9694794;
+
+  var hightlightBumpSize = 4;
+
+  this.toHex = function (n) {
+    return "#" + n.toString(16).split('.')[0];
+  };
+
+  this.highlight = function (color) {
+    if (typeof color === 'number')
+    {
+      return color + (hightlightBumpSize * 0x111111);
+    }
+  };
 }

@@ -8,10 +8,9 @@ MouseControls = function (camera, objects) {
   this.camera = camera;
 
   var projector = new THREE.Projector();
+  this.mouseStatus = 0;
 
-  this.selectElement = function (event) {
-    event.preventDefault();
-
+  this.raycasterMouse = function (event) {
     var vector = new THREE.Vector3(
         ( event.clientX / window.innerWidth ) * 2 - 1,
       - ( event.clientY / window.innerHeight ) * 2 + 1,
@@ -20,19 +19,34 @@ MouseControls = function (camera, objects) {
 
     projector.unprojectVector( vector, camera );
 
-    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+    return new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+  };
 
-    var intersects = raycaster.intersectObjects( objects );
+  this.targetObjects = function (event) {
+    return self.raycasterMouse(event).intersectObjects(objects);
+  };
+
+  this.onTarget = function(event, action, noTargets) {
+    var intersects = self.targetObjects(event);
 
     if ( intersects.length > 0 ) {
       var firstIntersection = intersects[0].object;
-      var model = firstIntersection.model;
-      
-      model.isSelected = !model.isSelected;
-      var nextColor = model.isSelected ? colors.selectionColor : model.color;
-      
-      firstIntersection.material.color.setHex(nextColor);
+      action(firstIntersection);
+    } 
+    else if (noTargets)
+    {
+      noTargets();
     }
+  };
+
+  this.selectElement = function (event) {
+    event.preventDefault();
+
+    self.onTarget(event, function (target) {
+      var model = target.model;
+      model.isSelected = !model.isSelected;
+      target.material.color.setHex(self.modelColor(model));
+    });
   };
 
   this.mousedown = function( event ) {
@@ -60,10 +74,43 @@ MouseControls = function (camera, objects) {
     }
   };
 
+  var currentHighlight;
+
+  this.highlightElement = function(event) {
+    self.onTarget(
+      event, 
+      function (target) {
+        if (target !== currentHighlight && !target.model.isHighlighted)
+        {
+          if (currentHighlight) {
+            var currentModel = currentHighlight.model;
+            currentModel.isHighlighted = false;
+            currentHighlight.material.color.setHex(self.modelColor(currentModel));
+          }
+          currentHighlight = target;
+          var targetModel = target.model;
+          targetModel.isHighlighted = true;
+          target.material.color.setHex(colors.highlight(self.modelColor(targetModel)));
+        }
+      },
+      function () {
+        if (currentHighlight) {
+          var currentModel = currentHighlight.model;
+          currentModel.isHighlighted = false;
+          
+          currentHighlight.material.color.setHex(self.modelColor(currentModel));
+        }        
+      });
+  };
+
+  this.modelColor = function (model) {
+    return model.isSelected ? colors.selectionColor : model.color;
+  };
+
   this.mousemove = function( event ) {
-    if ( self.mouseStatus > 0 ) {
-      // mouse move events
-    }
+    // if ( self.mouseStatus > 0 ) {
+      self.highlightElement(event);
+    // }
   };
 
   this.domElement.addEventListener( 'mousemove', self.mousemove, false );
