@@ -1,16 +1,11 @@
-THREE.Controls = function ( camera, objects, domElement ) {
+KeyControls = function ( camera ) {
   var self = this;
-  var colors = new Colors();
-
+  
   this.camera = camera;
-
-  this.domElement = ( domElement !== undefined ) ? domElement : document;
-  if ( domElement ) this.domElement.setAttribute( 'tabindex', -1 );
-
+  this.domElement = document;
   this.movementSpeed = 1.0;
   this.rotationSpeed = 0.01;
   this.tmpQuaternion = new THREE.Quaternion();
-  this.mouseStatus = 0;
 
   this.moveState = { 
     up: 0, 
@@ -81,7 +76,6 @@ THREE.Controls = function ( camera, objects, domElement ) {
       default: keyHandled = false;
     }
 
-
     if (keyHandled)
     {
       event.preventDefault(); 
@@ -89,63 +83,6 @@ THREE.Controls = function ( camera, objects, domElement ) {
       self.updateMovementVector();
       self.updateRotationVector();
     }     
-  };
-
-  var projector = new THREE.Projector();
-
-  this.selectElement = function (event) {
-    event.preventDefault();
-
-    var vector = new THREE.Vector3(
-        ( event.clientX / window.innerWidth ) * 2 - 1,
-      - ( event.clientY / window.innerHeight ) * 2 + 1,
-        0.5
-    );
-
-    projector.unprojectVector( vector, camera );
-
-    var raycaster = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-
-    var intersects = raycaster.intersectObjects( objects );
-
-    if ( intersects.length > 0 ) {
-        intersects[0].object.material.color.setHex( colors.selectionColor );
-    }
-  };
-
-  this.mousedown = function( event ) {
-    if ( self.domElement !== document ) {
-      self.domElement.focus();
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    switch ( event.button ) {
-      case 0: /*Left*/ self.selectElement(event); break;
-      // case 2: /*Right*/ self.moveState.back = 1; break;
-    }
-
-    self.updateMovementVector();
-  };
-
-  this.mouseup = function( event ) {
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    switch ( event.button ) {
-      // case 0: /*Left*/ self.moveState.forward = 0; break;
-      // case 2: /*Right*/ self.moveState.back = 0; break;
-    }
-
-    self.updateMovementVector();
-  };
-
-  this.mousemove = function( event ) {
-    if ( self.mouseStatus > 0 ) {
-      // mouse move events
-    }
   };
 
   this.updateMovementVector = function() {
@@ -158,7 +95,6 @@ THREE.Controls = function ( camera, objects, domElement ) {
   };
 
   this.updateRotationVector = function() {
-
     self.rotationVector.x = ( -self.moveState.turnDown + self.moveState.turnUp );
     self.rotationVector.y = ( -self.moveState.turnRight  + self.moveState.turnLeft );
     self.rotationVector.z = ( -self.moveState.rollBack + self.moveState.rollForward );
@@ -181,15 +117,9 @@ THREE.Controls = function ( camera, objects, domElement ) {
     self.camera.rotation.setFromQuaternion( self.camera.quaternion, self.camera.rotation.order );
   };
 
-  this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
-
-  this.domElement.addEventListener( 'mousemove', self.mousemove, false );
-  this.domElement.addEventListener( 'mousedown', self.mousedown, false );
-  this.domElement.addEventListener( 'mouseup',   self.mouseup, false );
-
   this.domElement.addEventListener( 'keydown', self.keydown, false );
   this.domElement.addEventListener( 'keyup',   self.keyup, false );
 
   this.updateMovementVector();
   this.updateRotationVector();
-};
+}

@@ -78,12 +78,11 @@ function Start() {
   camera.rotateY(self.radians(-35));
   camera.rotateZ(self.radians(-30));
 
-  var controls;
-  controls = new THREE.Controls( camera, blocks );
-
+  var keyControls = new KeyControls(camera);
+  new MouseControls(camera, blocks);
   function render() {
     requestAnimationFrame(render);
-    controls.update();
+    keyControls.update();
     renderer.render(scene, camera);
   }
 
