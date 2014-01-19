@@ -2,7 +2,7 @@ function Start() {
   var self = this;
 
   new SetupStats();
-  var colors = new Colors();
+  var colors = new style.Colors;
 
   var scene = new THREE.Scene();
   var width = window.innerWidth, height = window.innerHeight;
@@ -78,8 +78,8 @@ function Start() {
   camera.rotateY(self.radians(-35));
   camera.rotateZ(self.radians(-30));
 
-  var keyControls = new KeyControls(camera);
-  new MouseControls(camera, blocks);
+  var keyControls = new controls.Keys(camera);
+  new controls.Mouse(camera, blocks);
   function render() {
     requestAnimationFrame(render);
     keyControls.update();

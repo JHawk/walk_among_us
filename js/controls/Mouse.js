@@ -1,9 +1,11 @@
-MouseControls = function (camera, objects) {
+var controls = controls || {};
+
+controls.Mouse = function (camera, objects) {
   var self = this;
 
   this.domElement = document;
 
-  var colors = new Colors();
+  var colors = new style.Colors;
 
   this.camera = camera;
 

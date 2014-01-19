@@ -1,4 +1,6 @@
-Colors = function () {
+var style = style || {};
+
+style.Colors = function () {
   var self = this;
 
   this.randomColor = function () {

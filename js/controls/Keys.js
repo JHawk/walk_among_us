@@ -1,4 +1,6 @@
-KeyControls = function ( camera ) {
+var controls = controls || {};
+
+controls.Keys = function ( camera ) {
   var self = this;
   
   this.camera = camera;

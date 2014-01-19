@@ -1,4 +1,6 @@
-Wall = function (color) {
+var model = model || {};
+
+model.Wall = function (color) {
   var self = this;
 
   self.isSelected = false;

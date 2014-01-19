@@ -1,6 +1,6 @@
 BlocksGeometry = function () {
   var blockSize = 20;
-  var colors = new Colors();
+  var colors = new style.Colors;
 
   this.generate = function ( width, height ) {
     var _width = _(width).range();
@@ -23,7 +23,7 @@ BlocksGeometry = function () {
         cube.position.setZ(blockSize / 2);
         cube.castShadow = true;
 
-        cube.model = new Wall(color);
+        cube.model = new model.Wall(color);
 
         return cube;
       });
