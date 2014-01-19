@@ -10,7 +10,8 @@ Colors = function () {
   var blockColors = [
     10831884.834838064, 
     0xB3432B,
-    8801363.674616564
+    8801363.674616564,
+    11824921.967054684
   ];
 
   this.blockColor = function () {

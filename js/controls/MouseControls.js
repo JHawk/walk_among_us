@@ -25,7 +25,13 @@ MouseControls = function (camera, objects) {
     var intersects = raycaster.intersectObjects( objects );
 
     if ( intersects.length > 0 ) {
-        intersects[0].object.material.color.setHex( colors.selectionColor );
+      var firstIntersection = intersects[0].object;
+      var model = firstIntersection.model;
+      
+      model.isSelected = !model.isSelected;
+      var nextColor = model.isSelected ? colors.selectionColor : model.color;
+      
+      firstIntersection.material.color.setHex(nextColor);
     }
   };
 
