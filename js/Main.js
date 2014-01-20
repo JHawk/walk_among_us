@@ -11,7 +11,7 @@ Main = function () {
 
     var gridWidth = 20, gridHeight = 20;
 
-    var blocks = new BlocksGeometry().generate(gridWidth,gridHeight);
+    var blocks = new models.Board(gridWidth, gridHeight).create();
     _.each(blocks, function (mesh) { scene.add(mesh); })
 
     scene.add(lights.ambient());

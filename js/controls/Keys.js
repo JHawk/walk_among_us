@@ -92,8 +92,8 @@ controls.Keys = function ( camera ) {
     self.moveVector.y = ( -self.moveState.down    + self.moveState.up );
     self.moveVector.z = ( -self.moveState.forward + self.moveState.back );
 
-    console.log( 'move: ', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
-    console.log( 'camera: ', [self.camera.position.x, self.camera.position.y, self.camera.position.z] );
+    // console.log( 'move: ', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
+    // console.log( 'camera: ', [self.camera.position.x, self.camera.position.y, self.camera.position.z] );
   };
 
   this.updateRotationVector = function() {
@@ -101,8 +101,8 @@ controls.Keys = function ( camera ) {
     self.rotationVector.y = ( -self.moveState.turnRight  + self.moveState.turnLeft );
     self.rotationVector.z = ( -self.moveState.rollBack + self.moveState.rollForward );
 
-    console.log( 'rotate: ', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
-    console.log( 'camera: ', [self.camera.rotation.x, self.camera.rotation.y, self.camera.rotation.z] );
+    // console.log( 'rotate: ', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
+    // console.log( 'camera: ', [self.camera.rotation.x, self.camera.rotation.y, self.camera.rotation.z] );
   };
 
   this.update = function() {

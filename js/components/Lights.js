@@ -6,21 +6,20 @@ components.Lights = function (width, height) {
   var shadowDistance = 1024;
     
   this.directional = function () {
-    var pointColor = colors.directionalLight;
-    var directionalLight = new THREE.DirectionalLight(pointColor);
-    directionalLight.position.set(-40, 60, 30);
-    directionalLight.castShadow = true;
-    directionalLight.shadowCameraNear = components.Camera.near;
-    directionalLight.shadowCameraFar = components.Camera.far;
-    directionalLight.shadowCameraLeft = -shadowDistance;
-    directionalLight.shadowCameraRight = shadowDistance;
-    directionalLight.shadowCameraTop = shadowDistance;
-    directionalLight.shadowCameraBottom = -shadowDistance;
-    directionalLight.distance = 0;
-    directionalLight.intensity = 1.0;
-    directionalLight.shadowMapHeight = 1024;
-    directionalLight.shadowMapWidth = 1024;
-    return directionalLight;
+    var light = new THREE.DirectionalLight(colors.directionalLight);
+    light.position.set(-40, 60, 30);
+    light.castShadow = true;
+    light.shadowCameraNear = components.Camera.near;
+    light.shadowCameraFar = components.Camera.far;
+    light.shadowCameraLeft = -shadowDistance;
+    light.shadowCameraRight = shadowDistance;
+    light.shadowCameraTop = shadowDistance;
+    light.shadowCameraBottom = -shadowDistance;
+    light.distance = 0;
+    light.intensity = 1.0;
+    light.shadowMapHeight = 1024;
+    light.shadowMapWidth = 1024;
+    return light;
   };
 
   this.ambient = function () {
