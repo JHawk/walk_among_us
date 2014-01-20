@@ -1,6 +1,6 @@
 var controls = controls || {};
 
-controls.Mouse = function (camera, objects) {
+controls.Mouse = function (camera, scene) {
   var self = this;
 
   this.domElement = document;
@@ -25,7 +25,10 @@ controls.Mouse = function (camera, objects) {
   };
 
   this.targetObjects = function (event) {
-    return self.raycasterMouse(event).intersectObjects(objects);
+    var objects = self.raycasterMouse(event).intersectObjects(scene.children);
+    return _.filter(objects, function (obj) { 
+      return obj.object && obj.object.model && obj.object.model.isTargetable; 
+    });
   };
 
   this.onTarget = function(event, action, noTargets) {

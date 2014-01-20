@@ -11,11 +11,12 @@ models.Board = function (width, height) {
   var _board = {};
 
   this.wall = new meshes.Wall;
+  this.minion = new meshes.Minion;
 
-  this.create = function () {
-    var spawnPoint = self.spawnPoint();
+  this.createWalls = function () {
+    var spawnArea = self.spawnArea();
     var walls = self.walls();
-    return [].concat(spawnPoint).concat(walls);
+    return [].concat(spawnArea).concat(walls);
   };
 
   var spawnRadius = 3;
@@ -32,7 +33,11 @@ models.Board = function (width, height) {
     return spawnRange(1);
   };
 
-  this.spawnPoint = function () {
+  var randomSpawnPoint = function () {
+    return [_.sample(spawnX()), _.sample(spawnY())];
+  };
+
+  this.spawnArea = function () {
     _.each(spawnX(), function (x) {
       _.each(spawnY(), function (y) {
         var position = [x,y];
@@ -41,6 +46,17 @@ models.Board = function (width, height) {
       });
     });
     return [];
+  };
+
+  this.createMinion = function () {
+    var spawnPoint = randomSpawnPoint();
+    var x = spawnPoint[0], y = spawnPoint[1];
+    var name = self.name("Minion", x, y);
+    var color = self.minionColor();
+    var minion = self.minion.create(x, y, color);
+    minion.model = new model.Minion(color);
+    minion.name = name;
+    return minion;
   };
 
   this.name = function (obj, x, y) {

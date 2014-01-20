@@ -11,9 +11,15 @@ Main = function () {
 
     var gridWidth = 20, gridHeight = 20;
 
-    var blocks = new models.Board(gridWidth, gridHeight).create();
-    _.each(blocks, function (mesh) { scene.add(mesh); })
+    var board = new models.Board(gridWidth, gridHeight);
+    
+    _.each(board.createWalls(), function (mesh) { 
+      scene.add(mesh); 
+    });
 
+    var minion = board.createMinion();
+    scene.add(minion);
+    
     scene.add(lights.ambient());
     scene.add(lights.directional());
 
@@ -21,7 +27,7 @@ Main = function () {
     var renderer = new components.Renderer(camera, width, height).create();
 
     var keyControls = new controls.Keys(camera);
-    new controls.Mouse(camera, blocks);
+    new controls.Mouse(camera, scene);
     
     function render() {
       requestAnimationFrame(render);

@@ -9,7 +9,6 @@ meshes.Wall = function () {
     var material = new THREE.MeshLambertMaterial( { color: color } );
     var geometry = new THREE.CubeGeometry(size, size, size);
     var cube = new THREE.Mesh( geometry, material );
-    cube.name = "wall-x:" + x + "-y:" + y;
     cube.position.setX(size * x);
     cube.position.setY(size * y);
     cube.position.setZ(size / 2);

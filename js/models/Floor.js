@@ -1,10 +1,9 @@
 var model = model || {};
 
-model.Wall = function (color) {
+model.Floor = function () {
   var self = this;
 
   self.isSelected = false;
   self.isHighlighted = false;
-  self.isTargetable = true;
-  self.color = color;
+  self.isTargetable = false;
 };

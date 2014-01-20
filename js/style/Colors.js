@@ -37,4 +37,8 @@ style.Colors = function () {
       return color + (hightlightBumpSize * 0x111111);
     }
   };
+
+  this.minionColor = function () {
+    return self.randomColor();
+  };
 }

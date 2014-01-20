@@ -1,6 +1,6 @@
 var model = model || {};
 
-model.Wall = function (color) {
+model.Minion = function (color) {
   var self = this;
 
   self.isSelected = false;
