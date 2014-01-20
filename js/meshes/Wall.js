@@ -3,18 +3,17 @@ var meshes = meshes || {};
 meshes.Wall = function () {
   var self = this;
   self = _.extend(this, new style.Colors);
+  var size = 20;
 
   this.create = function (x, y, color) {
     var material = new THREE.MeshLambertMaterial( { color: color } );
-    var geometry = new THREE.CubeGeometry(self.size, self.size, self.size);
+    var geometry = new THREE.CubeGeometry(size, size, size);
     var cube = new THREE.Mesh( geometry, material );
     cube.name = "wall-x:" + x + "-y:" + y;
-    cube.position.setX(self.size * x);
-    cube.position.setY(self.size * y);
-    cube.position.setZ(self.size / 2);
+    cube.position.setX(size * x);
+    cube.position.setY(size * y);
+    cube.position.setZ(size / 2);
     cube.castShadow = true;
     return cube;
   };
 };
-
-meshes.Wall.size = 20;
