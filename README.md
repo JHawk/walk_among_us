@@ -10,3 +10,5 @@ fix to ortho camera
 spawn minion 
 
 walk minion
+
+collision detection
