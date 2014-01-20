@@ -33,6 +33,7 @@ Main = function () {
       requestAnimationFrame(render);
       keyControls.update();
       renderer.render(scene, camera);
+      board.update();
     }
 
     render();

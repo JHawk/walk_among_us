@@ -48,15 +48,26 @@ models.Board = function (width, height) {
     return [];
   };
 
+  var sprites = [];
+
   this.createMinion = function () {
     var spawnPoint = randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
     var name = self.name("Minion", x, y);
     var color = self.minionColor();
     var minion = self.minion.create(x, y, color);
-    minion.model = new model.Minion(color);
+    minion.model = new model.Minion(color, minion);
     minion.name = name;
+
+    sprites.push(minion.model);
+
     return minion;
+  };
+
+  this.update = function () {
+    _.each(sprites, function (sprite) {
+      sprite.update();
+    });
   };
 
   this.name = function (obj, x, y) {
