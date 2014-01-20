@@ -2,33 +2,45 @@
   <head>
     <title>Walk Among Us</title>
     <style>canvas { width: 100%; height: 100% }</style>
-    <link type="text/css" rel="stylesheet" href="./css/index.css">
+    <link type="text/css" rel="stylesheet" href="./css/index.css">    
+    <!-- components -->
+    <script type="text/javascript" src="./js/components/Camera.js"></script>
+    <script type="text/javascript" src="./js/components/Lights.js"></script>
+    <script type="text/javascript" src="./js/components/Renderer.js"></script>
 
+    <!-- controls -->
+    <script type="text/javascript" src="./js/controls/Keys.js"></script>
+    <script type="text/javascript" src="./js/controls/Mouse.js"></script>
+    
+    <!-- helpers -->
+    <script type="text/javascript" src="./js/helpers/Utils.js"></script>
+
+    <!-- meshes -->
+    <script type="text/javascript" src="./js/meshes/Floor.js"></script>
+
+    <!-- models -->
+    <script type="text/javascript" src="./js/models/Wall.js"></script>
+    
+    <!-- style -->
+    <script type="text/javascript" src="./js/style/Colors.js"></script>
+    
     <!-- vendor stuff and hacked stuff from the internets -->
     <script type="text/javascript" src="./js/vendor/Three.js"></script>
     <script type="text/javascript" src="./js/vendor/Stats.js"></script>
     <script type="text/javascript" src="./js/vendor/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="./js/vendor/Underscore1.5.2.js"></script>
     
-    <!-- my stuff -->
-
-    <!-- models -->
-    <script type="text/javascript" src="./js/models/Wall.js"></script>
-    
-    <!-- controls -->
-    <script type="text/javascript" src="./js/controls/Keys.js"></script>
-    <script type="text/javascript" src="./js/controls/Mouse.js"></script>
-    
-    <!-- style -->
-    <script type="text/javascript" src="./js/style/Colors.js"></script>
-    
+    <!-- top -->
     <script type="text/javascript" src="./js/BlocksGeometry.js"></script>
     <script type="text/javascript" src="./js/SetupStats.js"></script>
-    <script type="text/javascript" src="./js/Start.js"></script>
+    <script type="text/javascript" src="./js/Main.js"></script>
   </head>
   <body>
     <script>
-      $( document ).ready( Start )
+        $( document ).ready( function () {
+            var main = new Main();
+            main.start();
+        });
     </script>
   </body>
 </html>
