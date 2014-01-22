@@ -4,7 +4,6 @@ model.Minion = function (color, mesh) {
   var self = this;
 
   self = _.extend(this, new helpers.Utils);
-  // self = _.extend(this, new style.Colors);
   self = _.extend(this, new models.BaseModel());
 
   self.mesh = mesh;
@@ -16,9 +15,15 @@ model.Minion = function (color, mesh) {
   self.isTargetable = true;
   self.color = color;
 
-  self.destination = [0,0];
+  self.destination;
 
-  self.boundary = 10.0;
+  self.boundary = 20.0;
+
+  var _targets = [];
+
+  this.updateTargets = function (targets) {
+    _targets = targets;
+  };
 
   var move = function () {
     var x = mesh.position.x;
@@ -33,7 +38,6 @@ model.Minion = function (color, mesh) {
     }
     else
     {
-
       var step = self.step(self.destination, [x,y], self.speed);
 
       var nextX = x + step[0];
@@ -48,6 +52,14 @@ model.Minion = function (color, mesh) {
     if (self.destination) 
     {
       move();
+    }
+    else 
+    {
+      if (_targets.length > 0)
+      {
+        var newTarget = _.sample(_targets);
+        self.destination = [newTarget.position.x, newTarget.position.y];
+      }
     }
   };
 

@@ -48,7 +48,7 @@ models.Board = function (width, height) {
     return [];
   };
 
-  var sprites = [];
+  var minions = [];
 
   this.createMinion = function () {
     var spawnPoint = randomSpawnPoint();
@@ -59,13 +59,13 @@ models.Board = function (width, height) {
     minion.model = new model.Minion(color, minion);
     minion.name = name;
 
-    sprites.push(minion.model);
+    minions.push(minion.model);
 
     return minion;
   };
 
   this.update = function () {
-    _.each(sprites, function (sprite) {
+    _.each(minions, function (sprite) {
       sprite.update();
     });
   };
@@ -89,14 +89,18 @@ models.Board = function (width, height) {
         wall.name = name;
 
         wall.model.onSelect(function () { 
-          selectedWalls.push(wall); 
-           
-          console.log(_.map(selectedWalls, function(w) {return w.name;}));
+          selectedWalls.push(wall);
+          _.each(minions, function (m) {
+            m.updateTargets(selectedWalls);
+          });
         });
 
         wall.model.onDeselect(function () {
-          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall}); 
-          console.log(_.map(selectedWalls, function(w) {return w.name;}));
+          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall});
+          
+          _.each(minions, function (m) {
+            m.updateTargets(selectedWalls);
+          });
         });
 
         _board[position] = name;
