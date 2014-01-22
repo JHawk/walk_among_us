@@ -7,8 +7,15 @@ models.BaseModel = function () {
     return this.isSelected ? colors.selectionColor : this.color;
   };
 
-  var onSelect = function () {
-    console.log("selected")
+  // TODO: DRY this up. ///////////////
+  var removalEvents = [];
+
+  var removed = function () {
+    _.each(removalEvents, function(e) { e(); })
+  };
+
+  this.onRemoval = function (e) { 
+    removalEvents.push(e);
   };
 
   var deselectEvents = [];
@@ -30,6 +37,12 @@ models.BaseModel = function () {
   this.onSelect = function (e) { 
     selectEvents.push(e);
   };
+  // TODO: DRY this up. ///////////////
+
+  this.remove = function () {
+    removed();
+    models.scene.remove(this.mesh);
+  };
 
   this.toggleSelection = function () {
     this.isSelected = !this.isSelected;
@@ -45,12 +58,8 @@ models.BaseModel = function () {
   };
 
   this.highlight = function () {
-    try {
       this.isHighlighted = true;
       this.mesh.material.color.setHex(colors.highlightColor(this.currentColor()));
-    } catch(e) {
-      console.log(this);
-    }
   };
 
   this.unHighlight = function () {

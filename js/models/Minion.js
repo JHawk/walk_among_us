@@ -20,6 +20,7 @@ model.Minion = function (color, mesh) {
   self.boundary = 20.0;
 
   var _targets = [];
+  var _target;
 
   this.updateTargets = function (targets) {
     _targets = targets;
@@ -32,8 +33,13 @@ model.Minion = function (color, mesh) {
     var _dx = Math.abs(x - self.destination[0]);
     var _dy = Math.abs(y - self.destination[1]);
 
+    // TODO : actual hit detection
     if (self.magnitude([_dx, _dy]) < self.boundary)
     {
+      if (_target) 
+      {
+        _target.model.takeHit();
+      }
       self.destination = null;
     }
     else
@@ -57,8 +63,8 @@ model.Minion = function (color, mesh) {
     {
       if (_targets.length > 0)
       {
-        var newTarget = _.sample(_targets);
-        self.destination = [newTarget.position.x, newTarget.position.y];
+        _target = _.sample(_targets);
+        self.destination = [_target.position.x, _target.position.y];
       }
     }
   };

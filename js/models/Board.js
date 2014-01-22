@@ -103,6 +103,14 @@ models.Board = function (width, height) {
           });
         });
 
+        wall.model.onRemoval(function () {
+          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall});
+          
+          _.each(minions, function (m) {
+            m.updateTargets(selectedWalls);
+          });
+        });
+        
         _board[position] = name;
         return wall;
       });

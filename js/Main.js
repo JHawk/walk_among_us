@@ -1,3 +1,5 @@
+var models = models || {};
+
 Main = function () {
   var self = this;
   var width = window.innerWidth, height = window.innerHeight;
@@ -22,6 +24,8 @@ Main = function () {
     
     scene.add(lights.ambient());
     scene.add(lights.directional());
+
+    models.scene = scene;
 
     var camera = new components.Camera(width, height).create();
     var renderer = new components.Renderer(camera, width, height).create();
