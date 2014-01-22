@@ -74,6 +74,8 @@ models.Board = function (width, height) {
     return obj + "-x:" + x + "-y:" + y;
   };
 
+  var selectedWalls = [];
+
   this.walls = function () {
     var walls = _width.map(function(x) {
       return _height.map(function(y) {
@@ -83,8 +85,19 @@ models.Board = function (width, height) {
         var name = self.name("Wall", x, y);
         var color = self.blockColor();
         var wall = self.wall.create(x,y,color);
-        wall.model = new model.Wall(color);
+        wall.model = new model.Wall(color, wall);
         wall.name = name;
+
+        wall.model.onSelect(function () { 
+          selectedWalls.push(wall); 
+           
+          console.log(_.map(selectedWalls, function(w) {return w.name;}));
+        });
+
+        wall.model.onDeselect(function () {
+          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall}); 
+          console.log(_.map(selectedWalls, function(w) {return w.name;}));
+        });
 
         _board[position] = name;
         return wall;

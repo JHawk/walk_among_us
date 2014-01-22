@@ -48,9 +48,7 @@ controls.Mouse = function (camera, scene) {
     event.preventDefault();
 
     self.onTarget(event, function (target) {
-      var model = target.model;
-      model.isSelected = !model.isSelected;
-      target.material.color.setHex(self.modelColor(model));
+      target.model.toggleSelection();
     });
   };
 
@@ -88,34 +86,21 @@ controls.Mouse = function (camera, scene) {
         if (target !== currentHighlight && !target.model.isHighlighted)
         {
           if (currentHighlight) {
-            var currentModel = currentHighlight.model;
-            currentModel.isHighlighted = false;
-            currentHighlight.material.color.setHex(self.modelColor(currentModel));
+            currentHighlight.model.unHighlight();
           }
           currentHighlight = target;
-          var targetModel = target.model;
-          targetModel.isHighlighted = true;
-          target.material.color.setHex(colors.highlight(self.modelColor(targetModel)));
+          target.model.highlight();
         }
       },
       function () {
         if (currentHighlight) {
-          var currentModel = currentHighlight.model;
-          currentModel.isHighlighted = false;
-          
-          currentHighlight.material.color.setHex(self.modelColor(currentModel));
+          currentHighlight.model.unHighlight();
         }        
       });
   };
 
-  this.modelColor = function (model) {
-    return model.isSelected ? colors.selectionColor : model.color;
-  };
-
   this.mousemove = function( event ) {
-    // if ( self.mouseStatus > 0 ) {
-      self.highlightElement(event);
-    // }
+    self.highlightElement(event);
   };
 
   this.domElement.addEventListener( 'mousemove', self.mousemove, false );

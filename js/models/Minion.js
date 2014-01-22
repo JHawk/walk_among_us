@@ -2,8 +2,12 @@ var model = model || {};
 
 model.Minion = function (color, mesh) {
   var self = this;
-  self = _.extend(this, new helpers.Utils);
 
+  self = _.extend(this, new helpers.Utils);
+  // self = _.extend(this, new style.Colors);
+  self = _.extend(this, new models.BaseModel());
+
+  self.mesh = mesh;
   self.tickSpeed = 10;
   self.speed = 1;
 
@@ -11,6 +15,7 @@ model.Minion = function (color, mesh) {
   self.isHighlighted = false;
   self.isTargetable = true;
   self.color = color;
+
   self.destination = [0,0];
 
   self.boundary = 10.0;

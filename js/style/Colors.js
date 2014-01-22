@@ -31,7 +31,7 @@ style.Colors = function () {
     return "#" + n.toString(16).split('.')[0];
   };
 
-  this.highlight = function (color) {
+  this.highlightColor = function (color) {
     if (typeof color === 'number')
     {
       return color + (hightlightBumpSize * 0x111111);
