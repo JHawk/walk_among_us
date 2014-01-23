@@ -49,6 +49,16 @@ models.Board = function (width, height) {
     return [];
   };
 
+  this.update = function () {
+    _.each(minions, function (sprite) {
+      sprite.update();
+    });
+  };
+
+  this.name = function (obj, x, y) {
+    return obj + "-x:" + x + "-y:" + y;
+  };
+
   var minions = [];
 
   this.createMinion = function () {
@@ -65,14 +75,12 @@ models.Board = function (width, height) {
     return minion;
   };
 
-  this.update = function () {
-    _.each(minions, function (sprite) {
-      sprite.update();
-    });
-  };
+  var minionCount = 2;
 
-  this.name = function (obj, x, y) {
-    return obj + "-x:" + x + "-y:" + y;
+  this.createMinions = function () {
+    return _.map(_.range(minionCount), function () {
+      return self.createMinion();
+    });
   };
 
   this.walls = function () {

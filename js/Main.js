@@ -19,8 +19,9 @@ Main = function () {
       scene.add(mesh); 
     });
 
-    var minion = board.createMinion();
-    scene.add(minion);
+    _.each(board.createMinions(), function (mesh) { 
+      scene.add(mesh); 
+    });
     
     scene.add(lights.ambient());
     scene.add(lights.directional1());
