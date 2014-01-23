@@ -1,9 +1,13 @@
-var model = model || {};
+var models = models || {};
 
-model.Minion = function (color, mesh) {
+models.Minion = function (x,y) {
   var self = this;
-
+  self = _.extend(this, new style.Colors);
   self = _.extend(this, new helpers.Utils);
+
+  var color = self.minionColor();
+  var mesh = new meshes.Minion().create(x,y,color);
+  
   self = _.extend(this, new models.BaseModel(color, mesh));
 
   self.tickSpeed = 10;
@@ -38,18 +42,20 @@ model.Minion = function (color, mesh) {
   };
 
   var update = function () {
-    if (_target && !_target.isRemoved && _target.isSelected) 
+    if (_target && _target.isSelected) 
     {
       move();
     }
     else 
     {
-      if (model.Wall.selected.length > 0)
+      if (models.Wall.selected.length > 0)
       {
-        _target = _.sample(model.Wall.selected);
+        _target = _.sample(models.Wall.selected);
       }
     }
   };
 
+  mesh.model = self;
+  
   self.update = _.throttle(update, self.tickSpeed);
 };

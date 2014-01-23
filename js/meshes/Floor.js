@@ -9,7 +9,7 @@ meshes.Floor = function () {
     var plane = new THREE.Mesh(new THREE.PlaneGeometry(3000, 3000), material);
     plane.overdraw = true;
     plane.receiveShadow = true;
-    plane.model = new model.Floor();
+    plane.model = new models.Floor();
     plane.name = "Floor";
     return plane;
   };

@@ -1,6 +1,6 @@
-var model = model || {};
+var models = models || {};
 
-model.Floor = function () {
+models.Floor = function () {
   var self = this;
 
   self.isSelected = false;

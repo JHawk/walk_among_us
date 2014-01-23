@@ -1,8 +1,13 @@
-var model = model || {};
+var models = models || {};
 
-model.Wall = function (color, mesh) {
+models.Wall = function (x,y) {
   var self = this;
-  var _$ = model.Wall;
+  self = _.extend(this, new style.Colors);
+  var _$ = models.Wall;
+
+  var color = self.blockColor();
+
+  var mesh = new meshes.Wall().create(x,y,color);
 
   self = _.extend(this, new models.BaseModel(color, mesh));
 
@@ -18,7 +23,8 @@ model.Wall = function (color, mesh) {
     _$.selected = _.reject(_$.selected, function (w) { return w == self});    
   });
 
+  mesh.model = self;
   return self;
 };
 
-model.Wall.selected = [];
+models.Wall.selected = [];

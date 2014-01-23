@@ -2,7 +2,6 @@ var models = models || {};
 
 models.Board = function (width, height) {
   var self = this;
-  self = _.extend(this, new style.Colors);
 
   var _width = _(width).range();
   var _height = _(height).range();
@@ -11,9 +10,6 @@ models.Board = function (width, height) {
   
   self.centerPosition = _.map(_centerBlock, function (b) { return b * meshes.Wall.size });
   
-  this.wall = new meshes.Wall;
-  this.minion = new meshes.Minion;
-
   this.createWalls = function () {
     var spawnArea = self.spawnArea();
     var walls = self.walls();
@@ -55,51 +51,31 @@ models.Board = function (width, height) {
     });
   };
 
-  this.name = function (obj, x, y) {
-    return obj + "-x:" + x + "-y:" + y;
-  };
-
   var minions = [];
 
   this.createMinion = function () {
     var spawnPoint = randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
-    var name = self.name("Minion", x, y);
-    var color = self.minionColor();
-    var minion = self.minion.create(x, y, color);
-    minion.model = new model.Minion(color, minion);
-    minion.name = name;
-
-    minions.push(minion.model);
-
-    return minion;
+    minions.push(new models.Minion(x,y));
   };
 
   var minionCount = 2;
 
   this.createMinions = function () {
-    return _.map(_.range(minionCount), function () {
-      return self.createMinion();
+    _.each(_.range(minionCount), function () {
+      self.createMinion();
     });
   };
 
   this.walls = function () {
-    var walls = _width.map(function(x) {
-      return _height.map(function(y) {
+    _width.map(function(x) {
+      _height.map(function(y) {
         var position = [x,y];
         if (_board[position]) return;
+        new models.Wall(x,y);
 
-        var name = self.name("Wall", x, y);
-        var color = self.blockColor();
-        var wall = self.wall.create(x,y,color);
-        wall.model = new model.Wall(color, wall);
-        wall.name = name;
-        
-        _board[position] = name;
-        return wall;
+        // _board[position] = name;
       });
     });
-
-    return _.flatten(walls);
   };
 };

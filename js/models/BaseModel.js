@@ -7,6 +7,8 @@ models.BaseModel = function (color, mesh) {
   var internal = {};
 
   this.mesh = mesh;
+  models.scene.add(mesh);
+  
   this.position = function () { return [mesh.position.x, mesh.position.y]; };
   this.isSelected = false;
   this.isHighlighted = false;
@@ -39,6 +41,7 @@ models.BaseModel = function (color, mesh) {
   this.remove = function () {
     internal.removed();
     this.isRemoved = true;
+    this.isSelected = false;
     models.scene.remove(this.mesh);
   };
 
@@ -52,7 +55,7 @@ models.BaseModel = function (color, mesh) {
     {
       internal.deselected();
     }
-    this.mesh.material.color.setHex(this.currentColor(model));
+    this.mesh.material.color.setHex(this.currentColor());
   };
 
   this.highlight = function () {
