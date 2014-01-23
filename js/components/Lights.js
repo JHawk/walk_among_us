@@ -9,8 +9,8 @@ components.Lights = function (width, height) {
     var light = new THREE.DirectionalLight(colors.directionalLight);
     light.position.set(-40, 60, 30);
     light.castShadow = true;
-    light.shadowCameraNear = components.Camera.near;
-    light.shadowCameraFar = components.Camera.far;
+    light.shadowCameraNear = components.CameraControl.near;
+    light.shadowCameraFar = components.CameraControl.far;
     light.shadowCameraLeft = -shadowDistance;
     light.shadowCameraRight = shadowDistance;
     light.shadowCameraTop = shadowDistance;

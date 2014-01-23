@@ -1,6 +1,6 @@
 var components = components || {};
 
-components.Renderer = function (camera, width, height) {
+components.Renderer = function (width, height) {
     this.create = function () {
         var renderer = new THREE.WebGLRenderer();
         renderer.setSize( width, height );
@@ -8,7 +8,7 @@ components.Renderer = function (camera, width, height) {
         renderer.shadowMapSoft = true;
 
         renderer.shadowCameraNear = 3;
-        renderer.shadowCameraFar = components.Camera.far;
+        renderer.shadowCameraFar = components.CameraControl.far;
         renderer.shadowCameraFov = 50;
 
         renderer.shadowMapBias = 0.0039;

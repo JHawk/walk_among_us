@@ -27,16 +27,16 @@ Main = function () {
 
     models.scene = scene;
 
-    var camera = new components.Camera(width, height).create();
-    var renderer = new components.Renderer(camera, width, height).create();
+    var cameraControl = new components.CameraControl(width, height, board.centerPosition);
+    var renderer = new components.Renderer(width, height).create();
 
-    var keyControls = new controls.Keys(camera);
-    new controls.Mouse(camera, scene);
+    var keyControls = new controls.Keys(cameraControl);
+    new controls.Mouse(cameraControl.camera, scene);
     
     function render() {
       requestAnimationFrame(render);
       keyControls.update();
-      renderer.render(scene, camera);
+      renderer.render(scene, cameraControl.camera);
       board.update();
     }
 

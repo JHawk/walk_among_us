@@ -6,10 +6,11 @@ models.Board = function (width, height) {
 
   var _width = _(width).range();
   var _height = _(height).range();
-  var _center = [Math.floor(width / 2), Math.floor(height / 2)];
-  
+  var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
   var _board = {};
-
+  
+  self.centerPosition = _.map(_centerBlock, function (b) { return b * meshes.Wall.size });
+  
   this.wall = new meshes.Wall;
   this.minion = new meshes.Minion;
 
@@ -22,7 +23,7 @@ models.Board = function (width, height) {
   var spawnRadius = 3;
 
   var spawnRange = function(idx) {
-    return _.range(_center[idx] - spawnRadius, _center[idx] + spawnRadius);
+    return _.range(_centerBlock[idx] - spawnRadius, _centerBlock[idx] + spawnRadius);
   };
 
   var spawnX = function () {

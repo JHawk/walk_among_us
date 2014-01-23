@@ -1,9 +1,10 @@
 var controls = controls || {};
 
-controls.Keys = function ( camera ) {
+controls.Keys = function ( cameraControl ) {
   var self = this;
   
-  this.camera = camera;
+  this.cameraControl = cameraControl;
+  this.camera = cameraControl.camera;
   this.domElement = document;
   this.movementSpeed = 1.0;
   this.rotationSpeed = 0.01;
@@ -30,7 +31,9 @@ controls.Keys = function ( camera ) {
 
   this.keydown = function( event ) {
     var keyHandled = true;
-    if ( event.altKey ) {
+    if ( event.keyCode == 84) {
+      self.cameraControl.toggle();
+    } else if ( event.altKey ) {
       switch ( event.keyCode ) {
         case 87: /*W*/ self.moveState.rollForward = 1; break;
         case 83: /*S*/ self.moveState.rollBack = 1; break;
@@ -91,18 +94,12 @@ controls.Keys = function ( camera ) {
     self.moveVector.x = ( -self.moveState.left    + self.moveState.right );
     self.moveVector.y = ( -self.moveState.down    + self.moveState.up );
     self.moveVector.z = ( -self.moveState.forward + self.moveState.back );
-
-    // console.log( 'move: ', [ self.moveVector.x, self.moveVector.y, self.moveVector.z ] );
-    // console.log( 'camera: ', [self.camera.position.x, self.camera.position.y, self.camera.position.z] );
   };
 
   this.updateRotationVector = function() {
     self.rotationVector.x = ( -self.moveState.turnDown + self.moveState.turnUp );
     self.rotationVector.y = ( -self.moveState.turnRight  + self.moveState.turnLeft );
     self.rotationVector.z = ( -self.moveState.rollBack + self.moveState.rollForward );
-
-    // console.log( 'rotate: ', [ self.rotationVector.x, self.rotationVector.y, self.rotationVector.z ] );
-    // console.log( 'camera: ', [self.camera.rotation.x, self.camera.rotation.y, self.camera.rotation.z] );
   };
 
   this.update = function() {
