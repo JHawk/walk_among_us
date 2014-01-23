@@ -9,35 +9,15 @@ model.Minion = function (color, mesh) {
   self.tickSpeed = 10;
   self.speed = 1;
 
-  self.destination;
-
   self.meleeRange = 20.0;
 
   var _target;
-  
-  var collision = function () {
-    var origin = mesh.position.clone();
-    for (var vertexIndex = 0; vertexIndex < mesh.geometry.vertices.length; vertexIndex++)
-    {   
-      var localVertex = mesh.geometry.vertices[vertexIndex].clone();
-      var globalVertex = localVertex.applyMatrix4( mesh.matrix );
-      var directionVector = globalVertex.sub( mesh.position );
-      
-      var ray = new THREE.Raycaster( origin, directionVector.clone().normalize() );
-      var meshes = [_target.mesh];
-      var collisionResults = ray.intersectObjects( meshes );
-      if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
-      {
-        return true;
-      }
-    }
-  }
 
   var advance = function () {
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var step = self.step(self.destination, [x,y], self.speed);
+    var step = self.step(_target.position(), [x,y], self.speed);
 
     var nextX = x + step[0];
     var nextY = y + step[1];
@@ -47,20 +27,18 @@ model.Minion = function (color, mesh) {
   };
 
   var move = function () {
-    if (collision())
+    if (_target && meshes.Utils.collision(mesh, [_target.mesh]))
     {
-      if (_target) 
-      {
-        _target.takeHit();
-      }
-      self.destination = null;
+      _target.takeHit();
     }
     else
+    {
       advance();
+    }
   };
 
   var update = function () {
-    if (self.destination) 
+    if (_target && !_target.isRemoved && _target.isSelected) 
     {
       move();
     }
@@ -69,7 +47,6 @@ model.Minion = function (color, mesh) {
       if (model.Wall.selected.length > 0)
       {
         _target = _.sample(model.Wall.selected);
-        self.destination = [_target.mesh.position.x, _target.mesh.position.y];
       }
     }
   };

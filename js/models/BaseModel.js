@@ -7,6 +7,7 @@ models.BaseModel = function (color, mesh) {
   var internal = {};
 
   this.mesh = mesh;
+  this.position = function () { return [mesh.position.x, mesh.position.y]; };
   this.isSelected = false;
   this.isHighlighted = false;
   this.isTargetable = true;
@@ -33,8 +34,11 @@ models.BaseModel = function (color, mesh) {
     });
   }();
 
+  this.isRemoved = false;
+
   this.remove = function () {
     internal.removed();
+    this.isRemoved = true;
     models.scene.remove(this.mesh);
   };
 
