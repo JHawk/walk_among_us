@@ -3,6 +3,8 @@ var models = models || {};
 models.BaseModel = function (color, mesh) {
   colors = new style.Colors;
 
+  var base = this;
+
   this.mesh = mesh;
   this.isSelected = false;
   this.isHighlighted = false;
@@ -13,40 +15,25 @@ models.BaseModel = function (color, mesh) {
     return this.isSelected ? colors.selectionColor : this.color;
   };
 
-  // TODO: DRY this up. ///////////////
-  var removalEvents = [];
+  var registeredEvents = ["select", "deselect", "remove"];
 
-  var removed = function () {
-    _.each(removalEvents, function(e) { e(); })
-  };
-
-  this.onRemoval = function (e) { 
-    removalEvents.push(e);
-  };
-
-  var deselectEvents = [];
-
-  var deselected = function () {
-    _.each(deselectEvents, function(e) { e(); })
-  };
-
-  this.onDeselect = function (e) { 
-    deselectEvents.push(e);
-  };
-
-  var selectEvents = [];
-
-  var selected = function () {
-    _.each(selectEvents, function(e) { e(); })
-  };
-
-  this.onSelect = function (e) { 
-    selectEvents.push(e);
-  };
-  // TODO: DRY this up. ///////////////
+  // generates methods :
+  //    evented which fires all events
+  //    onEvent which adds the event to an array to be fired
+  this.generateRegisteredEvents = function () {
+    _.each(registeredEvents, function (eventName) {
+      var events = [];
+      base[eventName.pastTense()] = function() {
+        _.each(events, function(e) { e(); })
+      };
+      base["on" + eventName.capitalize()] = function (e) {
+        events.push(e);
+      };
+    });
+  }();
 
   this.remove = function () {
-    removed();
+    base.removed();
     models.scene.remove(this.mesh);
   };
 
@@ -54,11 +41,11 @@ models.BaseModel = function (color, mesh) {
     this.isSelected = !this.isSelected;
     if (this.isSelected)
     {
-      selected();
+      base.selected();
     }
     else
     {
-      deselected();
+      base.deselected();
     }
     this.mesh.material.color.setHex(this.currentColor(model));
   };
@@ -80,4 +67,6 @@ models.BaseModel = function (color, mesh) {
   this.takeHit = function () {
     this.remove();
   };
+
+  return base;
 };

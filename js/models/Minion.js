@@ -11,7 +11,7 @@ model.Minion = function (color, mesh) {
 
   self.destination;
 
-  self.boundary = 20.0;
+  self.meleeRange = 20.0;
 
   var _targets = [];
   var _target;
