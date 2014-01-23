@@ -1,7 +1,13 @@
 var models = models || {};
 
-models.BaseModel = function () {
+models.BaseModel = function (color, mesh) {
   colors = new style.Colors;
+
+  this.mesh = mesh;
+  this.isSelected = false;
+  this.isHighlighted = false;
+  this.isTargetable = true;
+  this.color = color;
 
   this.currentColor = function () {
     return this.isSelected ? colors.selectionColor : this.color;
@@ -69,5 +75,9 @@ models.BaseModel = function () {
     } catch(e) {
       console.log(this);
     }
+  };
+
+  this.takeHit = function () {
+    this.remove();
   };
 };
