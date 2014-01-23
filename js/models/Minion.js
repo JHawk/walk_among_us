@@ -26,7 +26,7 @@ model.Minion = function (color, mesh) {
     _targets = targets;
   };
 
-  var hitDetect = function () {
+  var collision = function () {
     var origin = mesh.position.clone();
     for (var vertexIndex = 0; vertexIndex < mesh.geometry.vertices.length; vertexIndex++)
     {   
@@ -43,14 +43,21 @@ model.Minion = function (color, mesh) {
     }
   }
 
-  var move = function () {
+  var advance = function () {
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var _dx = Math.abs(x - self.destination[0]);
-    var _dy = Math.abs(y - self.destination[1]);
+    var step = self.step(self.destination, [x,y], self.speed);
 
-    if (hitDetect())
+    var nextX = x + step[0];
+    var nextY = y + step[1];
+
+    mesh.position.setX(nextX);
+    mesh.position.setY(nextY);
+  };
+
+  var move = function () {
+    if (collision())
     {
       if (_target) 
       {
@@ -59,15 +66,7 @@ model.Minion = function (color, mesh) {
       self.destination = null;
     }
     else
-    {
-      var step = self.step(self.destination, [x,y], self.speed);
-
-      var nextX = x + step[0];
-      var nextY = y + step[1];
-
-      mesh.position.setX(nextX);
-      mesh.position.setY(nextY);
-    }
+      advance();
   };
 
   var update = function () {
