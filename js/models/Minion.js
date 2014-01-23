@@ -29,7 +29,8 @@ model.Minion = function (color, mesh) {
       var directionVector = globalVertex.sub( mesh.position );
       
       var ray = new THREE.Raycaster( origin, directionVector.clone().normalize() );
-      var collisionResults = ray.intersectObjects( _targets );
+      var meshes = _.map(_targets, function (t) { return t.mesh; });
+      var collisionResults = ray.intersectObjects( meshes );
       if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
       {
         return true;
@@ -55,7 +56,7 @@ model.Minion = function (color, mesh) {
     {
       if (_target) 
       {
-        _target.model.takeHit();
+        _target.takeHit();
       }
       self.destination = null;
     }
@@ -73,7 +74,7 @@ model.Minion = function (color, mesh) {
       if (_targets.length > 0)
       {
         _target = _.sample(_targets);
-        self.destination = [_target.position.x, _target.position.y];
+        self.destination = [_target.mesh.position.x, _target.mesh.position.y];
       }
     }
   };

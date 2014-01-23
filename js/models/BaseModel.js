@@ -3,7 +3,8 @@ var models = models || {};
 models.BaseModel = function (color, mesh) {
   colors = new style.Colors;
 
-  var base = this;
+  var external = this;
+  var internal = {};
 
   this.mesh = mesh;
   this.isSelected = false;
@@ -23,17 +24,17 @@ models.BaseModel = function (color, mesh) {
   this.generateRegisteredEvents = function () {
     _.each(registeredEvents, function (eventName) {
       var events = [];
-      base[eventName.pastTense()] = function() {
+      internal[eventName.pastTense()] = function() {
         _.each(events, function(e) { e(); })
       };
-      base["on" + eventName.capitalize()] = function (e) {
+      external["on" + eventName.capitalize().pastTense()] = function (e) {
         events.push(e);
       };
     });
   }();
 
   this.remove = function () {
-    base.removed();
+    internal.removed();
     models.scene.remove(this.mesh);
   };
 
@@ -41,11 +42,11 @@ models.BaseModel = function (color, mesh) {
     this.isSelected = !this.isSelected;
     if (this.isSelected)
     {
-      base.selected();
+      internal.selected();
     }
     else
     {
-      base.deselected();
+      internal.deselected();
     }
     this.mesh.material.color.setHex(this.currentColor(model));
   };
@@ -68,5 +69,5 @@ models.BaseModel = function (color, mesh) {
     this.remove();
   };
 
-  return base;
+  return external;
 };

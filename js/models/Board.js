@@ -75,8 +75,6 @@ models.Board = function (width, height) {
     return obj + "-x:" + x + "-y:" + y;
   };
 
-  var selectedWalls = [];
-
   this.walls = function () {
     var walls = _width.map(function(x) {
       return _height.map(function(y) {
@@ -89,26 +87,21 @@ models.Board = function (width, height) {
         wall.model = new model.Wall(color, wall);
         wall.name = name;
 
-        wall.model.onSelect(function () { 
-          selectedWalls.push(wall);
+        wall.model.onSelected(function () { 
           _.each(minions, function (m) {
-            m.updateTargets(selectedWalls);
+            m.updateTargets(model.Wall.selected);
           });
         });
 
-        wall.model.onDeselect(function () {
-          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall});
-          
+        wall.model.onDeselected(function () {
           _.each(minions, function (m) {
-            m.updateTargets(selectedWalls);
+            m.updateTargets(model.Wall.selected);
           });
         });
 
-        wall.model.onRemove(function () {
-          selectedWalls = _.reject(selectedWalls, function (w) { return w == wall});
-          
+        wall.model.onRemoved(function () {
           _.each(minions, function (m) {
-            m.updateTargets(selectedWalls);
+            m.updateTargets(model.Wall.selected);
           });
         });
         
