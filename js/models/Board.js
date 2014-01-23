@@ -86,24 +86,6 @@ models.Board = function (width, height) {
         var wall = self.wall.create(x,y,color);
         wall.model = new model.Wall(color, wall);
         wall.name = name;
-
-        wall.model.onSelected(function () { 
-          _.each(minions, function (m) {
-            m.updateTargets(model.Wall.selected);
-          });
-        });
-
-        wall.model.onDeselected(function () {
-          _.each(minions, function (m) {
-            m.updateTargets(model.Wall.selected);
-          });
-        });
-
-        wall.model.onRemoved(function () {
-          _.each(minions, function (m) {
-            m.updateTargets(model.Wall.selected);
-          });
-        });
         
         _board[position] = name;
         return wall;

@@ -13,13 +13,8 @@ model.Minion = function (color, mesh) {
 
   self.meleeRange = 20.0;
 
-  var _targets = [];
   var _target;
-
-  this.updateTargets = function (targets) {
-    _targets = targets;
-  };
-
+  
   var collision = function () {
     var origin = mesh.position.clone();
     for (var vertexIndex = 0; vertexIndex < mesh.geometry.vertices.length; vertexIndex++)
@@ -29,7 +24,7 @@ model.Minion = function (color, mesh) {
       var directionVector = globalVertex.sub( mesh.position );
       
       var ray = new THREE.Raycaster( origin, directionVector.clone().normalize() );
-      var meshes = _.map(_targets, function (t) { return t.mesh; });
+      var meshes = [_target.mesh];
       var collisionResults = ray.intersectObjects( meshes );
       if (collisionResults.length > 0 && collisionResults[0].distance < directionVector.length())
       {
@@ -71,9 +66,9 @@ model.Minion = function (color, mesh) {
     }
     else 
     {
-      if (_targets.length > 0)
+      if (model.Wall.selected.length > 0)
       {
-        _target = _.sample(_targets);
+        _target = _.sample(model.Wall.selected);
         self.destination = [_target.mesh.position.x, _target.mesh.position.y];
       }
     }
