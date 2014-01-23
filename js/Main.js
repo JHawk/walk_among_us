@@ -23,7 +23,8 @@ Main = function () {
     scene.add(minion);
     
     scene.add(lights.ambient());
-    scene.add(lights.directional());
+    scene.add(lights.directional1());
+    scene.add(lights.directional2());
 
     models.scene = scene;
 
