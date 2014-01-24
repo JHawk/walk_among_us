@@ -12,6 +12,10 @@ String.prototype.pastTense = function () {
   return (this.endsWith('e')) ? (this + 'd') : (this + "ed"); 
 };
 
+_.mixin({
+
+});
+
 helpers.Utils = function () {
   var self = this;
 

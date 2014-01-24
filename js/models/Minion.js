@@ -2,6 +2,7 @@ var models = models || {};
 
 models.Minion = function (x,y) {
   var self = this;
+  self.name = "Minion";
   self = _.extend(this, new style.Colors);
   self = _.extend(this, new helpers.Utils);
 

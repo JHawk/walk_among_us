@@ -2,6 +2,7 @@ var models = models || {};
 
 models.Wall = function (x,y) {
   var self = this;
+  self.name = "Wall";
   self = _.extend(this, new style.Colors);
   var _$ = models.Wall;
 

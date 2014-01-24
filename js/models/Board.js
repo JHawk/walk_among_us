@@ -8,7 +8,7 @@ models.Board = function (width, height) {
   var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
   var _board = {};
   
-  self.centerPosition = _.map(_centerBlock, function (b) { return b * meshes.Wall.size });
+  self.centerPosition = _.map(_centerBlock, function (b) { return (b * meshes.Wall.size) - meshes.Wall.size / 2 });
   
   this.createWalls = function () {
     var spawnArea = self.spawnArea();
@@ -70,9 +70,9 @@ models.Board = function (width, height) {
       _height.map(function(y) {
         var position = [x,y];
         if (_board[position]) return;
-        new models.Wall(x,y);
+        var wall = new models.Wall(x,y);
 
-        // _board[position] = name;
+        _board[position] = wall.name;
       });
     });
   };
