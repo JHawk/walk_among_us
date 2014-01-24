@@ -46,24 +46,22 @@ models.Board = function (width, height) {
   };
 
   this.update = function () {
-    _.each(minions, function (sprite) {
+    _.each(models.Minion.alive, function (sprite) {
       sprite.update();
     });
   };
 
-  var minions = [];
-
-  this.createMinion = function () {
+  this.spawnMinion = function () {
     var spawnPoint = randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
-    minions.push(new models.Minion(x,y));
+    new models.Minion(x,y);
   };
 
   var minionCount = 2;
 
   this.createMinions = function () {
     _.each(_.range(minionCount), function () {
-      self.createMinion();
+      self.spawnMinion();
     });
   };
 

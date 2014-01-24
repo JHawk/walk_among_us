@@ -38,7 +38,14 @@ style.Colors = function () {
     }
   };
 
+  var minionColors = [
+    11784241.9694794,
+    7133629.223240038,
+    3238919.3030391037,
+    706394.000864384
+  ];
+
   this.minionColor = function () {
-    return self.randomColor();
+    return _.sample(minionColors);
   };
 }

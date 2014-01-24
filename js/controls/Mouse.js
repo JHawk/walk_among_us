@@ -62,7 +62,7 @@ controls.Mouse = function (camera, scene) {
 
     switch ( event.button ) {
       case 0: /*Left*/ self.selectElement(event); break;
-      // case 2: /*Right*/ self.moveState.back = 1; break;
+      // case 2: /*Right*/ function; break;
     }
   };
 
@@ -72,8 +72,8 @@ controls.Mouse = function (camera, scene) {
     event.stopPropagation();
 
     switch ( event.button ) {
-      // case 0: /*Left*/ self.moveState.forward = 0; break;
-      // case 2: /*Right*/ self.moveState.back = 0; break;
+      // case 0: /*Left*/ function; break;
+      // case 2: /*Right*/ function; break;
     }
   };
 

@@ -1,4 +1,4 @@
-var models = models || {};
+  var models = models || {};
 
 Main = function () {
   var self = this;
@@ -17,6 +17,8 @@ Main = function () {
 
     var board = new models.Board(gridWidth, gridHeight);
     
+    models.board = board;
+
     board.createWalls();
     board.createMinions();
     

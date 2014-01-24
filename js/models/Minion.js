@@ -58,4 +58,8 @@ models.Minion = function (x,y) {
   mesh.model = self;
   
   self.update = _.throttle(update, self.tickSpeed);
+
+  models.Minion.alive.push(self);
 };
+
+models.Minion.alive = [];
