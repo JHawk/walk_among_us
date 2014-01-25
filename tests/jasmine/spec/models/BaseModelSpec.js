@@ -1,7 +1,7 @@
 describe("models.BaseModel", function() {
   var BaseModel, ModelInstance;
   var color;
-  var meshSpy, sceneSpy;
+  var meshSpy, sceneSpy, updateMaterialSpy;
   var colors = new style.Colors();
 
   beforeEach(function() {
@@ -20,6 +20,8 @@ describe("models.BaseModel", function() {
     };
 
     ModelInstance = new Model();
+
+    updateMaterialSpy = spyOn(BaseModel, 'updateMaterial');
   });
 
   describe("On initialization", function () {
@@ -57,6 +59,24 @@ describe("models.BaseModel", function() {
       it("will be the selection color", function() {
         expect(ModelInstance.currentColor()).toEqual(colors.selectionColor);
       });
+    });
+  });
+
+  describe("degradeColors", function () {
+    beforeEach(function () {
+      ModelInstance.degradeColors();
+    });
+
+    it("will update the material", function () {
+      expect(updateMaterialSpy).toHaveBeenCalled();
+    });
+
+    it("will set the color to the degraded color", function() {
+      expect(ModelInstance.color).not.toEqual(color);
+    });
+
+    it("will set the selected color to the degraded selected color", function() {
+      expect(ModelInstance.selectedColor).not.toEqual(colors.selectionColor);
     });
   });
 });

@@ -20,10 +20,14 @@ models.BaseModel = function (color, mesh) {
     return this.isSelected ? this.selectedColor : this.color;
   };
 
+  external.updateMaterial = function () {
+    mesh.material.color.setHex(external.currentColor());
+  };
+
   this.degradeColors = function () {
     this.color = colors.degrade(this.color);
     this.selectedColor = colors.degrade(this.selectedColor);
-    mesh.material.color.setHex(external.currentColor());
+    external.updateMaterial();
   };
 
   var registeredEvents = ["select", "deselect", "remove", "damage"];
