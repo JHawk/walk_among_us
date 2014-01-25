@@ -29,14 +29,14 @@ helpers.Utils = function () {
     return radians * (180 / pi);
   }
 
-  this.angle = function (point1, point2) {
-    var deltaX = point2[0] - point1[0];
-    var deltaY = point2[1] - point1[1];
+  this.angle = function (from, to) {
+    var deltaX = from[0] - to[0];
+    var deltaY = from[1] - to[1];
     return Math.atan2(deltaY, deltaX) * (180 / pi);
   };
 
-  this.step = function (point1, point2, stepSize) {
-    var angle = self.angle(point1, point2);
+  this.step = function (from, to, stepSize) {
+    var angle = self.angle(to, from);
     var x = stepSize * Math.cos(angle);
     var y = stepSize * Math.sin(angle);
     return [x,y];

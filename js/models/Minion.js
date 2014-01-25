@@ -24,7 +24,7 @@ models.Minion = function (x,y) {
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var step = self.step(_target.position(), [x,y], self.speed);
+    var step = self.step([x,y], _target.position(), self.speed);
 
     var nextX = x + step[0];
     var nextY = y + step[1];
