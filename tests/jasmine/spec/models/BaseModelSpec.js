@@ -43,6 +43,19 @@ describe("models.BaseModel", function() {
       it("will be the base color", function() {
         expect(ModelInstance.currentColor()).toEqual(color);
       });
+
+      describe("color is degraded", function () {
+        beforeEach(function () {
+          ModelInstance.degradeColors();
+        });
+
+        it("will be the degraded color", function() {
+          var result = ModelInstance.currentColor();
+
+          expect(result).toEqual(BaseModel.color);
+          expect(result).not.toEqual(color);
+        });
+      });
     });
   });
 
@@ -59,6 +72,17 @@ describe("models.BaseModel", function() {
       it("will be the selection color", function() {
         expect(ModelInstance.currentColor()).toEqual(colors.selectionColor);
       });
+
+      describe("color is degraded", function () {
+        beforeEach(function () {
+          ModelInstance.degradeColors();
+        });
+
+        it("will be the degraded selection color", function() {
+          expect(ModelInstance.currentColor()).toEqual(BaseModel.selectedColor);
+          expect(ModelInstance.currentColor()).not.toEqual(colors.selectionColor);
+        });
+      });
     });
   });
 
@@ -67,16 +91,21 @@ describe("models.BaseModel", function() {
       ModelInstance.degradeColors();
     });
 
+    it("will update the ModelInstance", function () {
+      expect(BaseModel.color).toEqual(ModelInstance.color);
+      expect(BaseModel.selectedColor).toEqual(ModelInstance.selectedColor);
+    });
+
     it("will update the material", function () {
-      expect(updateMaterialSpy).toHaveBeenCalled();
+      expect(updateMaterialSpy).toHaveBeenCalledWith(ModelInstance.currentColor());
     });
 
     it("will set the color to the degraded color", function() {
-      expect(ModelInstance.color).not.toEqual(color);
+      expect(BaseModel.color).not.toEqual(color);
     });
 
     it("will set the selected color to the degraded selected color", function() {
-      expect(ModelInstance.selectedColor).not.toEqual(colors.selectionColor);
+      expect(BaseModel.selectedColor).not.toEqual(colors.selectionColor);
     });
   });
 });

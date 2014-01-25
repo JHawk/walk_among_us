@@ -13,21 +13,21 @@ models.BaseModel = function (color, mesh) {
   this.isSelected = false;
   this.isHighlighted = false;
   this.isTargetable = true;
-  this.color = color;
-  this.selectedColor = colors.selectionColor;
+  external.color = color;
+  external.selectedColor = colors.selectionColor;
 
   external.currentColor = function () {
-    return this.isSelected ? this.selectedColor : this.color;
+    return this.isSelected ? external.selectedColor : external.color;
   };
 
-  external.updateMaterial = function () {
-    mesh.material.color.setHex(external.currentColor());
+  external.updateMaterial = function (color) {
+    mesh.material.color.setHex(color);
   };
 
   this.degradeColors = function () {
-    this.color = colors.degrade(this.color);
-    this.selectedColor = colors.degrade(this.selectedColor);
-    external.updateMaterial();
+    external.color = colors.degrade(external.color);
+    external.selectedColor = colors.degrade(external.selectedColor);
+    external.updateMaterial(external.currentColor());
   };
 
   var registeredEvents = ["select", "deselect", "remove", "damage"];
