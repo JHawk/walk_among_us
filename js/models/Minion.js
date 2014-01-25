@@ -3,8 +3,8 @@ var models = models || {};
 models.Minion = function (x,y) {
   var self = this;
   self.name = "Minion";
-  self = _.extend(this, new style.Colors);
-  self = _.extend(this, new helpers.Utils);
+  self = _.extend(this, new style.Colors());
+  self = _.extend(this, new helpers.Utils());
 
   var color = self.minionColor();
   var mesh = new meshes.Minion().create(x,y,color);
@@ -20,7 +20,7 @@ models.Minion = function (x,y) {
 
   var _target;
 
-  var advance = function () {
+  self.advance = function () {
     var x = mesh.position.x;
     var y = mesh.position.y;
 
@@ -55,7 +55,7 @@ models.Minion = function (x,y) {
     }
     else
     {
-      advance();
+      self.advance();
     }
   };
 

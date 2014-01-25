@@ -4,7 +4,7 @@ models.Wall = function (x,y) {
   var self = this;
   self.hitPoints = 10;
   self.name = "Wall";
-  self = _.extend(this, new style.Colors);
+  self = _.extend(this, new style.Colors());
   var _$ = models.Wall;
 
   var color = self.blockColor();

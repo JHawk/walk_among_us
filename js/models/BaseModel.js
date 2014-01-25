@@ -14,15 +14,15 @@ models.BaseModel = function (color, mesh) {
   this.isHighlighted = false;
   this.isTargetable = true;
   this.color = color;
-  this.selectedColor = 11784241.9694794;
+  this.selectedColor = colors.selectionColor;
 
-  this.currentColor = function () {
-    return external.isSelected ? external.selectedColor : external.color;
+  external.currentColor = function () {
+    return this.isSelected ? this.selectedColor : this.color;
   };
 
   this.degradeColors = function () {
-    external.color = colors.degrade(external.color);
-    external.selectedColor = colors.degrade(external.selectedColor);
+    this.color = colors.degrade(this.color);
+    this.selectedColor = colors.degrade(this.selectedColor);
     mesh.material.color.setHex(external.currentColor());
   };
 
