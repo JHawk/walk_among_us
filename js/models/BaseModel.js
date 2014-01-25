@@ -13,11 +13,14 @@ models.BaseModel = function (color, mesh) {
   this.isSelected = false;
   this.isHighlighted = false;
   this.isTargetable = true;
-  external.color = color;
-  external.selectedColor = colors.selectionColor;
+  internal.color = color;
+  internal.selectedColor = colors.selectionColor;
+
+  external.color = function () {return internal.color;}
+  external.selectedColor = function () {return internal.selectedColor;}
 
   external.currentColor = function () {
-    return this.isSelected ? external.selectedColor : external.color;
+    return this.isSelected ? internal.selectedColor : internal.color;
   };
 
   external.updateMaterial = function (color) {
@@ -25,8 +28,8 @@ models.BaseModel = function (color, mesh) {
   };
 
   this.degradeColors = function () {
-    external.color = colors.degrade(external.color);
-    external.selectedColor = colors.degrade(external.selectedColor);
+    internal.color = colors.degrade(internal.color);
+    internal.selectedColor = colors.degrade(internal.selectedColor);
     external.updateMaterial(external.currentColor());
   };
 
