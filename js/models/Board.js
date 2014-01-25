@@ -57,7 +57,7 @@ models.Board = function (width, height) {
     new models.Minion(x,y);
   };
 
-  var minionCount = 2;
+  var minionCount = 1;
 
   this.createMinions = function () {
     _.each(_.range(minionCount), function () {

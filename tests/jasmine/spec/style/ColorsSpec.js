@@ -12,5 +12,11 @@ describe("style.Colors", function() {
 
       expect(Colors.degrade(color)).toBeLessThan(color);
     });
+
+    it("has a lower bound", function() {
+      var color = 0;
+
+      expect(Colors.degrade(color)).toEqual(Colors.lowerBound);
+    });
   });
 });

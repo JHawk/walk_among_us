@@ -38,12 +38,30 @@ style.Colors = function () {
     }
   };
 
-  var degradeBumpSize = 0.01;
+  var degradeBumps = 1;
+  var bumpSize = degradeBumps * 0x111111;
+  this.lowerBound = bumpSize;
+  // var hits = 0;
 
   this.degrade = function (color) {
     if (typeof color === 'number')
     {
-      return color - (degradeBumpSize * 0x111111);
+      var degraded = color - (bumpSize);
+
+      // console.log("hits : " + hits ++);
+      // console.log("bumpSize : " + bumpSize);
+      // console.log("bumpSize : " + self.toHex(bumpSize));
+
+      // console.log("degraded : " + degraded);
+      // console.log("degraded :" + self.toHex(degraded));
+      // console.log("----------------------------------");
+
+      // if (self.toHex(degraded).length < 7)
+      // {
+      //   console.log("color value too low!")
+      // } 
+
+      return (degraded < self.lowerBound) ? self.lowerBound : degraded;
     }
   };
 
