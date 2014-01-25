@@ -1,7 +1,7 @@
 var models = models || {};
 
 models.BaseModel = function (color, mesh) {
-  colors = new style.Colors;
+  var colors = new style.Colors;
 
   var external = this;
   var internal = {};
@@ -14,12 +14,19 @@ models.BaseModel = function (color, mesh) {
   this.isHighlighted = false;
   this.isTargetable = true;
   this.color = color;
+  this.selectedColor = 11784241.9694794;
 
   this.currentColor = function () {
-    return this.isSelected ? colors.selectionColor : this.color;
+    return external.isSelected ? external.selectedColor : external.color;
   };
 
-  var registeredEvents = ["select", "deselect", "remove"];
+  this.degradeColors = function () {
+    external.color = colors.degrade(external.color);
+    external.selectedColor = colors.degrade(external.selectedColor);
+    mesh.material.color.setHex(external.currentColor());
+  };
+
+  var registeredEvents = ["select", "deselect", "remove", "damage"];
 
   // generates methods :
   //    evented which fires all events
@@ -72,8 +79,13 @@ models.BaseModel = function (color, mesh) {
     }
   };
 
-  this.takeHit = function () {
-    this.remove();
+  this.takeHit = function (damage) {
+    this.hitPoints = this.hitPoints - damage;
+    internal.damaged();
+    if (this.hitPoints < 0)
+    {
+      this.remove();
+    }
   };
 
   return external;

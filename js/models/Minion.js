@@ -11,10 +11,12 @@ models.Minion = function (x,y) {
   
   self = _.extend(this, new models.BaseModel(color, mesh));
 
-  self.tickSpeed = 10;
+  self.tickSpeedMs = 10;
+  self.attackSpeedMs = 1000;
   self.speed = 1;
+  self.damage = 1;
 
-  self.meleeRange = 20.0;
+  self.meleeRange = 10.0;
 
   var _target;
 
@@ -31,10 +33,25 @@ models.Minion = function (x,y) {
     mesh.position.setY(nextY);
   };
 
+  var inRange = function() {
+    var x = mesh.position.x;
+    var y = mesh.position.y;
+
+    var destination = _target.position();
+    var _dx = Math.abs(x - destination[0]);
+    var _dy = Math.abs(y - destination[1]);
+    return self.magnitude([_dx, _dy]) < self.meleeRange;
+  };
+
+  var attack = _.throttle(function () {
+    _target.takeHit(self.damage);
+  }, self.attackSpeedMs);
+
+  // meshes.Utils.collision(mesh, [_target.mesh])
   var move = function () {
-    if (_target && meshes.Utils.collision(mesh, [_target.mesh]))
+    if (_target && inRange())
     {
-      _target.takeHit();
+      attack();
     }
     else
     {
@@ -58,7 +75,7 @@ models.Minion = function (x,y) {
 
   mesh.model = self;
   
-  self.update = _.throttle(update, self.tickSpeed);
+  self.update = _.throttle(update, self.tickSpeedMs);
 
   models.Minion.alive.push(self);
 };

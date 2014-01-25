@@ -2,6 +2,7 @@ var models = models || {};
 
 models.Wall = function (x,y) {
   var self = this;
+  self.hitPoints = 10;
   self.name = "Wall";
   self = _.extend(this, new style.Colors);
   var _$ = models.Wall;
@@ -23,6 +24,8 @@ models.Wall = function (x,y) {
   self.onRemoved(function () {
     _$.selected = _.reject(_$.selected, function (w) { return w == self});    
   });
+
+  self.onDamaged(self.degradeColors);
 
   mesh.model = self;
   return self;

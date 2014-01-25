@@ -25,16 +25,25 @@ style.Colors = function () {
   this.floor = 0xB0A6A4;
   this.selectionColor = 11784241.9694794;
 
-  var hightlightBumpSize = 4;
-
   this.toHex = function (n) {
     return "#" + n.toString(16).split('.')[0];
   };
+
+  var hightlightBumpSize = 4;
 
   this.highlightColor = function (color) {
     if (typeof color === 'number')
     {
       return color + (hightlightBumpSize * 0x111111);
+    }
+  };
+
+  var degradeBumpSize = 0.01;
+
+  this.degrade = function (color) {
+    if (typeof color === 'number')
+    {
+      return color - (degradeBumpSize * 0x111111);
     }
   };
 
