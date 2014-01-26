@@ -8,7 +8,9 @@ models.Board = function (width, height) {
   var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
   var _board = {};
   
-  self.centerPosition = _.map(_centerBlock, function (b) { return (b * meshes.Wall.size) - meshes.Wall.size / 2 });
+  self.centerPosition = _.map(_centerBlock, function (b) { 
+    return (b * meshes.Wall.size) - meshes.Wall.size / 2 
+  });
   
   this.createWalls = function () {
     var spawnArea = self.spawnArea();
@@ -65,6 +67,32 @@ models.Board = function (width, height) {
     });
   };
 
+  this.adjacentBoardPositions = function (p) {
+    return [
+      [p[0] - 1, p[1]],
+      [p[0] + 1, p[1]],
+      [p[0], p[1] - 1],
+      [p[0], p[1] + 1]
+    ];
+  };
+
+  // TODO factor out the board concept of objects - let scene deal with it.
+  this.isEmpty = function (p) {
+    return _board[p] === "Empty";
+  }
+
+  this.isNearEmptySpace = function (w) {
+    return _.some(self.adjacentBoardPositions(w.boardPosition), function (p) {
+      return self.isEmpty(p);
+    });
+  };
+
+  this.targetableWalls = function () {
+    return _.filter(models.Wall.selected, function (w) {
+      return self.isNearEmptySpace(w);
+    });
+  };
+
   this.walls = function () {
     _width.map(function(x) {
       _height.map(function(y) {
@@ -72,8 +100,10 @@ models.Board = function (width, height) {
         if (_board[position]) return;
         var wall = new models.Wall(x,y);
 
-        _board[position] = wall.name;
+        _board[position] = [ wall.name, wall.uuid ];
       });
     });
   };
+
+  models.Board.board = self;
 };

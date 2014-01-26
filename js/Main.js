@@ -13,7 +13,7 @@ Main = function () {
 
     scene.add(new meshes.Floor().create());
 
-    var gridWidth = 20, gridHeight = 20;
+    var gridWidth = 25, gridHeight = 25;
 
     var board = new models.Board(gridWidth, gridHeight);
     

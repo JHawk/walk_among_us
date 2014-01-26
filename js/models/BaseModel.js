@@ -9,7 +9,11 @@ models.BaseModel = function (color, mesh) {
   this.mesh = mesh;
   models.scene.add(mesh);
   
+  // delegate to the mesh
   this.position = function () { return [mesh.position.x, mesh.position.y]; };
+  this.uuid = mesh.uuid;
+  //
+  
   this.isSelected = false;
   this.isHighlighted = false;
   this.isTargetable = true;
@@ -33,7 +37,7 @@ models.BaseModel = function (color, mesh) {
     external.updateMaterial(external.currentColor());
   };
 
-  var registeredEvents = ["select", "deselect", "remove", "damage"];
+  var registeredEvents = ["create", "select", "deselect", "remove", "damage"];
 
   // generates methods :
   //    evented which fires all events

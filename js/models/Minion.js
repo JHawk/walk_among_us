@@ -51,7 +51,14 @@ models.Minion = function (x,y) {
   var move = function () {
     if (_target && inRange())
     {
+
+
+
+      var targetables = models.Board.board.targetableWalls();
+
       attack();
+
+
     }
     else
     {
