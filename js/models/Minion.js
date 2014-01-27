@@ -51,14 +51,7 @@ models.Minion = function (x,y) {
   var move = function () {
     if (_target && inRange())
     {
-
-
-
-      var targetables = models.Board.board.targetableWalls();
-
       attack();
-
-
     }
     else
     {
@@ -73,9 +66,10 @@ models.Minion = function (x,y) {
     }
     else 
     {
-      if (models.Wall.selected.length > 0)
+      var walls = models.Board.board.targetableWalls;
+      if (walls.length > 0)
       {
-        _target = _.sample(models.Wall.selected);
+        _target = _.sample(walls);
       }
     }
   };

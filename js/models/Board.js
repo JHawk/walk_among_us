@@ -87,8 +87,10 @@ models.Board = function (width, height) {
     });
   };
 
-  this.targetableWalls = function () {
-    return _.filter(models.Wall.selected, function (w) {
+  this.targetableWalls = [];
+
+  this.updateTargetableWalls = function () {
+    self.targetableWalls = _.filter(models.Wall.selected, function (w) {
       return self.isNearEmptySpace(w);
     });
   };
@@ -101,6 +103,13 @@ models.Board = function (width, height) {
         var wall = new models.Wall(x,y);
 
         _board[position] = [ wall.name, wall.uuid ];
+
+        wall.onSelected(self.updateTargetableWalls);
+        wall.onDeselected(self.updateTargetableWalls);
+        wall.onRemoved(function () {
+          _board[wall.boardPosition] = "Empty";
+          self.updateTargetableWalls();
+        });
       });
     });
   };
