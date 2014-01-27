@@ -16,7 +16,7 @@ models.Minion = function (x,y) {
   self.speed = 1;
   self.damage = 1;
 
-  self.meleeRange = 10.0;
+  self.meleeRange = 20.0;
 
   var _target;
 
