@@ -18,14 +18,34 @@ models.Minion = function (x,y) {
 
   self.meleeRange = 20.0;
 
-  var _target, _path, _destination;
+  self.target = undefined;
+
+    // meshes.Utils.collision(mesh, [self.target.mesh])
+
+  self.currentPath = undefined;
+  self.setPath = function () {
+    var _path = models.Board.board.findPath(self.boardPosition(), self.target.boardPosition);
+    self.currentPath = _path.slice(1);
+  };
+
+  self.currentDestination =  undefined;
+  self.destination = function () {
+    if (!self.currentPath || self.currentPath.length < 1) {
+      self.setPath();
+    }
+
+    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 20)) {
+      self.currentDestination = self.fromBoard(self.currentPath.shift());
+    }
+
+    return self.currentDestination;
+  };
 
   self.advance = function () {
-
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var step = self.step([x,y], _destination, self.speed);
+    var step = self.step([x,y], self.destination(), self.speed);
 
     var nextX = x + step[0];
     var nextY = y + step[1];
@@ -34,38 +54,31 @@ models.Minion = function (x,y) {
     mesh.position.setY(nextY);
   };
 
-  this.isClose = function(from, to, tolerance) {
-    var _dx = Math.abs(from[0] - to[0]);
-    var _dy = Math.abs(from[1] - to[1]);
-
-    return self.magnitude([_dx, _dy]) < tolerance;
-  };
-
-  var attack = _.throttle(function () {
-    _target.takeHit(self.damage);
+  self.attack = _.throttle(function () {
+    self.target.takeHit(self.damage);
   }, self.attackSpeedMs);
 
   self.fromBoard = function (p) {
-    return [p[0] * meshes.Wall.size, p[1] * meshes.Wall.size];
+    var half = (meshes.Wall.size / 2);
+    return [p[0] * meshes.Wall.size + half, p[1] * meshes.Wall.size + half];
   };
 
-  // meshes.Utils.collision(mesh, [_target.mesh])
-  var move = function () {
-    if (_target && self.isClose(self.position(), _target.position, self.meleeRange))
-    {
-      attack();
-    }
+  self.takeAction = function () {
+    if (!self.target) return;
+
+    if (self.isClose(self.position(), self.target.position, self.meleeRange))
+      self.attack();
     else
-    {
-      if (_destination == undefined || self.isClose(self.position(), _destination, 20)) 
-      {
-        _destination = self.fromBoard(_path.shift());
-        console.log("path : " + _path);
-        console.log("current destination : " + _destination);
-      }
       self.advance();
-    }
   };
+
+  this.acquireTarget = function () {
+    var walls = models.Board.board.targetableWalls;
+    if (walls.length > 0)
+    {
+      self.target = _.sample(walls);
+    }
+  }
 
   this.boardPosition = function () {
     return _.map(self.position(), function (i) {
@@ -74,21 +87,10 @@ models.Minion = function (x,y) {
   };
 
   var update = function () {
-    if (_target && _target.isSelected && _path.length > 0) 
-    {
-      move();
-    }
-    else 
-    {
-      var walls = models.Board.board.targetableWalls;
-      if (walls.length > 0)
-      {
-        _target = _.sample(walls);
-        _path = models.Board.board.findPath(self.boardPosition(), _target.boardPosition);
-        _path.shift();
-        console.log("New Path : " + _path);
-      }
-    }
+    if (self.target && self.target.isSelected)
+      self.takeAction();
+    else
+      self.acquireTarget();
   };
 
   mesh.model = self;

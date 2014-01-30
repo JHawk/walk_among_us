@@ -1,16 +1,13 @@
 describe("models.BaseModel", function() {
   var BaseModel, ModelInstance;
-  var color;
-  var meshSpy, sceneSpy, updateMaterialSpy;
+  var color; 
+  var updateMaterialSpy;
+  
   var colors = new style.Colors();
 
   beforeEach(function() {
     color = 11824921;
-    meshSpy = jasmine.createSpyObj('mesh', ['position']);
-    sceneSpy = jasmine.createSpyObj('scene', ['add']);
     
-    models.scene = sceneSpy;
-
     BaseModel = new models.BaseModel(color, meshSpy);
 
     function Model () {

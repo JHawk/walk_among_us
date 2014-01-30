@@ -42,10 +42,23 @@ helpers.Utils = function () {
     return [x,y];
   };
 
-  this.magnitude = function (vector) {
+  this.magnitude = function (vector1, vector2) {
+    var vector = vector1;
+
+    if (vector2) {
+      vector = [
+        Math.abs(vector1[0] - vector2[0]), 
+        Math.abs(vector1[1] - vector2[1])
+      ];
+    }
+
     var xSquare = vector[0] * vector[0];
     var ySquare = vector[1] * vector[1];
     
     return Math.sqrt(xSquare + ySquare);
+  };
+
+  this.isClose = function(vector1, vector2, tolerance) {
+    return self.magnitude(vector1, vector2) > tolerance;
   };
 }
