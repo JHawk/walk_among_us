@@ -59,6 +59,6 @@ helpers.Utils = function () {
   };
 
   this.isClose = function(vector1, vector2, tolerance) {
-    return self.magnitude(vector1, vector2) > tolerance;
+    return self.magnitude(vector1, vector2) < tolerance;
   };
 }

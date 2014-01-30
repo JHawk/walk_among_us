@@ -182,4 +182,10 @@ describe("models.Minion", function() {
       expect(Minion.currentPath).toEqual(path.slice(1));
     });
   });
+
+  describe("fromBoard", function () {
+    it("will return the mid point of the target", function() {
+      expect(Minion.fromBoard([0,0])).toEqual([10,10]);
+    });
+  });
 });

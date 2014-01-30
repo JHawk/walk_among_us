@@ -24,8 +24,15 @@ models.Minion = function (x,y) {
 
   self.currentPath = undefined;
   self.setPath = function () {
-    var _path = models.Board.board.findPath(self.boardPosition(), self.target.boardPosition);
-    self.currentPath = _path.slice(1);
+    var from = self.boardPosition();
+    var to = self.target.boardPosition;
+    try {
+      var _path = models.Board.board.findPath(from, to);
+      _path.push(to);
+      self.currentPath = _path.slice(1);
+    } catch(e) {
+      console.log("broken path");
+    }
   };
 
   self.currentDestination =  undefined;
@@ -34,7 +41,7 @@ models.Minion = function (x,y) {
       self.setPath();
     }
 
-    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 20)) {
+    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 0.5)) {
       self.currentDestination = self.fromBoard(self.currentPath.shift());
     }
 
@@ -66,7 +73,7 @@ models.Minion = function (x,y) {
   self.takeAction = function () {
     if (!self.target) return;
 
-    if (self.isClose(self.position(), self.target.position, self.meleeRange))
+    if (self.isClose(self.position(), self.target.position(), self.meleeRange))
       self.attack();
     else
       self.advance();
@@ -76,6 +83,8 @@ models.Minion = function (x,y) {
     var walls = models.Board.board.targetableWalls;
     if (walls.length > 0)
     {
+      self.currentPath = undefined;
+      self.currentDestination = undefined;
       self.target = _.sample(walls);
     }
   }
