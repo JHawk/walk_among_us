@@ -34,12 +34,9 @@ models.Minion = function (x,y) {
     mesh.position.setY(nextY);
   };
 
-  var closeEnough = function(t, tolerance) {
-    var x = mesh.position.x;
-    var y = mesh.position.y;
-
-    var _dx = Math.abs(x - t[0]);
-    var _dy = Math.abs(y - t[1]);
+  this.isClose = function(from, to, tolerance) {
+    var _dx = Math.abs(from[0] - to[0]);
+    var _dy = Math.abs(from[1] - to[1]);
 
     return self.magnitude([_dx, _dy]) < tolerance;
   };
@@ -54,16 +51,17 @@ models.Minion = function (x,y) {
 
   // meshes.Utils.collision(mesh, [_target.mesh])
   var move = function () {
-    if (_target && closeEnough(_target.position, self.meleeRange))
+    if (_target && self.isClose(self.position(), _target.position, self.meleeRange))
     {
       attack();
     }
     else
     {
-      if (_destination == undefined || closeEnough(_destination, 20)) 
+      if (_destination == undefined || self.isClose(self.position(), _destination, 20)) 
       {
         _destination = self.fromBoard(_path.shift());
-        console.log(_destination);
+        console.log("path : " + _path);
+        console.log("current destination : " + _destination);
       }
       self.advance();
     }
@@ -87,6 +85,8 @@ models.Minion = function (x,y) {
       {
         _target = _.sample(walls);
         _path = models.Board.board.findPath(self.boardPosition(), _target.boardPosition);
+        _path.shift();
+        console.log("New Path : " + _path);
       }
     }
   };
