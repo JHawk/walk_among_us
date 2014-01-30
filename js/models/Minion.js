@@ -12,19 +12,20 @@ models.Minion = function (x,y) {
   self = _.extend(this, new models.BaseModel(color, mesh));
 
   self.tickSpeedMs = 10;
-  self.attackSpeedMs = 1000;
+  self.attackSpeedMs = 500;
   self.speed = 1;
   self.damage = 1;
 
   self.meleeRange = 20.0;
 
-  var _target;
+  var _target, _path, _destination;
 
   self.advance = function () {
+
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var step = self.step([x,y], _target.position(), self.speed);
+    var step = self.step([x,y], _destination, self.speed);
 
     var nextX = x + step[0];
     var nextY = y + step[1];
@@ -33,34 +34,49 @@ models.Minion = function (x,y) {
     mesh.position.setY(nextY);
   };
 
-  var inRange = function() {
+  var closeEnough = function(t, tolerance) {
     var x = mesh.position.x;
     var y = mesh.position.y;
 
-    var destination = _target.position();
-    var _dx = Math.abs(x - destination[0]);
-    var _dy = Math.abs(y - destination[1]);
-    return self.magnitude([_dx, _dy]) < self.meleeRange;
+    var _dx = Math.abs(x - t[0]);
+    var _dy = Math.abs(y - t[1]);
+
+    return self.magnitude([_dx, _dy]) < tolerance;
   };
 
   var attack = _.throttle(function () {
     _target.takeHit(self.damage);
   }, self.attackSpeedMs);
 
+  self.fromBoard = function (p) {
+    return [p[0] * meshes.Wall.size, p[1] * meshes.Wall.size];
+  };
+
   // meshes.Utils.collision(mesh, [_target.mesh])
   var move = function () {
-    if (_target && inRange())
+    if (_target && closeEnough(_target.position, self.meleeRange))
     {
       attack();
     }
     else
     {
+      if (_destination == undefined || closeEnough(_destination, 20)) 
+      {
+        _destination = self.fromBoard(_path.shift());
+        console.log(_destination);
+      }
       self.advance();
     }
   };
 
+  this.boardPosition = function () {
+    return _.map(self.position(), function (i) {
+      return Math.round(i / meshes.Wall.size);
+    });
+  };
+
   var update = function () {
-    if (_target && _target.isSelected) 
+    if (_target && _target.isSelected && _path.length > 0) 
     {
       move();
     }
@@ -70,6 +86,7 @@ models.Minion = function (x,y) {
       if (walls.length > 0)
       {
         _target = _.sample(walls);
+        _path = models.Board.board.findPath(self.boardPosition(), _target.boardPosition);
       }
     }
   };

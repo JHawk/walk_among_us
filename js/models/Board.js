@@ -6,6 +6,18 @@ models.Board = function (width, height) {
   var _width = _(width).range();
   var _height = _(height).range();
   var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
+  var _grid = new PF.Grid(width, height);
+
+  var _finder = new PF.AStarFinder({
+    allowDiagonal: true,
+    dontCrossCorners: true
+  }); 
+
+  this.findPath = function (from, to) {
+    to = (self.isEmpty(to)) ? to : self.adjacentEmptySpace(to);
+    return _finder.findPath(from[0], from[1], to[0], to[1], _grid.clone());
+  };
+  
   var _board = {};
   
   self.centerPosition = _.map(_centerBlock, function (b) { 
@@ -42,6 +54,7 @@ models.Board = function (width, height) {
         var position = [x,y];
         if (_board[position]) return;
         _board[position] = "Empty";
+        _grid.setWalkableAt(x, y, true);
       });
     });
     return [];
@@ -81,8 +94,12 @@ models.Board = function (width, height) {
     return _board[p] === "Empty";
   }
 
-  this.isNearEmptySpace = function (w) {
-    return _.some(self.adjacentBoardPositions(w.boardPosition), function (p) {
+  this.isNearEmptySpace = function (p) {
+    return self.adjacentEmptySpace(p) != undefined;
+  };
+
+  this.adjacentEmptySpace = function (position) {
+    return _.find(self.adjacentBoardPositions(position), function (p) {
       return self.isEmpty(p);
     });
   };
@@ -91,7 +108,7 @@ models.Board = function (width, height) {
 
   this.updateTargetableWalls = function () {
     self.targetableWalls = _.filter(models.Wall.selected, function (w) {
-      return self.isNearEmptySpace(w);
+      return self.isNearEmptySpace(w.boardPosition);
     });
   };
 
@@ -99,17 +116,25 @@ models.Board = function (width, height) {
     _width.map(function(x) {
       _height.map(function(y) {
         var position = [x,y];
-        if (_board[position]) return;
-        var wall = new models.Wall(x,y);
+        if (_board[position] /*|| Math.floor(Math.random() * 10000) % 3 == 0*/) {
+          _board[[x,y]] = "Empty";
+          // self.updateTargetableWalls();
+          _grid.setWalkableAt(x, y, true);
+        } else {
+          var wall = new models.Wall(x,y);
 
-        _board[position] = [ wall.name, wall.uuid ];
+          _board[position] = [ wall.name, wall.uuid ];
 
-        wall.onSelected(self.updateTargetableWalls);
-        wall.onDeselected(self.updateTargetableWalls);
-        wall.onRemoved(function () {
-          _board[wall.boardPosition] = "Empty";
-          self.updateTargetableWalls();
-        });
+          _grid.setWalkableAt(x, y, false);
+
+          wall.onSelected(self.updateTargetableWalls);
+          wall.onDeselected(self.updateTargetableWalls);
+          wall.onRemoved(function () {
+            _board[wall.boardPosition] = "Empty";
+            self.updateTargetableWalls();
+            _grid.setWalkableAt(x, y, true);
+          });
+        }
       });
     });
   };
