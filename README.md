@@ -7,4 +7,6 @@ fix to ortho camera
 
 wall hit detection
 
+can reach down and left
+
 path finding 

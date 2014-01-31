@@ -15,8 +15,8 @@ models.Board = function (width, height) {
 
   this.findPath = function (from, to) {
     to = (self.isEmpty(to)) ? to : self.adjacentEmptySpace(to);
-    var path = _finder.findPath(from[0], from[1], to[0], to[1], _grid.clone());
-    return PF.Util.smoothenPath(_grid.clone(), path);
+    // var path = 
+    return _finder.findPath(from[0], from[1], to[0], to[1], _grid.clone());
   };
   
   var _board = {};

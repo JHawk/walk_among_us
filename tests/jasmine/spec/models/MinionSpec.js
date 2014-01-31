@@ -129,7 +129,7 @@ describe("models.Minion", function() {
       it("will consume the path", function() {
         Minion.destination();
 
-        expect(Minion.currentPath.length).toEqual(1);
+        expect(Minion.currentPath.length).toEqual(2);
       });
     });
 
@@ -148,7 +148,7 @@ describe("models.Minion", function() {
       it("will consume the path", function() {
         Minion.destination();
 
-        expect(Minion.currentPath.length).toEqual(1);
+        expect(Minion.currentPath.length).toEqual(2);
       });
     });
 

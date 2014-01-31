@@ -16,7 +16,7 @@ models.Minion = function (x,y) {
   self.speed = 1;
   self.damage = 1;
 
-  self.meleeRange = 20.0;
+  self.meleeRange = 30.0;
 
   self.target = undefined;
 
@@ -41,7 +41,7 @@ models.Minion = function (x,y) {
       self.setPath();
     }
 
-    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 0.5)) {
+    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 10)) {
       self.currentDestination = self.fromBoard(self.currentPath.shift());
     }
 
@@ -57,6 +57,13 @@ models.Minion = function (x,y) {
     var nextX = x + step[0];
     var nextY = y + step[1];
 
+    if (nextX > x || nextY > y)
+    {
+      console.log("position    : " + self.position());
+      console.log("destination : " + self.destination());
+      console.log("next        : " + [nextX, nextY]);
+    }
+
     mesh.position.setX(nextX);
     mesh.position.setY(nextY);
   };
@@ -65,6 +72,7 @@ models.Minion = function (x,y) {
     self.target.takeHit(self.damage);
   }, self.attackSpeedMs);
 
+  // far corner
   self.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
     return [p[0] * meshes.Wall.size + half, p[1] * meshes.Wall.size + half];
