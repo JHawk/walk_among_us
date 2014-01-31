@@ -6,7 +6,8 @@ models.Board = function (width, height) {
   var _width = _(width).range();
   var _height = _(height).range();
   var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
-  var _grid = new PF.Grid(width, height);
+  
+  this.grid = new PF.Grid(width, height);
 
   var _finder = new PF.AStarFinder({
     allowDiagonal: true,
@@ -15,8 +16,7 @@ models.Board = function (width, height) {
 
   this.findPath = function (from, to) {
     to = (self.isEmpty(to)) ? to : self.adjacentEmptySpace(to);
-    // var path = 
-    return _finder.findPath(from[0], from[1], to[0], to[1], _grid.clone());
+    return _finder.findPath(from[0], from[1], to[0], to[1], self.grid.clone());
   };
   
   var _board = {};
@@ -24,6 +24,16 @@ models.Board = function (width, height) {
   self.centerPosition = _.map(_centerBlock, function (b) { 
     return (b * meshes.Wall.size) - meshes.Wall.size / 2 
   });
+
+  this.emptySpace = function(p) {
+    _board[p] = "Empty";
+    self.updateTargetableWalls();
+    self.grid.setWalkableAt(p.x, p.y, true);
+  };
+
+  this.emptySpaces = function(ps) {
+    _.each(ps, self.emptySpace);
+  };
   
   this.createWalls = function () {
     var spawnArea = self.spawnArea();
@@ -55,7 +65,7 @@ models.Board = function (width, height) {
         var position = [x,y];
         if (_board[position]) return;
         _board[position] = "Empty";
-        _grid.setWalkableAt(x, y, true);
+        self.grid.setWalkableAt(x, y, true);
       });
     });
     return [];
@@ -119,21 +129,18 @@ models.Board = function (width, height) {
         var position = [x,y];
         if (_board[position] /*|| Math.floor(Math.random() * 10000) % 3 == 0*/) {
           _board[[x,y]] = "Empty";
-          // self.updateTargetableWalls();
-          _grid.setWalkableAt(x, y, true);
+          self.grid.setWalkableAt(x, y, true);
         } else {
           var wall = new models.Wall(x,y);
 
           _board[position] = [ wall.name, wall.uuid ];
 
-          _grid.setWalkableAt(x, y, false);
+          self.grid.setWalkableAt(x, y, false);
 
           wall.onSelected(self.updateTargetableWalls);
           wall.onDeselected(self.updateTargetableWalls);
           wall.onRemoved(function () {
-            _board[wall.boardPosition] = "Empty";
-            self.updateTargetableWalls();
-            _grid.setWalkableAt(x, y, true);
+            self.emptySpace(wall.mesh.position);
           });
         }
       });
