@@ -42,30 +42,36 @@ models.Minion = function (x,y) {
     }
 
     if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 10)) {
-      self.currentDestination = self.fromBoard(self.currentPath.shift());
+      var d = self.fromBoard(self.currentPath.shift());
+      self.currentDestination = new THREE.Vector3(d[0], d[1], 15)
     }
 
     return self.currentDestination;
   };
 
+  var tween;
+
   self.advance = function () {
-    var x = mesh.position.x;
-    var y = mesh.position.y;
-
-    var step = self.step([x,y], self.destination(), self.speed);
-
-    var nextX = x + step[0];
-    var nextY = y + step[1];
-
-    if (nextX > x || nextY > y)
+    if (!tween)
     {
-      console.log("position    : " + self.position());
-      console.log("destination : " + self.destination());
-      console.log("next        : " + [nextX, nextY]);
-    }
+      var position = {x: self.mesh.position.x, y: self.mesh.position.y}; 
+      var destination = self.destination().clone();
+      var ease = 'Elastic.EaseInOut';
+      var easing  = TWEEN.Easing[ease.split('.')[0]][ease.split('.')[1]];
+  
+      update = function(){
+        
+        self.mesh.position.set(position.x, position.y, 15);
+      }
 
-    mesh.position.setX(nextX);
-    mesh.position.setY(nextY);
+      tween = new TWEEN.Tween(position)
+        .to(destination, 5000)
+        .delay(2000)
+        // .easing(easing)
+        .onUpdate(update)
+        .start();
+    }
+    tween.update();
   };
 
   self.attack = _.throttle(function () {
