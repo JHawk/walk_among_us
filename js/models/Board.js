@@ -19,14 +19,11 @@ models.Board = function (width, height) {
     return _finder.findPath(from[0], from[1], to[0], to[1], self.grid.clone());
   };
   
-  var _board = {};
-  
   self.centerPosition = _.map(_centerBlock, function (b) { 
     return (b * meshes.Wall.size) - meshes.Wall.size / 2 
   });
 
   this.emptySpace = function(p) {
-    _board[p] = "Empty";
     self.updateTargetableWalls();
     self.grid.setWalkableAt(p.x, p.y, true);
   };
@@ -62,10 +59,7 @@ models.Board = function (width, height) {
   this.spawnArea = function () {
     _.each(spawnX(), function (x) {
       _.each(spawnY(), function (y) {
-        var position = [x,y];
-        if (_board[position]) return;
-        _board[position] = "Empty";
-        self.grid.setWalkableAt(x, y, true);
+        self.emptySpace({x: x, y: y});
       });
     });
     return [];
@@ -102,7 +96,7 @@ models.Board = function (width, height) {
 
   // TODO factor out the board concept of objects - let scene deal with it.
   this.isEmpty = function (p) {
-    return _board[p] === "Empty";
+    return self.grid.getNodeAt(p.x, p.y).walkable;
   }
 
   this.isNearEmptySpace = function (p) {
@@ -126,26 +120,25 @@ models.Board = function (width, height) {
   this.walls = function () {
     _width.map(function(x) {
       _height.map(function(y) {
+        if (self.isEmpty({x:x, y:y})) return;
+
         var position = [x,y];
-        if (_board[position] /*|| Math.floor(Math.random() * 10000) % 3 == 0*/) {
-          _board[[x,y]] = "Empty";
-          self.grid.setWalkableAt(x, y, true);
-        } else {
-          var wall = new models.Wall(x,y);
-
-          _board[position] = [ wall.name, wall.uuid ];
-
-          self.grid.setWalkableAt(x, y, false);
-
-          wall.onSelected(self.updateTargetableWalls);
-          wall.onDeselected(self.updateTargetableWalls);
-          wall.onRemoved(function () {
-            self.emptySpace(wall.mesh.position);
-          });
-        }
+        var wall = new models.Wall(x,y);
+        self.grid.setWalkableAt(x, y, false);
+        wall.onSelected(self.updateTargetableWalls);
+        wall.onDeselected(self.updateTargetableWalls);
+        wall.onRemoved(function () {
+          self.emptySpace(wall.mesh.position);
+        });
       });
     });
   };
+
+  _width.map(function(x) {
+    _height.map(function(y) {
+      self.grid.setWalkableAt(x, y, false);
+    });
+  });
 
   models.Board.board = self;
 };
