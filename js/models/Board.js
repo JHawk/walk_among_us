@@ -15,7 +15,7 @@ models.Board = function (width, height) {
   }); 
 
   this.findPath = function (from, to) {
-    to = (self.isEmpty(to)) ? to : self.adjacentEmptySpace(to);
+    to = (self.isEmpty({x: to[0], y: to[1]})) ? to : self.adjacentEmptySpace(to);
     return _finder.findPath(from[0], from[1], to[0], to[1], self.grid.clone());
   };
   
@@ -105,7 +105,7 @@ models.Board = function (width, height) {
 
   this.adjacentEmptySpace = function (position) {
     return _.find(self.adjacentBoardPositions(position), function (p) {
-      return self.isEmpty(p);
+      return self.isEmpty({x: p[0], y: p[1]});
     });
   };
 
