@@ -130,6 +130,7 @@ models.Board = function (width, height) {
         wall.onRemoved(function () {
           var p = wall.boardPosition;
           self.emptySpace({x: p[0], y: p[1]});
+          self.updateTargetableWalls();
         });
       });
     });
