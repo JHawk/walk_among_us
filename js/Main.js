@@ -37,6 +37,7 @@ Main = function () {
       keyControls.update();
       renderer.render(scene, cameraControl.camera);
       board.update();
+      TWEEN.update();
     }
 
     render();

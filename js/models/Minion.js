@@ -56,22 +56,16 @@ models.Minion = function (x,y) {
     {
       var position = {x: self.mesh.position.x, y: self.mesh.position.y}; 
       var destination = self.destination().clone();
-      var ease = 'Elastic.EaseInOut';
-      var easing  = TWEEN.Easing[ease.split('.')[0]][ease.split('.')[1]];
-  
-      update = function(){
-        
-        self.mesh.position.set(position.x, position.y, 15);
-      }
-
+      
       tween = new TWEEN.Tween(position)
-        .to(destination, 5000)
-        .delay(2000)
-        // .easing(easing)
-        .onUpdate(update)
+        .to(destination, self.speed * 1000)
+        // .delay(2000)
+        // .easing(TWEEN.Easing.Elastic.InOut)
+        .onUpdate(function(obj, value){
+          self.mesh.position.set(position.x, position.y, 15);
+        })
         .start();
     }
-    tween.update();
   };
 
   self.attack = _.throttle(function () {
