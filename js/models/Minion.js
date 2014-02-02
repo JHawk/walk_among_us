@@ -13,8 +13,11 @@ models.Minion = function (x,y) {
 
   self.tickSpeedMs = 10;
   self.attackSpeedMs = 500;
-  self.speed = 1;
+
+  // 1 to 1000
+  self.speed = 10;
   self.damage = 1;
+  self.delay = 200;
 
   self.meleeRange = 30.0;
 
@@ -35,9 +38,13 @@ models.Minion = function (x,y) {
     }
   };
 
+  self.needsPath = function () {
+    return !self.currentPath || self.currentPath.length < 1;
+  };
+
   self.currentDestination =  undefined;
   self.destination = function () {
-    if (!self.currentPath || self.currentPath.length < 1) {
+    if (self.needsPath()) {
       self.setPath();
     }
 
@@ -56,14 +63,15 @@ models.Minion = function (x,y) {
       var position = {x: self.mesh.position.x, y: self.mesh.position.y}; 
       var destination = self.destination().clone();
       self.tween = new TWEEN.Tween(position)
-        .to(destination, self.speed * 1000)
-        // .delay(2000)
+        .to(destination, 1000 / self.speed)
+        // .delay(self.delay)
         // .easing(TWEEN.Easing.Elastic.InOut)
         .onUpdate(function(obj, value){
           self.mesh.position.set(position.x, position.y, 15);
         })
-        .onComplete(function(a,b,c) {
-          TWEEN.remove(self.tween);
+        .onComplete(function() {
+          // TODO: make tweens unique so they can be removed in the Tween.js lib 
+          // TWEEN.remove(self.tween);
           self.currentDestination = undefined;
           self.tween = undefined;
         })
@@ -75,10 +83,9 @@ models.Minion = function (x,y) {
     self.target.takeHit(self.damage);
   }, self.attackSpeedMs);
 
-  // far corner
   self.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
-    return [p[0] * meshes.Wall.size + half, p[1] * meshes.Wall.size + half];
+    return [p[0] * meshes.Wall.size, p[1] * meshes.Wall.size];
   };
 
   self.takeAction = function () {
