@@ -184,8 +184,8 @@ describe("models.Minion", function() {
   });
 
   describe("fromBoard", function () {
-    it("will return the mid point of the target", function() {
-      expect(Minion.fromBoard([0,0])).toEqual([10,10]);
+    it("will return the corner point of the target", function() {
+      expect(Minion.fromBoard([1,1])).toEqual([20,20]);
     });
   });
 });
