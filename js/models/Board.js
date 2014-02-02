@@ -128,7 +128,8 @@ models.Board = function (width, height) {
         wall.onSelected(self.updateTargetableWalls);
         wall.onDeselected(self.updateTargetableWalls);
         wall.onRemoved(function () {
-          self.emptySpace(wall.mesh.position);
+          var p = wall.boardPosition;
+          self.emptySpace({x: p[0], y: p[1]});
         });
       });
     });

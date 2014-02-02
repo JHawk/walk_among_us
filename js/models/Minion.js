@@ -49,20 +49,23 @@ models.Minion = function (x,y) {
     return self.currentDestination;
   };
 
-  var tween;
-
+  self.tween = undefined;
   self.advance = function () {
-    if (!tween)
+    if (!self.tween)
     {
       var position = {x: self.mesh.position.x, y: self.mesh.position.y}; 
       var destination = self.destination().clone();
-      
-      tween = new TWEEN.Tween(position)
+      self.tween = new TWEEN.Tween(position)
         .to(destination, self.speed * 1000)
         // .delay(2000)
         // .easing(TWEEN.Easing.Elastic.InOut)
         .onUpdate(function(obj, value){
           self.mesh.position.set(position.x, position.y, 15);
+        })
+        .onComplete(function(a,b,c) {
+          TWEEN.remove(self.tween);
+          self.currentDestination = undefined;
+          self.tween = undefined;
         })
         .start();
     }
