@@ -77,17 +77,13 @@ models.BaseModel = function (color, mesh) {
   };
 
   this.highlight = function () {
-      this.isHighlighted = true;
-      this.mesh.material.color.setHex(colors.highlightColor(this.currentColor()));
+    this.isHighlighted = true;
+    this.mesh.material.color.setHex(colors.highlightColor(this.currentColor()));
   };
 
   this.unHighlight = function () {
-    try {
-      this.isHighlighted = false;    
-      this.mesh.material.color.setHex(this.currentColor());
-    } catch(e) {
-      console.log(this);
-    }
+    this.isHighlighted = false;    
+    this.mesh.material.color.setHex(this.currentColor());
   };
 
   this.takeHit = function (damage) {
@@ -95,9 +91,15 @@ models.BaseModel = function (color, mesh) {
     internal.damaged();
     if (this.hitPoints < 0)
     {
+      if (this.deadBody) 
+      {
+        this.deadBody();
+      }
       this.remove();
     }
   };
+
+  this.specialAttack = function () {};
 
   return external;
 };

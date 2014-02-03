@@ -28,6 +28,19 @@ models.Minion = function (x,y) {
 
   self.target = undefined;
 
+  self.deadBody = _.once(function ()
+  {
+    var material = new THREE.MeshLambertMaterial( { color: "#111111" } );
+    var geometry = new THREE.CubeGeometry(5,5,5);
+    var cube = new THREE.Mesh( geometry, material );
+    var p = self.mesh.position;
+    cube.position.setX(p.x);
+    cube.position.setY(p.y);
+    cube.position.setZ(p.z);
+    cube.castShadow = false;
+    models.scene.add(cube);
+  });
+
     // meshes.Utils.collision(mesh, [self.target.mesh])
 
   self.currentPath = undefined;
