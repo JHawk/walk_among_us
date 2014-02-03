@@ -3,6 +3,9 @@ var models = models || {};
 models.Minion = function (x,y) {
   var self = this;
   self.name = "Minion";
+
+  var _$ = models.Minion;
+
   self = _.extend(this, new style.Colors());
   self = _.extend(this, new helpers.Utils());
 
@@ -11,11 +14,13 @@ models.Minion = function (x,y) {
   
   self = _.extend(this, new models.BaseModel(color, mesh));
 
+  self.hitPoints = 10;
+
   self.tickSpeedMs = 10;
   self.attackSpeedMs = 500;
 
   // 1 to 1000
-  self.speed = 10;
+  self.speed = 2;
   self.damage = 1;
   self.delay = 200;
 
@@ -79,6 +84,15 @@ models.Minion = function (x,y) {
     }
   };
 
+  this.motivate = function() {
+    self.speed++;
+  };
+
+  this.specialAttack = function () {
+    self.takeHit(1);
+    self.motivate();
+  };
+
   self.attack = _.throttle(function () {
     self.target.takeHit(self.damage);
   }, self.attackSpeedMs);
@@ -123,6 +137,10 @@ models.Minion = function (x,y) {
   mesh.model = self;
   
   self.update = _.throttle(update, self.tickSpeedMs);
+
+  self.onRemoved(function () {
+    _$.alive = _.reject(_$.alive, function (m) { return m == self});    
+  });
 
   models.Minion.alive.push(self);
 };
