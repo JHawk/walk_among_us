@@ -20,7 +20,7 @@ models.Minion = function (x,y) {
   self.attackSpeedMs = 500;
 
   // 1 to 1000
-  self.speed = 2;
+  self.speed = 5;
   self.damage = 1;
   self.delay = 200;
 
@@ -100,6 +100,8 @@ models.Minion = function (x,y) {
   this.motivate = function() {
     self.speed++;
   };
+
+  self.onDamaged(self.degradeColors);
 
   this.specialAttack = function () {
     self.takeHit(1);
