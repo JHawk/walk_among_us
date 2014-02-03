@@ -71,17 +71,17 @@ models.Board = function (width, height) {
     });
   };
 
-  this.spawnMinion = function () {
+  this.spawnExplorer = function () {
     var spawnPoint = randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
-    new models.Minion(x,y);
+    new models.Explorer(x,y);
   };
 
-  var minionCount = 1;
+  var explorerCount = 1;
 
-  this.createMinions = function () {
-    _.each(_.range(minionCount), function () {
-      self.spawnMinion();
+  this.createExplorers = function () {
+    _.each(_.range(explorerCount), function () {
+      self.spawnExplorer();
     });
   };
 

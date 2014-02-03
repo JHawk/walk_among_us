@@ -12,7 +12,6 @@ models.BaseModel = function (color, mesh) {
   // delegate to the mesh
   this.position = function () { return [mesh.position.x, mesh.position.y]; };
   this.uuid = mesh.uuid;
-  //
   
   this.isSelected = false;
   this.isHighlighted = false;

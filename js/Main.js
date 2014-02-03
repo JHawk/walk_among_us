@@ -20,7 +20,7 @@ Main = function () {
     models.board = board;
 
     board.createWalls();
-    board.createMinions();
+    board.createExplorers();
     
     scene.add(lights.ambient());
     scene.add(lights.directional1());

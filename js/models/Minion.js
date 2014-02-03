@@ -1,39 +1,21 @@
 var models = models || {};
 
-models.Minion = function (x,y) {
-  var self = this;
-  self.name = "Minion";
+models.Minion = function (that) {
+  var external = this;
+  var internal = {};
 
   var _$ = models.Minion;
+  external = _.extend(this, new helpers.Utils());
+  external = _.extend(this, new models.BaseModel(that.color, that.mesh));
 
-  self = _.extend(this, new style.Colors());
-  self = _.extend(this, new helpers.Utils());
+  that.target = undefined;
 
-  var color = self.minionColor();
-  var mesh = new meshes.Minion().create(x,y,color);
-  
-  self = _.extend(this, new models.BaseModel(color, mesh));
-
-  self.hitPoints = 10;
-
-  self.tickSpeedMs = 10;
-  self.attackSpeedMs = 500;
-
-  // 1 to 1000
-  self.speed = 5;
-  self.damage = 1;
-  self.delay = 200;
-
-  self.meleeRange = 30.0;
-
-  self.target = undefined;
-
-  self.deadBody = _.once(function ()
+  external.deadBody = _.once(function () 
   {
-    var material = new THREE.MeshLambertMaterial( { color: "#111111" } );
+    var material = new THREE.MeshLambertMaterial( { color: color } );
     var geometry = new THREE.CubeGeometry(5,5,5);
     var cube = new THREE.Mesh( geometry, material );
-    var p = self.mesh.position;
+    var p = that.mesh.position;
     cube.position.setX(p.x);
     cube.position.setY(p.y);
     cube.position.setZ(p.z);
@@ -42,122 +24,114 @@ models.Minion = function (x,y) {
   });
 
     // meshes.Utils.collision(mesh, [self.target.mesh])
-
-  self.currentPath = undefined;
-  self.setPath = function () {
-    var from = self.boardPosition();
-    var to = self.target.boardPosition;
+  external.currentPath = undefined;
+  external.setPath = function () {
+    var from = external.boardPosition();
+    var to = that.target.boardPosition;
     try {
       var _path = models.Board.board.findPath(from, to);
       _path.push(to);
-      self.currentPath = _path.slice(1);
+      external.currentPath = _path.slice(1);
     } catch(e) {
       console.log("broken path");
     }
   };
 
-  self.needsPath = function () {
-    return !self.currentPath || self.currentPath.length < 1;
+  external.needsPath = function () {
+    return !external.currentPath || external.currentPath.length < 1;
   };
 
-  self.currentDestination =  undefined;
-  self.destination = function () {
-    if (self.needsPath()) {
-      self.setPath();
+  external.currentDestination =  undefined;
+  external.destination = function () {
+    if (external.needsPath()) {
+      external.setPath();
     }
 
-    if (!self.currentDestination || self.isClose(self.position(), self.currentDestination, 10)) {
-      var d = self.fromBoard(self.currentPath.shift());
-      self.currentDestination = new THREE.Vector3(d[0], d[1], 15)
+    if (!external.currentDestination || external.isClose(external.position(), external.currentDestination, 10)) {
+      var d = external.fromBoard(external.currentPath.shift());
+      external.currentDestination = new THREE.Vector3(d[0], d[1], 15)
     }
 
-    return self.currentDestination;
+    return external.currentDestination;
   };
 
-  self.tween = undefined;
-  self.advance = function () {
-    if (!self.tween)
+  internal.tweenPosition = undefined;
+
+  external.tween = undefined;
+  external.advance = function () {
+    if (!external.tween)
     {
-      var position = {x: self.mesh.position.x, y: self.mesh.position.y}; 
-      var destination = self.destination().clone();
-      self.tween = new TWEEN.Tween(position)
-        .to(destination, 1000 / self.speed)
+      internal.tweenPosition = {x: that.mesh.position.x, y: that.mesh.position.y}; 
+      var destination = external.destination().clone();
+      external.tween = new TWEEN.Tween(internal.tweenPosition)
+        .to(destination, 1000 / this.speed)
         // .delay(self.delay)
         // .easing(TWEEN.Easing.Elastic.InOut)
         .onUpdate(function(obj, value){
-          self.mesh.position.set(position.x, position.y, 15);
+          // internal.tweenPosition is NaNs
+          that.mesh.position.set(internal.tweenPosition.x, internal.tweenPosition.y, 15);
         })
         .onComplete(function() {
           // TODO: make tweens unique so they can be removed in the Tween.js lib 
           // TWEEN.remove(self.tween);
-          self.currentDestination = undefined;
-          self.tween = undefined;
+          external.currentDestination = undefined;
+          external.tween = undefined;
+          internal.tweenPosition = undefined;
         })
         .start();
     }
   };
 
-  this.motivate = function() {
-    self.speed++;
-  };
+  external.onDamaged(external.degradeColors);
 
-  self.onDamaged(self.degradeColors);
+  external.attack = _.throttle(function () {
+    that.target.takeHit(this.damage);
+  }, this.attackSpeedMs);
 
-  this.specialAttack = function () {
-    self.takeHit(1);
-    self.motivate();
-  };
-
-  self.attack = _.throttle(function () {
-    self.target.takeHit(self.damage);
-  }, self.attackSpeedMs);
-
-  self.fromBoard = function (p) {
+  external.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
     return [p[0] * meshes.Wall.size, p[1] * meshes.Wall.size];
   };
 
-  self.takeAction = function () {
-    if (!self.target) return;
+  external.takeAction = function () {
+    if (!that.target) return;
 
-    if (self.isClose(self.position(), self.target.position(), self.meleeRange))
-      self.attack();
+    if (external.isClose(external.position(), that.target.position(), external.meleeRange))
+      external.attack();
     else
-      self.advance();
+      external.advance();
   };
 
-  this.acquireTarget = function () {
-    var walls = models.Board.board.targetableWalls;
-    if (walls.length > 0)
-    {
-      self.currentPath = undefined;
-      self.currentDestination = undefined;
-      self.target = _.sample(walls);
-    }
-  }
-
   this.boardPosition = function () {
-    return _.map(self.position(), function (i) {
+    return _.map(external.position(), function (i) {
       return Math.round(i / meshes.Wall.size);
     });
   };
 
-  var update = function () {
-    if (self.target && self.target.isSelected)
-      self.takeAction();
-    else
-      self.acquireTarget();
+  var acquireTarget = function () {
+    external.currentPath = undefined;
+    external.currentDestination = undefined;
+    that.acquireTarget();  
   };
 
-  mesh.model = self;
-  
-  self.update = _.throttle(update, self.tickSpeedMs);
+  var update = function () {
+    if (that.target && that.target.isSelected)
+      external.takeAction();
+    else
+      acquireTarget();
+  };
 
-  self.onRemoved(function () {
-    _$.alive = _.reject(_$.alive, function (m) { return m == self});    
+  that.mesh.model = that;
+  
+  external.update = _.throttle(update, this.tickSpeedMs);
+
+  external.onRemoved(function () {
+    _$.alive = _.reject(_$.alive, function (m) { return m == this});    
   });
 
-  models.Minion.alive.push(self);
+  models.Minion.alive.push(this);
+
+  return external;
 };
 
 models.Minion.alive = [];

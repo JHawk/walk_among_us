@@ -1,8 +1,7 @@
 var meshes = meshes || {};
 
-meshes.Minion = function () {
+meshes.Explorer = function () {
   var self = this;
-  self = _.extend(this, new style.Colors);
   self = _.extend(this, new helpers.Utils);
   var size = 8;
   var height = 30;
