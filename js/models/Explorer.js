@@ -18,10 +18,12 @@ models.Explorer = function (x,y) {
   self.damage = 1;
   self.delay = 200;
 
-  self.meleeRange = 20.0;
+  self.meleeRange = 25.0;
 
   this.motivate = function() {
     self.speed++;
+    console.log("Speed = " + self.speed);
+    console.log("HP = " + self.hitPoints);
   };
 
   this.specialAttack = function () {

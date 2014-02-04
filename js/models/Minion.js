@@ -48,7 +48,8 @@ models.Minion = function (that) {
     }
 
     if (!external.currentDestination || external.isClose(external.position(), external.currentDestination, 10)) {
-      var d = external.fromBoard(external.currentPath.shift());
+      var newDestination = external.currentPath.shift();
+      var d = external.fromBoard(newDestination);
       external.currentDestination = new THREE.Vector3(d[0], d[1], 15)
     }
 
@@ -61,7 +62,7 @@ models.Minion = function (that) {
     {
       var position = {x: that.mesh.position.x, y: that.mesh.position.y}; 
       var destination = external.destination().clone();
-      external.tween = new TWEEN.Tween(position)
+      internal.tween = new TWEEN.Tween(position)
         .to(destination, 1000 / that.speed)
         // .delay(self.delay)
         // .easing(TWEEN.Easing.Elastic.InOut)
@@ -73,15 +74,23 @@ models.Minion = function (that) {
           // TODO: make tweens unique so they can be removed in the Tween.js lib 
           // TWEEN.remove(self.tween);
           external.currentDestination = undefined;
-          external.tween = undefined;
+          internal.tween = undefined;
         })
         .start();
     }
   };
 
+  external.stop = function () {
+    if (internal.tween) internal.tween.stop();
+    external.currentDestination = undefined;
+    external.currentPath = undefined;
+    internal.tween = undefined;
+  };
+
   external.onDamaged(external.degradeColors);
 
   external.attack = _.throttle(function () {
+    external.stop();
     that.target.takeHit(that.damage);
   }, that.attackSpeedMs);
 

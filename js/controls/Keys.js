@@ -34,7 +34,7 @@ controls.Keys = function ( cameraControl ) {
     if ( event.keyCode == 84 /*T*/ ) {
       self.cameraControl.toggle();
     } else if ( event.keyCode == 49 /*1*/ ) {
-      models.board.spawnMinion();
+      models.board.spawnExplorer();
     } else if ( event.altKey ) {
       switch ( event.keyCode ) {
         case 87: /*W*/ self.moveState.rollForward = 1; break;
