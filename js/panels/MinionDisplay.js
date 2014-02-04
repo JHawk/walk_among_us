@@ -11,7 +11,15 @@ panels.MinionDisplay = function () {
 
   $( "body" ).append( "<div id='" + self.id + "' class='display' style='position: absolute; left: 0px; top: " + top + ";'></div>" );
 
-  models.Minion.onSelection(function (m) {
-    console.log("hi" + m.name);
+  var display = $('#' + self.id);
+
+  models.Minion.onSelected(function (m) {
+    display.append("<div class='minionDetail' id='" + m.mesh.uuid + "'>" + m.characterName + " - " + m.name + "</div>");    
+  });
+
+  models.Minion.onDeselected(function (m) {
+    var detailMatcher = '#' + m.mesh.uuid + '.minionDetail';
+    var minionDetail = display.find(detailMatcher);
+    minionDetail.remove();
   });
 };

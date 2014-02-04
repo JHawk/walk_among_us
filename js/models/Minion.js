@@ -6,8 +6,10 @@ models.Minion = function (that) {
   var initColor = that.color;
 
   var _$ = models.Minion;
+
   external = _.extend(this, new helpers.Utils());
   external = _.extend(this, new models.BaseModel(that.color, that.mesh));
+  external.characterName = Faker.Name.findName();
 
   that.target = undefined;
 
@@ -137,7 +139,11 @@ models.Minion = function (that) {
   });
 
   external.onSelected(function () { 
-    _$.updateSelection(that);
+    _$.selected(that);
+  });
+
+  external.onDeselected(function () { 
+    _$.deselected(that);
   });
 
   models.Minion.alive.push(this);
@@ -145,14 +151,26 @@ models.Minion = function (that) {
   return external;
 };
 
-models.Minion.selectionEvents = []
-models.Minion.updateSelection = function (minion) {
-  _.each(models.Minion.selectionEvents, function(e) {
+/* DRY this up */
+models.Minion.selectedEvents = []
+models.Minion.selected = function (minion) {
+  _.each(models.Minion.selectedEvents, function(e) {
     e(minion);
   })
 };
-models.Minion.onSelection = function (e) {
-  models.Minion.selectionEvents.push(e);
+models.Minion.onSelected = function (e) {
+  models.Minion.selectedEvents.push(e);
 };
+
+models.Minion.deselectedEvents = []
+models.Minion.deselected = function (minion) {
+  _.each(models.Minion.deselectedEvents, function(e) {
+    e(minion);
+  })
+};
+models.Minion.onDeselected = function (e) {
+  models.Minion.deselectedEvents.push(e);
+};
+/* DRY this up */
 
 models.Minion.alive = [];
