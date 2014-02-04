@@ -7,6 +7,7 @@ canvas {
   width: 200px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.2);
+  cursor:url(../resources/hand.png), -moz-zoom-in;
 }
 
 .minionDetail {
@@ -17,4 +18,5 @@ canvas {
   font-size:10px;
   color: white;
   margin: 10px; 
+  cursor:url(../resources/hand.png), -moz-zoom-in;
 }

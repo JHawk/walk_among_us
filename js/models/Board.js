@@ -23,9 +23,12 @@ models.Board = function (width, height) {
     return (b * meshes.Wall.size) - meshes.Wall.size / 2 
   });
 
+  var emptySpaces = [];
+
   this.emptySpace = function(p) {
     self.updateTargetableWalls();
     self.grid.setWalkableAt(p.x, p.y, true);
+    emptySpaces.push([p.x, p.y]);
   };
 
   this.emptySpaces = function(ps) {
@@ -54,6 +57,10 @@ models.Board = function (width, height) {
 
   this.randomSpawnPoint = function () {
     return [_.sample(spawnX()), _.sample(spawnY())];
+  };
+
+  this.randomEmptyPoint = function () {
+    return _.sample(emptySpaces);
   };
 
   this.spawnArea = function () {

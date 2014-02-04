@@ -107,10 +107,13 @@ models.Minion = function (that) {
           // TWEEN.remove(self.tween);
           external.currentDestination = undefined;
           internal.tween = undefined;
+          if (!external.currentPath || external.currentPath.length < 1)
+          {
+            external.setCurrentAction("Waiting");  
+            external.attacker = undefined;
+          }
         })
         .start();
-
-      external.setCurrentAction("Walking");
     }
   };
 
@@ -136,10 +139,13 @@ models.Minion = function (that) {
     return that.attacker;
   };
   external.flee = function () {
-    external.stop();
-    external.setPath(models.Board.board.randomSpawnPoint());
+    if (that.currentAction != "Fleeing")
+    {
+      external.stop();
+      external.setPath(models.Board.board.randomEmptyPoint()); 
+      external.setCurrentAction("Fleeing");
+    }
     external.advance();
-    external.setCurrentAction("Fleeing");
   };
 
   external.fromBoard = function (p) {
@@ -155,7 +161,10 @@ models.Minion = function (that) {
     if (action)
       that[action]();
     else
+    {
       external.advance();
+      external.setCurrentAction("Walking");  
+    }
   };
 
   var acquireTarget = function () {
@@ -168,8 +177,12 @@ models.Minion = function (that) {
     }
   };
 
+  external.hasAttacker = function () {
+    return that.attacker;
+  };
+
   var update = function () {
-    if (that.hasTarget())
+    if (that.hasTarget() || that.hasAttacker())
       external.takeAction();
     else
       acquireTarget();
