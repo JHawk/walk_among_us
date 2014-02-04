@@ -40,6 +40,7 @@ models.Minion = function (that) {
     }
   };
 
+  external.currentAction = "Waiting";
   external.trackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction"];
   
   var trackedPropertiesEvents = [];
@@ -51,6 +52,8 @@ models.Minion = function (that) {
   var trackedPropertiesSetters = function () {
     _.each(external.trackedProperties, function (prop) {
       external["set" + prop.capitalize()] = function (v) {
+        if (v == that[prop]) return;
+
         that[prop] = v;
         _.each(trackedPropertiesEvents, function (e) {
           e(prop, v);
@@ -99,6 +102,8 @@ models.Minion = function (that) {
           internal.tween = undefined;
         })
         .start();
+
+      external.setCurrentAction("Walking");
     }
   };
 
@@ -114,6 +119,7 @@ models.Minion = function (that) {
   external.attack = _.throttle(function () {
     external.stop();
     that.target.takeHit(that.damage);
+    external.setCurrentAction("Attacking");
   }, that.attackSpeedMs);
 
   external.fromBoard = function (p) {
@@ -122,7 +128,9 @@ models.Minion = function (that) {
   };
 
   external.takeAction = function () {
-    if (!that.target) return;
+    if (!that.target) {
+      return;
+    }
 
     if (external.isClose(external.position(), that.target.position(), that.meleeRange))
       external.attack();
@@ -139,7 +147,11 @@ models.Minion = function (that) {
   var acquireTarget = function () {
     external.currentPath = undefined;
     external.currentDestination = undefined;
-    that.acquireTarget();  
+    that.acquireTarget();
+    if (!that.target || that.target.isRemoved)
+    {
+      external.setCurrentAction("Waiting");  
+    }
   };
 
   var update = function () {
