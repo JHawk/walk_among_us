@@ -107,10 +107,10 @@ models.Minion = function (that) {
           // TWEEN.remove(self.tween);
           external.currentDestination = undefined;
           internal.tween = undefined;
-          if (!external.currentPath || external.currentPath.length < 1)
+          if (!external.currentPath || external.currentPath.length < 3)
           {
+            that.attacker = undefined;
             external.setCurrentAction("Waiting");  
-            external.attacker = undefined;
           }
         })
         .start();

@@ -12,7 +12,7 @@ models.Fighter = function (x,y) {
   self.hitPoints = 20;
   self.tickSpeedMs = 10;
   self.attackSpeedMs = 500;
-  self.perseption = 8 * meshes.Wall.size;
+  self.perseption = 5 * meshes.Wall.size;
 
   // 1 to 1000
   self.speed = 3;
