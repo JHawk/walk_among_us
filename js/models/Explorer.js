@@ -22,6 +22,10 @@ models.Explorer = function (x,y) {
 
   self = _.extend(this, new models.Minion(this));
 
+  self.hasTarget = function () {
+    return self.target && self.target.isSelected;
+  };
+
   self.speedUp = function () {
     self.setSpeed(self.speed + 1);
   };

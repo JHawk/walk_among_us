@@ -30,7 +30,7 @@ models.Minion = function (that) {
   external.currentPath = undefined;
   external.setPath = function () {
     var from = external.boardPosition();
-    var to = that.target.boardPosition;
+    var to = that.target.boardPosition();
     try {
       var _path = models.Board.board.findPath(from, to);
       _path.push(to);
@@ -138,12 +138,6 @@ models.Minion = function (that) {
       external.advance();
   };
 
-  this.boardPosition = function () {
-    return _.map(external.position(), function (i) {
-      return Math.round(i / meshes.Wall.size);
-    });
-  };
-
   var acquireTarget = function () {
     external.currentPath = undefined;
     external.currentDestination = undefined;
@@ -155,7 +149,7 @@ models.Minion = function (that) {
   };
 
   var update = function () {
-    if (that.target && that.target.isSelected)
+    if (that.hasTarget())
       external.takeAction();
     else
       acquireTarget();
@@ -166,7 +160,7 @@ models.Minion = function (that) {
   external.update = _.throttle(update, this.tickSpeedMs);
 
   external.onRemoved(function () {
-    _$.alive = _.reject(_$.alive, function (m) { return m == this});    
+    _$.alive = _.reject(_$.alive, function (m) { return m == that});    
   });
 
   external.onSelected(function () { 
@@ -177,7 +171,7 @@ models.Minion = function (that) {
     _$.deselected(that);
   });
 
-  models.Minion.alive.push(this);
+  models.Minion.alive.push(that);
 
   return external;
 };

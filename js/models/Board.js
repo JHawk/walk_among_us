@@ -119,7 +119,7 @@ models.Board = function (width, height) {
 
   this.updateTargetableWalls = function () {
     self.targetableWalls = _.filter(models.Wall.selected, function (w) {
-      return self.isNearEmptySpace(w.boardPosition);
+      return self.isNearEmptySpace(w.boardPosition());
     });
   };
 
@@ -134,7 +134,7 @@ models.Board = function (width, height) {
         wall.onSelected(self.updateTargetableWalls);
         wall.onDeselected(self.updateTargetableWalls);
         wall.onRemoved(function () {
-          var p = wall.boardPosition;
+          var p = wall.boardPosition();
           self.emptySpace({x: p[0], y: p[1]});
           self.updateTargetableWalls();
         });

@@ -85,6 +85,12 @@ models.BaseModel = function (color, mesh) {
     this.mesh.material.color.setHex(this.currentColor());
   };
 
+  this.boardPosition = function () {
+    return _.map(this.position(), function (i) {
+      return Math.round(i / meshes.Wall.size);
+    });
+  };
+
   this.takeHit = function (damage) {
     var newHp = this.hitPoints - damage;
     
