@@ -17,23 +17,41 @@ panels.MinionDisplay = function () {
     var el = '<ul>'
     
     var props = _.map(m.trackedProperties, function (p) {
-      return "<li>" + p + " : " + m[p] + "</li>";
+      return "<li>" + _.humanize(p) + " : " + m[p] + "</li>";
     });
     
     return _.reduce(props, function (a,l) {return a + l}) + '</ul>'; 
+  };
+
+  self.findDetail = function (m) {
+    var detailMatcher = '#' + m.mesh.uuid + '.minionDetail';
+    var minionDetail = display.find(detailMatcher);
+    return minionDetail;
   };
 
   self.createDetail = function (m) {
     return "<div class='minionDetail' id='" + m.mesh.uuid + "'>" + self.content(m) + "</div>";
   };
 
+  self.updateDetail = function (m) {
+    var detail = self.findDetail(m);
+    if (detail.length > 0)
+    {
+      detail.empty();
+      detail.append(self.content(m));
+    }
+  };
+
+  self.removeDetail = function (m) {
+    self.findDetail(m).remove();
+  };
+
   models.Minion.onSelected(function (m) {
-    display.append(self.createDetail(m));    
+    display.append(self.createDetail(m));
+    m.onTrackedChanged(function (prop, v) {
+      self.updateDetail(m);
+    });    
   });
 
-  models.Minion.onDeselected(function (m) {
-    var detailMatcher = '#' + m.mesh.uuid + '.minionDetail';
-    var minionDetail = display.find(detailMatcher);
-    minionDetail.remove();
-  });
+  models.Minion.onDeselected(self.removeDetail);
 };

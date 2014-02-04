@@ -9,11 +9,11 @@ models.Minion = function (that) {
 
   external = _.extend(this, new helpers.Utils());
   external = _.extend(this, new models.BaseModel(that.color, that.mesh));
-  external.characterName = Faker.Name.findName();
+  external.name = Faker.Name.findName();
 
   that.target = undefined;
 
-  external.deadBody = _.once(function () 
+  external.deadBody = _.once(function ()
   {
     var material = new THREE.MeshLambertMaterial( { color: initColor } );
     var geometry = new THREE.CubeGeometry(5,5,5);
@@ -40,7 +40,24 @@ models.Minion = function (that) {
     }
   };
 
-  external.trackedProperties = ["name", "speed", "damage", "currentAction", "hitPoints"];
+  external.trackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction"];
+  
+  var trackedPropertiesEvents = [];
+  
+  external.onTrackedChanged = function (e) {
+    trackedPropertiesEvents.push(e);
+  };  
+
+  var trackedPropertiesSetters = function () {
+    _.each(external.trackedProperties, function (prop) {
+      external["set" + prop.capitalize()] = function (v) {
+        that[prop] = v;
+        _.each(trackedPropertiesEvents, function (e) {
+          e(prop, v);
+        });
+      };
+    });
+  }();
 
   external.needsPath = function () {
     return !external.currentPath || external.currentPath.length < 1;

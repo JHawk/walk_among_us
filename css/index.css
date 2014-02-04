@@ -3,17 +3,18 @@ canvas {
 }
 
 .display {
-  height: 200px;
+  height: 380px;
   width: 200px;
+  padding: 10px;
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 .minionDetail {
-  height: 50px;
+  height: 75px;
   width: 200px;
   background-color: transparent;
   font-family:Helvetica,Arial,sans-serif;
   font-size:10px;
   color: white;
-  padding: 10px; 
+  margin: 10px; 
 }

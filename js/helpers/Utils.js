@@ -13,7 +13,11 @@ String.prototype.pastTense = function () {
 };
 
 _.mixin({
-
+  humanize: function(string) {
+    return string
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, function(str){ return str.toUpperCase(); });
+  }
 });
 
 helpers.Utils = function () {

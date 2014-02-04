@@ -2,7 +2,7 @@ var models = models || {};
 
 models.Fighter = function (x,y) {
   var self = this;
-  self.name = "Fighter";
+  self.type = "Fighter";
 
   self = _.extend(this, new style.Colors());
 

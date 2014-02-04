@@ -2,7 +2,7 @@ var models = models || {};
 
 models.Explorer = function (x,y) {
   var self = this;
-  self.name = "Explorer";
+  self.type = "Explorer";
 
   self = _.extend(this, new style.Colors());
 
@@ -23,7 +23,7 @@ models.Explorer = function (x,y) {
   self = _.extend(this, new models.Minion(this));
 
   self.speedUp = function () {
-    self.speed++;
+    self.setSpeed(self.speed + 1);
     console.log("Speed Up : " + self.speed);
   };
 
