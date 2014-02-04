@@ -2,19 +2,28 @@ describe("models.Minion", function() {
 
   var Minion;
   var x, y;
-  var boardSpy, isCloseSpy, targetSpy;
+  var boardSpy, isCloseSpy, targetSpy, thatSpy;
 
   beforeEach(function() {
     x = 1;
     y = 1;
 
     boardSpy = jasmine.createSpyObj('board', ['findPath']);
+    
     targetSpy = jasmine.createSpyObj('target', ['position', 'boardPosition']);
     targetSpy.boardPosition = [2,3];
+    
+    meshSpy = jasmine.createSpyObj('mesh', ['uuid', 'position']);
+    meshSpy.position = [1,1];
+
+    thatSpy = jasmine.createSpyObj('that', ['color', 'mesh']);
+    
+    thatSpy.color = "#111111";
+    thatSpy.mesh = meshSpy;
 
     models.Board.board = boardSpy;
 
-    Minion = new models.Minion(x,y);
+    Minion = new models.Minion(thatSpy);
 
     isCloseSpy = spyOn(Minion, "isClose");
   });
@@ -38,7 +47,7 @@ describe("models.Minion", function() {
 
     describe("when target set", function () {
       beforeEach(function() {
-        Minion.target = targetSpy;
+        thatSpy.target = targetSpy;
       });
 
       describe("and in range", function () {
@@ -67,27 +76,26 @@ describe("models.Minion", function() {
     });
   });
 
-  describe("acquireTarget", function () {
-    describe("when no targets available", function () {
-      it("does nothing", function() {
-        boardSpy.targetableWalls = [];
+  describe("setPath", function () {
+    var path;
 
-        Minion.acquireTarget();
-
-        expect(Minion.target).toBe(undefined);
-      });
+    beforeEach(function() {
+      path = [[0,0],[1,0]];
+      thatSpy.target = targetSpy;
     });
 
-    describe("when targets available", function () {
-      it("sets the target", function() {
-        var target = 1;
+    it("will fetch the path from the board", function() {
+      boardSpy.findPath.andReturn(path);
 
-        boardSpy.targetableWalls = [target];
+      Minion.setPath();
 
-        Minion.acquireTarget();
+      expect(Minion.currentPath).toEqual(path.slice(1));
+    });
+  });
 
-        expect(Minion.target).toBe(target);
-      });
+  describe("fromBoard", function () {
+    it("will return the corner point of the target", function() {
+      expect(Minion.fromBoard([1,1])).toEqual([20,20]);
     });
   });
 
@@ -96,7 +104,7 @@ describe("models.Minion", function() {
 
     beforeEach(function() {
       path = [[0,0],[1,0],[2,1]];
-      Minion.target = targetSpy;
+      thatSpy.target = targetSpy;
 
       boardSpy.findPath.andReturn(path);
     });
@@ -163,29 +171,6 @@ describe("models.Minion", function() {
       it("will return the current destination", function() {
         expect(Minion.destination()).toEqual(destination);
       });
-    });
-  });
-
-  describe("setPath", function () {
-    var path;
-
-    beforeEach(function() {
-      path = [[0,0],[1,0]];
-      Minion.target = targetSpy;
-    });
-
-    it("will fetch the path from the board", function() {
-      boardSpy.findPath.andReturn(path);
-
-      Minion.setPath();
-
-      expect(Minion.currentPath).toEqual(path.slice(1));
-    });
-  });
-
-  describe("fromBoard", function () {
-    it("will return the corner point of the target", function() {
-      expect(Minion.fromBoard([1,1])).toEqual([20,20]);
     });
   });
 });
