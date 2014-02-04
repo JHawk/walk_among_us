@@ -41,26 +41,11 @@ style.Colors = function () {
   var degradeBumps = 1;
   var bumpSize = degradeBumps * 0x111111;
   this.lowerBound = bumpSize;
-  // var hits = 0;
 
   this.degrade = function (color) {
     if (typeof color === 'number')
     {
       var degraded = color - (bumpSize);
-
-      // console.log("hits : " + hits ++);
-      // console.log("bumpSize : " + bumpSize);
-      // console.log("bumpSize : " + self.toHex(bumpSize));
-
-      // console.log("degraded : " + degraded);
-      // console.log("degraded :" + self.toHex(degraded));
-      // console.log("----------------------------------");
-
-      // if (self.toHex(degraded).length < 7)
-      // {
-      //   console.log("color value too low!")
-      // } 
-
       return (degraded < self.lowerBound) ? self.lowerBound : degraded;
     }
   };
@@ -73,6 +58,16 @@ style.Colors = function () {
   ];
 
   this.explorerColor = function () {
-    return _.sample(explorerColors);
+    return _.sample(explorerColors) /*self.randomColor()*/;
+  };
+
+  var fighterColors = [
+    13421772,
+    16046570.48886231,
+    5652792.846400604
+  ];
+
+  this.fighterColor = function () {
+    return _.sample(fighterColors);
   };
 }

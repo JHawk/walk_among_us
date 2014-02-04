@@ -77,6 +77,12 @@ models.Board = function (width, height) {
     new models.Explorer(x,y);
   };
 
+  this.spawnFighter = function () {
+    var spawnPoint = randomSpawnPoint();
+    var x = spawnPoint[0], y = spawnPoint[1];
+    new models.Fighter(x,y);
+  };
+
   var explorerCount = 1;
 
   this.createExplorers = function () {

@@ -22,14 +22,19 @@ models.Explorer = function (x,y) {
 
   self = _.extend(this, new models.Minion(this));
 
-  self.motivate = function() {
+  self.speedUp = function () {
     self.speed++;
+    console.log("Speed Up : " + self.speed);
+  };
+
+  self.motivate = function() {
+    console.log("Motivated!");
+    self.takeHit(1);
+    self.speedUp();
   };
 
   self.specialAttack = function () {
-    self.takeHit(1);
     self.motivate();
-    console.log("hp :" + self.hitPoints);
   };
 
   self.acquireTarget = function () {

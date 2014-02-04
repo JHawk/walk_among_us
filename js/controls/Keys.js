@@ -35,6 +35,8 @@ controls.Keys = function ( cameraControl ) {
       self.cameraControl.toggle();
     } else if ( event.keyCode == 49 /*1*/ ) {
       models.board.spawnExplorer();
+    } else if ( event.keyCode == 50 /*2*/ ) {
+      models.board.spawnFighter();
     } else if ( event.altKey ) {
       switch ( event.keyCode ) {
         case 87: /*W*/ self.moveState.rollForward = 1; break;

@@ -2,7 +2,7 @@ describe("models.Explorer", function() {
 
   var Explorer;
   var x, y;
-  var boardSpy, isCloseSpy, targetSpy;
+  var boardSpy, targetSpy;
 
   beforeEach(function() {
     x = 1;
@@ -15,8 +15,6 @@ describe("models.Explorer", function() {
     models.Board.board = boardSpy;
 
     Explorer = new models.Explorer(x,y);
-
-    isCloseSpy = spyOn(Explorer, "isClose");
   });
 
   describe("acquireTarget", function () {

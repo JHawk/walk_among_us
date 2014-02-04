@@ -88,6 +88,7 @@ models.BaseModel = function (color, mesh) {
   this.takeHit = function (damage) {
     this.hitPoints = this.hitPoints - damage;
     internal.damaged();
+    console.log("Hit : " + this.hitPoints);
     if (this.hitPoints < 0)
     {
       if (this.deadBody) 
