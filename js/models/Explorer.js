@@ -20,24 +20,24 @@ models.Explorer = function (x,y) {
 
   self.meleeRange = 25.0;
 
-  this.motivate = function() {
+  self = _.extend(this, new models.Minion(this));
+
+  self.motivate = function() {
     self.speed++;
-    console.log("Speed = " + self.speed);
-    console.log("HP = " + self.hitPoints);
   };
 
-  this.specialAttack = function () {
+  self.specialAttack = function () {
     self.takeHit(1);
     self.motivate();
   };
 
-  this.acquireTarget = function () {
+  self.acquireTarget = function () {
     var walls = models.Board.board.targetableWalls;
     if (walls.length > 0)
     {
-      this.target = _.sample(walls);
+      self.target = _.sample(walls);
     }
   }
 
-  return _.extend(this, new models.Minion(this));
+  return self;
 };
