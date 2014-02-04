@@ -29,6 +29,7 @@ models.Explorer = function (x,y) {
   self.specialAttack = function () {
     self.takeHit(1);
     self.motivate();
+    console.log("hp :" + self.hitPoints);
   };
 
   self.acquireTarget = function () {

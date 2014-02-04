@@ -3,6 +3,7 @@ var models = models || {};
 models.Minion = function (that) {
   var external = this;
   var internal = {};
+  var initColor = that.color;
 
   var _$ = models.Minion;
   external = _.extend(this, new helpers.Utils());
@@ -12,7 +13,7 @@ models.Minion = function (that) {
 
   external.deadBody = _.once(function () 
   {
-    var material = new THREE.MeshLambertMaterial( { color: color } );
+    var material = new THREE.MeshLambertMaterial( { color: initColor } );
     var geometry = new THREE.CubeGeometry(5,5,5);
     var cube = new THREE.Mesh( geometry, material );
     var p = that.mesh.position;
