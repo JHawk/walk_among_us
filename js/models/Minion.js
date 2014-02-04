@@ -55,28 +55,25 @@ models.Minion = function (that) {
     return external.currentDestination;
   };
 
-  internal.tweenPosition = undefined;
-
-  external.tween = undefined;
+  internal.tween = undefined;
   external.advance = function () {
-    if (!external.tween)
+    if (!internal.tween)
     {
-      internal.tweenPosition = {x: that.mesh.position.x, y: that.mesh.position.y}; 
+      var position = {x: that.mesh.position.x, y: that.mesh.position.y}; 
       var destination = external.destination().clone();
-      external.tween = new TWEEN.Tween(internal.tweenPosition)
-        .to(destination, 1000 / this.speed)
+      external.tween = new TWEEN.Tween(position)
+        .to(destination, 1000 / that.speed)
         // .delay(self.delay)
         // .easing(TWEEN.Easing.Elastic.InOut)
         .onUpdate(function(obj, value){
           // internal.tweenPosition is NaNs
-          that.mesh.position.set(internal.tweenPosition.x, internal.tweenPosition.y, 15);
+          that.mesh.position.set(position.x, position.y, 15);
         })
         .onComplete(function() {
           // TODO: make tweens unique so they can be removed in the Tween.js lib 
           // TWEEN.remove(self.tween);
           external.currentDestination = undefined;
           external.tween = undefined;
-          internal.tweenPosition = undefined;
         })
         .start();
     }
@@ -85,8 +82,8 @@ models.Minion = function (that) {
   external.onDamaged(external.degradeColors);
 
   external.attack = _.throttle(function () {
-    that.target.takeHit(this.damage);
-  }, this.attackSpeedMs);
+    that.target.takeHit(that.damage);
+  }, that.attackSpeedMs);
 
   external.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
@@ -96,7 +93,7 @@ models.Minion = function (that) {
   external.takeAction = function () {
     if (!that.target) return;
 
-    if (external.isClose(external.position(), that.target.position(), external.meleeRange))
+    if (external.isClose(external.position(), that.target.position(), that.meleeRange))
       external.attack();
     else
       external.advance();
