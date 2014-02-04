@@ -12,17 +12,26 @@ models.Fighter = function (x,y) {
   self.hitPoints = 20;
   self.tickSpeedMs = 10;
   self.attackSpeedMs = 500;
+  self.perseption = 8 * meshes.Wall.size;
 
   // 1 to 1000
-  self.speed = 5;
+  self.speed = 3;
   self.damage = 1;
   self.delay = 200;
+  self.meleeRange = 25.0;
 
-  self.hasTarget = function () {
-    return self.target && !self.target.isRemoved;
+  self.canSeeTarget = function() {
+    return self.isClose(self.position(), self.target.position(), self.perseption);
   };
 
-  self.meleeRange = 25.0;
+  self.actions = [
+    "attack"
+  ];
+
+  self.hasTarget = function () {
+    var liveTarget = self.target && !self.target.isRemoved;
+    return liveTarget && self.canSeeTarget();
+  };
 
   self = _.extend(this, new models.Minion(this));
 

@@ -91,7 +91,7 @@ models.BaseModel = function (color, mesh) {
     });
   };
 
-  this.takeHit = function (damage) {
+  this.takeHit = function (damage, source) {
     var newHp = this.hitPoints - damage;
     
     if (this.setHitPoints)
@@ -103,7 +103,7 @@ models.BaseModel = function (color, mesh) {
       this.hitPoints = newHp;
     }
 
-    internal.damaged();
+    internal.damaged(source);
     if (this.hitPoints < 0)
     {
       if (this.deadBody) 

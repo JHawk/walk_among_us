@@ -13,6 +13,8 @@ models.Explorer = function (x,y) {
   self.tickSpeedMs = 10;
   self.attackSpeedMs = 500;
 
+  self.attacker = undefined;
+
   // 1 to 1000
   self.speed = 5;
   self.damage = 1;
@@ -21,6 +23,15 @@ models.Explorer = function (x,y) {
   self.meleeRange = 25.0;
 
   self = _.extend(this, new models.Minion(this));
+
+  self.actions = [
+    "flee",
+    "attack"
+  ];
+
+  self.onDamaged(function (source) {
+    self.attacker = source;
+  });
 
   self.hasTarget = function () {
     return self.target && self.target.isSelected;

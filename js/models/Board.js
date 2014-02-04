@@ -52,7 +52,7 @@ models.Board = function (width, height) {
     return spawnRange(1);
   };
 
-  var randomSpawnPoint = function () {
+  this.randomSpawnPoint = function () {
     return [_.sample(spawnX()), _.sample(spawnY())];
   };
 
@@ -71,16 +71,18 @@ models.Board = function (width, height) {
     });
   };
 
-  this.spawnExplorer = function () {
-    var spawnPoint = randomSpawnPoint();
+  var spawn = function (constructor) {
+    var spawnPoint = self.randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
-    new models.Explorer(x,y);
+    new constructor(x,y);
+  };
+
+  this.spawnExplorer = function () {
+    spawn(models.Explorer);
   };
 
   this.spawnFighter = function () {
-    var spawnPoint = randomSpawnPoint();
-    var x = spawnPoint[0], y = spawnPoint[1];
-    new models.Fighter(x,y);
+    spawn(models.Fighter);
   };
 
   var explorerCount = 1;

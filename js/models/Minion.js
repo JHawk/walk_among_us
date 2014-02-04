@@ -26,11 +26,44 @@ models.Minion = function (that) {
     models.scene.add(cube);
   });
 
+  external.currentAction = "Waiting";
+  var initialTrackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction"];
+  
+  external.trackedProperties = [];
+  var trackedPropertiesEvents = [];
+  
+  external.onTrackedChanged = function (e) {
+    trackedPropertiesEvents.push(e);
+  };  
+
+  external.addTrackedProperty = function (prop) {
+    external.trackedProperties.push(prop);
+
+    external["set" + prop.capitalize()] = function (v) {
+      if (v == that[prop]) return;
+
+      that[prop] = v;
+      _.each(trackedPropertiesEvents, function (e) {
+        e(prop, v);
+      });
+    };
+  };
+
+  var trackedPropertiesSetters = function () {
+    _.each(initialTrackedProperties, function (prop) {
+      external.addTrackedProperty(prop);
+    });
+  }();
+
+  external.needsPath = function () {
+    return !external.currentPath || external.currentPath.length < 1;
+  };
+
     // meshes.Utils.collision(mesh, [self.target.mesh])
   external.currentPath = undefined;
-  external.setPath = function () {
+  external.setPath = function (to) {
     var from = external.boardPosition();
-    var to = that.target.boardPosition();
+    to = to || that.target.boardPosition();
     try {
       var _path = models.Board.board.findPath(from, to);
       _path.push(to);
@@ -38,32 +71,6 @@ models.Minion = function (that) {
     } catch(e) {
       console.log("broken path");
     }
-  };
-
-  external.currentAction = "Waiting";
-  external.trackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction"];
-  
-  var trackedPropertiesEvents = [];
-  
-  external.onTrackedChanged = function (e) {
-    trackedPropertiesEvents.push(e);
-  };  
-
-  var trackedPropertiesSetters = function () {
-    _.each(external.trackedProperties, function (prop) {
-      external["set" + prop.capitalize()] = function (v) {
-        if (v == that[prop]) return;
-
-        that[prop] = v;
-        _.each(trackedPropertiesEvents, function (e) {
-          e(prop, v);
-        });
-      };
-    });
-  }();
-
-  external.needsPath = function () {
-    return !external.currentPath || external.currentPath.length < 1;
   };
 
   external.currentDestination =  undefined;
@@ -116,11 +123,24 @@ models.Minion = function (that) {
 
   external.onDamaged(external.degradeColors);
 
+  external.canAttack = function () {
+    return external.isClose(external.position(), that.target.position(), that.meleeRange);
+  };
   external.attack = _.throttle(function () {
     external.stop();
-    that.target.takeHit(that.damage);
+    that.target.takeHit(that.damage, that);
     external.setCurrentAction("Attacking");
   }, that.attackSpeedMs);
+
+  external.canFlee = function () {
+    return that.attacker;
+  };
+  external.flee = function () {
+    external.stop();
+    external.setPath(models.Board.board.randomSpawnPoint());
+    external.advance();
+    external.setCurrentAction("Fleeing");
+  };
 
   external.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
@@ -128,12 +148,12 @@ models.Minion = function (that) {
   };
 
   external.takeAction = function () {
-    if (!that.target) {
-      return;
-    }
+    var action = _.find(that.actions, function (a) {
+      return that["can" + a.capitalize()]();
+    });
 
-    if (external.isClose(external.position(), that.target.position(), that.meleeRange))
-      external.attack();
+    if (action)
+      that[action]();
     else
       external.advance();
   };

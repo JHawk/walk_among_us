@@ -6,8 +6,6 @@ models.Wall = function (x,y) {
   self.name = "Wall";
   self = _.extend(this, new style.Colors());
   var _$ = models.Wall;
-  self.boardPosition = [x,y];
-
 
   var color = self.blockColor();
 
