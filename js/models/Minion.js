@@ -40,6 +40,8 @@ models.Minion = function (that) {
     }
   };
 
+  external.trackedProperties = ["name", "speed", "damage", "currentAction", "hitPoints"];
+
   external.needsPath = function () {
     return !external.currentPath || external.currentPath.length < 1;
   };
