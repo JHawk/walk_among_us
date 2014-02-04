@@ -44,8 +44,8 @@ models.BaseModel = function (color, mesh) {
   this.generateRegisteredEvents = function () {
     _.each(registeredEvents, function (eventName) {
       var events = [];
-      internal[eventName.pastTense()] = function() {
-        _.each(events, function(e) { e(); })
+      internal[eventName.pastTense()] = function(m) {
+        _.each(events, function(e) { e(m); })
       };
       external["on" + eventName.capitalize().pastTense()] = function (e) {
         events.push(e);
@@ -56,7 +56,7 @@ models.BaseModel = function (color, mesh) {
   this.isRemoved = false;
 
   this.remove = function () {
-    internal.removed();
+    internal.removed(this);
     this.isRemoved = true;
     this.isSelected = false;
     models.scene.remove(this.mesh);
@@ -86,9 +86,18 @@ models.BaseModel = function (color, mesh) {
   };
 
   this.takeHit = function (damage) {
-    this.hitPoints = this.hitPoints - damage;
+    var newHp = this.hitPoints - damage;
+    
+    if (this.setHitPoints)
+    {
+      this.setHitPoints(newHp);
+    }
+    else
+    {
+      this.hitPoints = newHp;
+    }
+
     internal.damaged();
-    console.log("Hit : " + this.hitPoints);
     if (this.hitPoints < 0)
     {
       if (this.deadBody) 

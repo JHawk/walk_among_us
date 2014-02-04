@@ -24,7 +24,6 @@ models.Explorer = function (x,y) {
 
   self.speedUp = function () {
     self.setSpeed(self.speed + 1);
-    console.log("Speed Up : " + self.speed);
   };
 
   self.motivate = function() {

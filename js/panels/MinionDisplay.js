@@ -51,6 +51,7 @@ panels.MinionDisplay = function () {
     m.onTrackedChanged(function (prop, v) {
       self.updateDetail(m);
     });    
+    m.onRemoved(self.removeDetail);
   });
 
   models.Minion.onDeselected(self.removeDetail);
