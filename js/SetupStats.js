@@ -3,9 +3,13 @@ SetupStats = function () {
   stats.setMode(1); // 0: fps, 1: ms
 
   // Align top-left
+
+  var displayEl = $('.display');
+
+  var top = (displayEl.length > 0) ? (displayEl.height() + 'px') : '0px';
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '0px';
+  stats.domElement.style.top = top;
 
   document.body.appendChild( stats.domElement );
 

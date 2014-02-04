@@ -136,9 +136,23 @@ models.Minion = function (that) {
     _$.alive = _.reject(_$.alive, function (m) { return m == this});    
   });
 
+  external.onSelected(function () { 
+    _$.updateSelection(that);
+  });
+
   models.Minion.alive.push(this);
 
   return external;
+};
+
+models.Minion.selectionEvents = []
+models.Minion.updateSelection = function (minion) {
+  _.each(models.Minion.selectionEvents, function(e) {
+    e(minion);
+  })
+};
+models.Minion.onSelection = function (e) {
+  models.Minion.selectionEvents.push(e);
 };
 
 models.Minion.alive = [];

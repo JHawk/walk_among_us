@@ -1,11 +1,13 @@
-  var models = models || {};
+var models = models || {};
 
 Main = function () {
   var self = this;
   var width = window.innerWidth, height = window.innerHeight;
 
   this.start = function () {
+    var display = new panels.MinionDisplay();
     new SetupStats();
+    
     var lights = new components.Lights();
     var scene = new THREE.Scene();
 

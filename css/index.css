@@ -1,3 +1,9 @@
 canvas {
   cursor:url(../resources/hand.png), -moz-zoom-in;
 }
+
+.display {
+  height: 200px;
+  width: 200px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
