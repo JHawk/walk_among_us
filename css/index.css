@@ -2,10 +2,19 @@ canvas {
   cursor:url(../resources/hand.png), -moz-zoom-in;
 }
 
-.display {
-  height: 380px;
+#minionDisplay {
+  height: 350px;
   width: 200px;
-  padding: 10px;
+  /*padding: 10px;*/
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor:url(../resources/hand.png), -moz-zoom-in;
+}
+
+#spellsDisplay {
+  height: 50px;
+  width: 200px;
+  display: none;
+  /*padding: 10px;*/
   background-color: rgba(0, 0, 0, 0.2);
   cursor:url(../resources/hand.png), -moz-zoom-in;
 }
@@ -19,4 +28,19 @@ canvas {
   color: white;
   margin: 10px; 
   cursor:url(../resources/hand.png), -moz-zoom-in;
+}
+
+.spellDetail {
+  height: 50px;
+  width: 50px;
+  background-color: transparent;
+  font-family:Helvetica,Arial,sans-serif;
+  font-size:10px;
+  color: white;
+  margin: 10px; 
+  cursor:url(../resources/hand.png), -moz-zoom-in;
+}
+
+.spellDetail.selected {
+  color: #ffd700;
 }

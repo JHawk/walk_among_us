@@ -5,7 +5,9 @@ Main = function () {
   var width = window.innerWidth, height = window.innerHeight;
 
   this.start = function () {
-    var display = new panels.MinionDisplay();
+
+    var minionDisplay = new panels.MinionDisplay();
+    var SpellsDisplay = new panels.SpellsDisplay();
     new SetupStats();
     
     var lights = new components.Lights();

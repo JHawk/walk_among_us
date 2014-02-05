@@ -26,6 +26,8 @@ models.Fighter = function (x,y) {
 
   self.actions = [
     "attack"
+    // ,
+    // "wander"
   ];
 
   self.hasTarget = function () {

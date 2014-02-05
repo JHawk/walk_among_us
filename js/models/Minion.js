@@ -148,6 +148,19 @@ models.Minion = function (that) {
     external.advance();
   };
 
+  external.canWander = function () {
+    return !that.hasTarget();
+  };
+  external.wander = function () {
+    if (that.currentAction != "Wandering")
+    {
+      external.stop();
+      external.setPath(models.Board.board.randomEmptyPoint()); 
+      external.setCurrentAction("Wandering");
+    }
+    external.advance();
+  };
+
   external.fromBoard = function (p) {
     var half = (meshes.Wall.size / 2);
     return [p[0] * meshes.Wall.size, p[1] * meshes.Wall.size];
@@ -186,6 +199,9 @@ models.Minion = function (that) {
       external.takeAction();
     else
       acquireTarget();
+
+    // if (that.canWander)
+    //   that.wander();
   };
 
   that.mesh.model = that;

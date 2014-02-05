@@ -27,6 +27,8 @@ models.Explorer = function (x,y) {
   self.actions = [
     "flee",
     "attack"
+    // ,
+    // "wander"
   ];
 
   self.onDamaged(function (source) {
