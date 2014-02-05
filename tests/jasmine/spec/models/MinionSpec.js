@@ -11,13 +11,14 @@ describe("models.Minion", function() {
     boardSpy = jasmine.createSpyObj('board', ['findPath']);
     
     targetSpy = jasmine.createSpyObj('target', ['position', 'boardPosition']);
-    targetSpy.boardPosition = [2,3];
+    targetSpy.boardPosition.andReturn([2,3]);
     
     meshSpy = jasmine.createSpyObj('mesh', ['uuid', 'position']);
     meshSpy.position = [1,1];
 
-    thatSpy = jasmine.createSpyObj('that', ['color', 'mesh']);
+    thatSpy = jasmine.createSpyObj('that', ['color', 'mesh', 'canAttack', 'attack']);
     
+    thatSpy.actions = ['attack'];
     thatSpy.color = "#111111";
     thatSpy.mesh = meshSpy;
 
@@ -36,14 +37,14 @@ describe("models.Minion", function() {
       advanceSpy = spyOn(Minion, "advance");
     });
 
-    describe("when no target set", function () {
-      it("does nothing", function() {
-        Minion.takeAction();
+    // describe("when no target set", function () {
+    //   it("does nothing", function() {
+    //     Minion.takeAction();
 
-        expect(attackSpy).not.toHaveBeenCalled();
-        expect(advanceSpy).not.toHaveBeenCalled();
-      });
-    });
+    //     expect(attackSpy).not.toHaveBeenCalled();
+    //     expect(advanceSpy).not.toHaveBeenCalled();
+    //   });
+    // });
 
     describe("when target set", function () {
       beforeEach(function() {
@@ -52,19 +53,19 @@ describe("models.Minion", function() {
 
       describe("and in range", function () {
         beforeEach(function() {
-          isCloseSpy.andReturn(true);
+          thatSpy.canAttack.andReturn(true);
         });
 
         it("will attack", function() {
           Minion.takeAction();
 
-          expect(attackSpy).toHaveBeenCalled();
+          expect(thatSpy.attack).toHaveBeenCalled();
         });
       });
 
       describe("and not in range", function () {
         beforeEach(function() {
-          isCloseSpy.andReturn(false);
+          thatSpy.canAttack.andReturn(false);
         });
 
         it("will advance", function() {
