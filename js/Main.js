@@ -7,7 +7,6 @@ Main = function () {
   this.start = function () {
 
     var minionDisplay = new panels.MinionDisplay();
-    var SpellsDisplay = new panels.SpellsDisplay();
     new SetupStats();
     
     var lights = new components.Lights();
@@ -34,7 +33,10 @@ Main = function () {
     var renderer = new components.Renderer(width, height).create();
 
     var keyControls = new controls.Keys(cameraControl);
-    new controls.Mouse(cameraControl.camera, scene);
+    var mouseControls = new controls.Mouse(cameraControl.camera, scene);
+
+    new controls.Spells(mouseControls);
+    new panels.SpellsDisplay();
     
     function render() {
       requestAnimationFrame(render);

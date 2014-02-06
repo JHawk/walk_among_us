@@ -23,8 +23,8 @@ panels.SpellsDisplay = function (spells) {
                                                 $(window).scrollLeft()) + "px");
   };
 
-  self.createDetail = function (spellName, spell) {
-    return  "<td class='spellDetail' id='" + spellName + "'>" + spellName + " : " + spell.key + "</td>";
+  self.createDetail = function (spellName, key) {
+    return  "<td class='spellDetail' id='" + spellName + "'>" + spellName + " : " + key + "</td>";
   };
 
   self.select = function (e) {
@@ -33,12 +33,14 @@ panels.SpellsDisplay = function (spells) {
   };
 
   self.create = function () {
-    var spells = new controls.Spells();
-    _.each(spells.available, function(spell, spellName) {
-      display.append(self.createDetail(spellName, spell));
-      // display.find('#' + spellName).click(self.select);
+    var spells = controls.Spells.spells;
+    
+    _.each(spells.keyActions(), function(spell) {
+      display.append(self.createDetail(spell[1].name, spell[0].key));
+      display.find('#' + spell[1].name).click(self.select);
     });
-    var spellsCount = _.keys(spells.available).length;
+    var spellsCount = spells.actions.length;
+    $('.spellDetail').first().click();
     var newWidth = $('.spellDetail').width() * spellsCount;
     display.width(newWidth);
     display.show();

@@ -47,6 +47,13 @@ controls.Mouse = function (camera, scene) {
     }
   };
 
+  this.currentTarget = function(action, noTargets) {
+    if (!self.lastMouseMoveEvent) {
+      noTargets();
+    }
+    self.onTarget(self.lastMouseMoveEvent, action, noTargets);
+  };
+
   this.selectElement = function (event) {
     event.preventDefault();
 
@@ -110,7 +117,10 @@ controls.Mouse = function (camera, scene) {
       });
   };
 
+  this.lastMouseMoveEvent = undefined;
+
   this.mousemove = function( event ) {
+    self.lastMouseMoveEvent = event;
     self.highlightElement(event);
   };
 
