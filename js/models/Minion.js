@@ -27,7 +27,7 @@ models.Minion = function (that) {
   });
 
   external.currentAction = "Waiting";
-  var initialTrackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction"];
+  var initialTrackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction", "allegiance"];
   
   external.trackedProperties = [];
   var trackedPropertiesEvents = [];
@@ -187,6 +187,23 @@ models.Minion = function (that) {
     if (!that.target || that.target.isRemoved)
     {
       external.setCurrentAction("Waiting");  
+    }
+  };
+
+  external.speedUp = function () {
+    that.setSpeed(that.speed + 1);
+  };
+
+  external.motivate = function() {
+    console.log("Motivated!");
+    that.takeHit(1);
+    that.speedUp();
+  };
+
+  external.specialAttack = function () {
+    if (that.allegiance == "Player")
+    {
+      that.motivate();
     }
   };
 

@@ -2,7 +2,9 @@ var models = models || {};
 
 models.Explorer = function (x,y) {
   var self = this;
+  
   self.type = "Explorer";
+  self.allegiance = "Player";
 
   self = _.extend(this, new style.Colors());
 
@@ -37,20 +39,6 @@ models.Explorer = function (x,y) {
 
   self.hasTarget = function () {
     return self.target && self.target.isSelected;
-  };
-
-  self.speedUp = function () {
-    self.setSpeed(self.speed + 1);
-  };
-
-  self.motivate = function() {
-    console.log("Motivated!");
-    self.takeHit(1);
-    self.speedUp();
-  };
-
-  self.specialAttack = function () {
-    self.motivate();
   };
 
   self.acquireTarget = function () {

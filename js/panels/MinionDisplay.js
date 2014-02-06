@@ -40,10 +40,22 @@ panels.MinionDisplay = function () {
       detail.empty();
       detail.append(self.content(m));
     }
+    self.resize();
   };
 
   self.removeDetail = function (m) {
     self.findDetail(m).remove();
+  };
+
+  self.resize = function () {
+    var mds = $('.minionDetail');
+    var detailCount = mds.length;
+    var detailMargin = parseInt( mds.css('margin'));
+    var detailHeight = mds.height() + detailMargin;
+    var newHeight = detailHeight * detailCount + detailMargin;
+    
+    display.height(newHeight);
+    display.show();
   };
 
   models.Minion.onSelected(function (m) {
@@ -52,7 +64,11 @@ panels.MinionDisplay = function () {
       self.updateDetail(m);
     });    
     m.onRemoved(self.removeDetail);
+    self.resize();
   });
 
-  models.Minion.onDeselected(self.removeDetail);
+  models.Minion.onDeselected(function (m) {
+    self.removeDetail(m);
+    self.resize();
+  });
 };

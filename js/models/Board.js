@@ -81,15 +81,15 @@ models.Board = function (width, height) {
   var spawn = function (constructor) {
     var spawnPoint = self.randomSpawnPoint();
     var x = spawnPoint[0], y = spawnPoint[1];
-    new constructor(x,y);
+    return new constructor(x,y);
   };
 
   this.spawnExplorer = function () {
-    spawn(models.Explorer);
+    return spawn(models.Explorer);
   };
 
   this.spawnFighter = function () {
-    spawn(models.Fighter);
+    return spawn(models.Fighter);
   };
 
   var explorerCount = 1;

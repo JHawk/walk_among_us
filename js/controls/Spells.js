@@ -89,6 +89,13 @@ controls.Spells = function (mouseControls) {
               console.log("Motivate missed.");
             })
         }
+      },
+      {
+        name : "enemy",
+        callBack : function () {
+          var f = models.board.spawnFighter();
+          f.allegiance = "Enemy";
+        }
       }
       // ,
       // {

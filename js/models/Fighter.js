@@ -1,8 +1,10 @@
 var models = models || {};
 
-models.Fighter = function (x,y) {
+models.Fighter = function (x, y) {
   var self = this;
+
   self.type = "Fighter";
+  self.allegiance = "Player";
 
   self = _.extend(this, new style.Colors());
 
@@ -38,7 +40,9 @@ models.Fighter = function (x,y) {
   self = _.extend(this, new models.Minion(this));
 
   self.acquireTarget = function () {
-    var minions = _.reject(models.Minion.alive, function (m) { return m.mesh.uuid == self.mesh.uuid });
+    var minions = _.reject(models.Minion.alive, function (m) { 
+      return m.mesh.uuid == self.mesh.uuid || m.allegiance == self.allegiance;
+    });
     if (minions.length > 0)
     {
       self.target = _.sample(minions);

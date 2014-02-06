@@ -8,8 +8,8 @@ SetupStats = function () {
 
   var top = (displayEl.length > 0) ? (displayEl.height() + 'px') : '0px';
   stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = top;
+  stats.domElement.style.bottom = '0px';
+  
 
   document.body.appendChild( stats.domElement );
 

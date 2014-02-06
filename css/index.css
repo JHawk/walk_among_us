@@ -5,6 +5,7 @@ canvas {
 #minionDisplay {
   height: 350px;
   width: 200px;
+  display: none;
   /*padding: 10px;*/
   background-color: rgba(0, 0, 0, 0.2);
   cursor:url(../resources/hand.png), -moz-zoom-in;
@@ -20,7 +21,7 @@ canvas {
 }
 
 .minionDetail {
-  height: 75px;
+  height: 85px;
   width: 200px;
   background-color: transparent;
   font-family:Helvetica,Arial,sans-serif;
