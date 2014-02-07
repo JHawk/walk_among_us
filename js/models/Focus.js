@@ -4,6 +4,7 @@ models.Focus = function (x,y) {
   var self = this;
   self.hitPoints = 30;
   self.name = "Focus";
+  self.allegiance = "Player";
 
   var _$ = models.Focus;
 
