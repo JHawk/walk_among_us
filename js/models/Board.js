@@ -20,7 +20,7 @@ models.Board = function (width, height) {
   };
   
   self.centerPosition = _.map(_centerBlock, function (b) { 
-    return (b * meshes.Wall.size) - meshes.Wall.size / 2 
+    return (b * meshes.Wall.size); 
   });
 
   var emptySpaces = [];

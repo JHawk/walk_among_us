@@ -8,6 +8,7 @@ describe("models.Board", function() {
     width = 10; 
     height = 10;
     position = {x: 5, y: 5};
+    meshes.Wall.size = 20;
     
     Board = new models.Board(width, height);
   });
@@ -20,6 +21,15 @@ describe("models.Board", function() {
       Board.emptySpace(position);
 
       expect(Board.grid.getNodeAt(position.x,position.y).walkable).toBeTruthy();
+    });
+  });
+
+  describe("centerPosition", function () {
+    beforeEach(function () {
+    });
+
+    it("returns the center", function() {
+      expect(Board.centerPosition).toEqual([100,100]);
     });
   });
 });
