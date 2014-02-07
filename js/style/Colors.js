@@ -17,8 +17,10 @@ style.Colors = function () {
   ];
 
   this.blockColor = function () {
-    return _.sample(blockColors);
+    return /* self.randomColor(); */ _.sample(blockColors);
   };
+
+  this.focusColor = 11080712.866881756;
 
   this.directionalLight = "#ffffff";
   this.ambientLight = 0x001100;

@@ -132,6 +132,11 @@ models.Board = function (width, height) {
     });
   };
 
+  this.createFocus = function () {
+    self.grid.setWalkableAt(_centerBlock[0],_centerBlock[1], false);
+    new models.Focus(_centerBlock[0],_centerBlock[1]);    
+  };
+
   this.walls = function () {
     _width.map(function(x) {
       _height.map(function(y) {

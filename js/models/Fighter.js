@@ -42,7 +42,7 @@ models.Fighter = function (x, y) {
   self.acquireTarget = function () {
     var minions = _.reject(models.Minion.alive, function (m) { 
       return m.mesh.uuid == self.mesh.uuid || m.allegiance == self.allegiance;
-    });
+    }).concat(models.Focus.alive);
     if (minions.length > 0)
     {
       self.target = _.sample(minions);

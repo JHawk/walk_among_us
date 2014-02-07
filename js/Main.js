@@ -24,6 +24,7 @@ Main = function () {
 
     board.createWalls();
     board.createExplorers();
+    board.createFocus();
     
     scene.add(lights.ambient());
     scene.add(lights.directional1());
