@@ -16,8 +16,10 @@ style.Colors = function () {
     11824921.967054684
   ];
 
+  self.tileColor = 7504561.982380722;
+
   this.blockColor = function () {
-    return /* self.randomColor(); */ _.sample(blockColors);
+    return _.sample(blockColors); // self.randomColor();
   };
 
   this.focusColor = 11080712.866881756;

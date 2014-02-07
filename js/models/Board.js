@@ -67,6 +67,7 @@ models.Board = function (width, height) {
     _.each(spawnX(), function (x) {
       _.each(spawnY(), function (y) {
         self.emptySpace({x: x, y: y});
+        new models.Tile(x,y);
       });
     });
     return [];

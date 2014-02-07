@@ -53,12 +53,12 @@ controls.Keys = function ( cameraControl ) {
       }
     } else {
       switch ( event.keyCode ) {
-        case 87: /*W*/ self.moveState.forward = 1; break;
-        case 83: /*S*/ self.moveState.back = 1; break;
+        case 87: /*W*/ self.moveState.up = 1; break;
+        case 83: /*S*/ self.moveState.down = 1; break;
         case 65: /*A*/ self.moveState.left = 1; break;
         case 68: /*D*/ self.moveState.right = 1; break;
-        case 69: /*E*/ self.moveState.up = 1; break;
-        case 81: /*Q*/ self.moveState.down = 1; break;
+        case 69: /*E*/ self.moveState.forward = 1; break;
+        case 81: /*Q*/ self.moveState.back = 1; break;
         default: keyHandled = false; 
       }
 
@@ -74,12 +74,12 @@ controls.Keys = function ( cameraControl ) {
     var keyHandled = true;
 
     switch( event.keyCode ) {
-      case 87: /*W*/ self.moveState.forward = 0; self.moveState.rollForward = 0; break;
-      case 83: /*S*/ self.moveState.back = 0; self.moveState.rollBack = 0; break;
+      case 87: /*W*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
+      case 83: /*S*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
       case 65: /*A*/ self.moveState.left = 0; self.moveState.turnLeft = 0; break;
       case 68: /*D*/ self.moveState.right = 0; self.moveState.turnRight = 0; break;
-      case 69: /*E*/ self.moveState.up = 0; self.moveState.turnUp = 0; break;
-      case 81: /*Q*/ self.moveState.down = 0; self.moveState.turnDown = 0; break;
+      case 69: /*E*/ self.moveState.forward = 0; self.moveState.rollForward = 0; break;
+      case 81: /*Q*/ self.moveState.back = 0; self.moveState.rollBack = 0; break;
       default: keyHandled = false;
     }
 
