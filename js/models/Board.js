@@ -5,7 +5,10 @@ models.Board = function (width, height) {
 
   var _width = _(width).range();
   var _height = _(height).range();
-  var _centerBlock = [Math.floor(width / 2), Math.floor(height / 2)];
+  
+  self.centerBlock = function () {
+    return [Math.floor(width / 2), Math.floor(height / 2)];
+  };
   
   this.grid = new PF.Grid(width, height);
 
@@ -19,7 +22,7 @@ models.Board = function (width, height) {
     return _finder.findPath(from[0], from[1], to[0], to[1], self.grid.clone());
   };
   
-  self.centerPosition = _.map(_centerBlock, function (b) { 
+  self.centerPosition = _.map(self.centerBlock(), function (b) { 
     return (b * meshes.Wall.size); 
   });
 
@@ -44,7 +47,7 @@ models.Board = function (width, height) {
   var spawnRadius = 3;
 
   var spawnRange = function(idx) {
-    return _.range(_centerBlock[idx] - spawnRadius, _centerBlock[idx] + spawnRadius);
+    return _.range(self.centerBlock()[idx] - spawnRadius, self.centerBlock()[idx] + spawnRadius);
   };
 
   var spawnX = function () {
@@ -134,8 +137,9 @@ models.Board = function (width, height) {
   };
 
   this.createFocus = function () {
-    self.grid.setWalkableAt(_centerBlock[0],_centerBlock[1], false);
-    new models.Focus(_centerBlock[0],_centerBlock[1]);    
+    var c = self.centerBlock();
+    self.grid.setWalkableAt(c[0],c[1], false);
+    new models.Focus(c[0],c[1]);    
   };
 
   this.walls = function () {

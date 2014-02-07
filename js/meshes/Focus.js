@@ -10,12 +10,12 @@ meshes.Focus = function () {
     var material = new THREE.MeshLambertMaterial( { color: color } );
     var geometry = new THREE.CubeGeometry(_$.size, _$.size, _$.size);
     var cube = new THREE.Mesh( geometry, material );
-    cube.position.setX(_$.size * x);
-    cube.position.setY(_$.size * y);
+    cube.position.setX((meshes.Wall.size * x) - (meshes.Focus.size / 4));
+    cube.position.setY((meshes.Wall.size * y) - (meshes.Focus.size / 4));
     cube.position.setZ(_$.size / 2);
     cube.castShadow = true;
     return cube;
   };
 };
 
-meshes.Focus.size = 20;
+meshes.Focus.size = 40;

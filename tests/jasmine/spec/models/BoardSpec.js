@@ -24,10 +24,13 @@ describe("models.Board", function() {
     });
   });
 
-  describe("centerPosition", function () {
-    beforeEach(function () {
+  describe("centerBlock", function () {
+    it("returns the center block", function() {
+      expect(Board.centerBlock()).toEqual([5,5]);
     });
+  });
 
+  describe("centerPosition", function () {
     it("returns the center", function() {
       expect(Board.centerPosition).toEqual([100,100]);
     });
