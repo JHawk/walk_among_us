@@ -1,7 +1,10 @@
 canvas {
   cursor:url(../resources/hand.png), -moz-zoom-in;
 }
-
+body{
+  margin: 0px;
+  overflow: hidden;
+}
 #minionDisplay {
   height: 350px;
   width: 200px;

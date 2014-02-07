@@ -4,7 +4,34 @@ Main = function () {
   var self = this;
   var width = window.innerWidth, height = window.innerHeight;
 
-  this.start = function () {
+  // self.start = function () {
+  //   var button = "<div id='startButton' class='display'>play the game and such.</div>";
+  //   $('body').append(button);
+  //   var startButton = $('#startButton');
+
+  //   $('body').click(function () {
+  //     var el = document.documentElement;
+  //     var rfs = el.requestFullScreen
+  //             || el.webkitRequestFullScreen
+  //             || el.mozRequestFullScreen;
+      
+  //     rfs.call(el);
+
+  //     startButton.hide();
+  //     self.play();
+  //   });
+
+  //   self.centerEl = function () {
+  //     startButton.css("top", Math.max(0, (($(window).height() - startButton.outerHeight()) / 2) + 
+  //                                                 $(window).scrollTop()) + "px");
+  //     startButton.css("left", Math.max(0, (($(window).width() - startButton.outerWidth()) / 2) + 
+  //                                                 $(window).scrollLeft()) + "px");
+  //   };
+
+  //   self.centerEl();
+  // };
+
+  self.play = function () {
 
     var minionDisplay = new panels.MinionDisplay();
     new SetupStats();

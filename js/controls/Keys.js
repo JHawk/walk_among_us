@@ -37,12 +37,12 @@ controls.Keys = function ( cameraControl ) {
       controls.Spells.spells.action(event.keyCode)();
     } else if ( event.altKey ) {
       switch ( event.keyCode ) {
-        case 87: /*W*/ self.moveState.rollForward = 1; break;
-        case 83: /*S*/ self.moveState.rollBack = 1; break;
+        case 87: /*W*/ self.moveState.turnUp = 1; break;
+        case 83: /*S*/ self.moveState.turnDown = 1; break;
         case 65: /*A*/ self.moveState.turnLeft = 1; break;
         case 68: /*D*/ self.moveState.turnRight = 1; break;
-        case 69: /*E*/ self.moveState.turnUp = 1; break;
-        case 81: /*Q*/ self.moveState.turnDown = 1; break;
+        case 69: /*E*/ self.moveState.rollForward = 1; break;
+        case 81: /*Q*/ self.moveState.rollBack = 1; break;
         default: keyHandled = false;
       }
 
