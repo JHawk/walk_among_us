@@ -87,7 +87,8 @@ controls.Spells = function (mouseControls) {
             }, 
             function () {
               console.log("Motivate missed.");
-            })
+            }
+          );
         }
       },
       {

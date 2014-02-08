@@ -27,7 +27,7 @@ models.Minion = function (that) {
   });
 
   external.currentAction = "Waiting";
-  var initialTrackedProperties = ["name", "type", "speed", "damage", "hitPoints", "currentAction", "allegiance"];
+  var initialTrackedProperties = ["name", "type", "speed", "damage", "hitPoints", "allegiance", "currentAction"];
   
   external.trackedProperties = [];
   var trackedPropertiesEvents = [];
