@@ -51,7 +51,7 @@ Main = function () {
 
     board.createWalls();
     board.createExplorers();
-    board.createFocus();
+    var focus = board.createFocus();
     
     scene.add(lights.ambient());
     scene.add(lights.directional1());
@@ -66,14 +66,20 @@ Main = function () {
     new controls.Spells(mouseControls);
     new panels.SpellsDisplay();
     var playerDisplay = new panels.PlayerDisplay();
+
+    var gameOver = new panels.GameOverDisplay(focus);
     
     function render() {
       requestAnimationFrame(render);
-      keyControls.update();
       renderer.render(scene, cameraControl.camera);
-      board.update();
-      playerDisplay.update();
-      TWEEN.update();
+      
+      if (!gameOver.isGameOver)
+      {
+        keyControls.update();
+        board.update();
+        playerDisplay.update();
+        TWEEN.update();
+      }
     }
 
     render();

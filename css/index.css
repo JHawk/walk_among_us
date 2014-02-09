@@ -37,6 +37,19 @@ body{
   cursor:url(../resources/hand.png), -moz-zoom-in;
 }
 
+#gameOverDisplay {
+  height: 50px;
+  width: 200px;
+  display: none;
+  /*padding: 10px;*/
+  background-color: rgba(0, 0, 0, 0.2);
+  font-family:Helvetica,Arial,sans-serif;
+  font-size:10px;
+  color: white;
+  /*margin: 10px; */
+  cursor:url(../resources/hand.png), -moz-zoom-in;
+}
+
 .minionDetail {
   height: 85px;
   width: 200px;

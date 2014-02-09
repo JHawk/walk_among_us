@@ -15,8 +15,6 @@ models.Focus = function (x,y) {
   self = _.extend(this, new models.BaseModel(color, mesh));
 
   self.onRemoved(function () {
-    console.log("game over!");  
-
     _$.alive = _.reject(_$.alive, function (m) { return m == self});  
   });
 

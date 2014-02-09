@@ -144,7 +144,7 @@ models.Board = function (width, height) {
   this.createFocus = function () {
     var c = self.centerBlock();
     self.grid.setWalkableAt(c[0],c[1], false);
-    new models.Focus(c[0],c[1]);    
+    return new models.Focus(c[0],c[1]);    
   };
 
   this.walls = function () {

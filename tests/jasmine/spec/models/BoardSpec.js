@@ -47,7 +47,7 @@ describe("models.Board", function() {
 
     it("returns false if position isn't on grid", function() {
       expect(Board.isEmpty({x:-1, y:-1})).toBeFalsy();
-      expect(Board.isEmpty({x:100, y:100})).toBeFalsy();
+      expect(Board.isEmpty({x:100, y:100  })).toBeFalsy();
     });
   });
 
