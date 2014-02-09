@@ -65,12 +65,14 @@ Main = function () {
 
     new controls.Spells(mouseControls);
     new panels.SpellsDisplay();
+    var playerDisplay = new panels.PlayerDisplay();
     
     function render() {
       requestAnimationFrame(render);
       keyControls.update();
       renderer.render(scene, cameraControl.camera);
       board.update();
+      playerDisplay.update();
       TWEEN.update();
     }
 

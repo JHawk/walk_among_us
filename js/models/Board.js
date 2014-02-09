@@ -96,6 +96,11 @@ models.Board = function (width, height) {
     return spawn(models.Fighter);
   };
 
+  this.spawnEnemy = function () {
+    var f = models.board.spawnFighter();
+    f.allegiance = "Enemy";
+  };
+
   var explorerCount = 1;
 
   this.createExplorers = function () {

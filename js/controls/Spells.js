@@ -93,10 +93,7 @@ controls.Spells = function (mouseControls) {
       },
       {
         name : "enemy",
-        callBack : function () {
-          var f = models.board.spawnFighter();
-          f.allegiance = "Enemy";
-        }
+        callBack : models.board.spawnEnemy
       }
       // ,
       // {
