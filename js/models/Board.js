@@ -113,8 +113,8 @@ models.Board = function (width, height) {
     ];
   };
 
-  // TODO factor out the board concept of objects - let scene deal with it.
   this.isEmpty = function (p) {
+    if (!self.grid.isInside(p.x,p.y)) return false;
     return self.grid.getNodeAt(p.x, p.y).walkable;
   }
 
