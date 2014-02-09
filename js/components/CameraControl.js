@@ -6,7 +6,7 @@ components.CameraControl = function (width, height, center) {
     
     var isOverhead = true;
 
-    var perspectiveVector = new THREE.Vector3(-60, -60, 60);
+    var perspectiveVector = new THREE.Vector3(90, 90, 120);
     var overheadVector = new THREE.Vector3(center[0], center[1], 300);
 
     var resetRotation = function () {
