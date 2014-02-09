@@ -65,7 +65,8 @@ Main = function () {
 
     new controls.Spells(mouseControls);
     new panels.SpellsDisplay();
-    var playerDisplay = new panels.PlayerDisplay();
+    var player = new models.Player();
+    var playerDisplay = new panels.PlayerDisplay(player, focus);
 
     var gameOver = new panels.GameOverDisplay(focus);
     

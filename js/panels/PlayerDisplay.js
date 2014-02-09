@@ -1,6 +1,6 @@
 var panels = panels || {};
 
-panels.PlayerDisplay = function () {
+panels.PlayerDisplay = function (player, focus) {
   var self = this;
 
   self.updateTimeMs = 1000;
@@ -17,17 +17,34 @@ panels.PlayerDisplay = function () {
     models.Board.board.spawnEnemy();
   });
 
+  self.content = function () {
+    var el = 
+      '<ul>' +
+        "<li>Attack Countdown : " + Math.ceil(Math.ceil(self.time / 1000)) + "</li>" +
+        "<li>Life : " + focus.hitPoints + "</li>" +
+        "<li>Gold : " + player.gold + "</li>" +
+      '</ul>';
+    
+    return el;
+  };
+
+  self.updateDisplay = function () {
+    display.html(
+      "<div class='playerDetail'>" + self.content() + "</div>"
+    );
+  };
+
   self.update = _.throttle(function () {
     var newTime = self.time - 1000;
     if (newTime < 0) 
     {
-      display.html(0);
+      self.time = 0;
       self.onTimeUp();
     }
     else {
-      display.html(Math.ceil(Math.ceil(self.time / 1000)));
       self.time = newTime; 
     }
+    self.updateDisplay();
   }, self.updateTimeMs);
 
   display.show();

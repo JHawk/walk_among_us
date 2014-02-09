@@ -14,9 +14,21 @@ controls.Spells = function (mouseControls) {
   };
 
   self.action = function (keyCode) {
-    return _.find(self.keyActions(), function (ka) {
+    var spell = _.find(self.keyActions(), function (ka) {
       return ka[0].keyCode == keyCode;
-    })[1].callBack;
+    })[1];
+    return function () {
+      var player = models.Player.player;
+      if (player.gold >= spell.cost)
+      {
+        player.gold = player.gold - spell.cost;
+        spell.callBack();
+      }
+      else
+      {
+        console.log("not enough gold");
+      }
+    };
   };
 
   self.keyActions = function () {
@@ -72,11 +84,13 @@ controls.Spells = function (mouseControls) {
     [ 
       {
         name : "explorer",
-        callBack : models.board.spawnExplorer
+        callBack : models.board.spawnExplorer,
+        cost : 10
       },
       {
         name : "fighter",
-        callBack : models.board.spawnFighter
+        callBack : models.board.spawnFighter,
+        cost : 20
       },
       {
         name : "motivate",
@@ -89,11 +103,13 @@ controls.Spells = function (mouseControls) {
               console.log("Motivate missed.");
             }
           );
-        }
+        },
+        cost : 0
       },
       {
         name : "enemy",
-        callBack : models.board.spawnEnemy
+        callBack : models.board.spawnEnemy,
+        cost : 0
       }
       // ,
       // {
