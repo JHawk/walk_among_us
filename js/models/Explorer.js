@@ -1,6 +1,6 @@
 var models = models || {};
 
-models.Explorer = function (x,y) {
+models.Explorer = function (p) {
   var self = this;
   
   self.type = "Explorer";
@@ -9,7 +9,7 @@ models.Explorer = function (x,y) {
   self = _.extend(this, new style.Colors());
 
   self.color = self.explorerColor();
-  self.mesh = new meshes.Explorer().create(x,y,self.color);
+  self.mesh = new meshes.Explorer().create(p[0],p[1],self.color);
 
   self.hitPoints = 10;
   self.tickSpeedMs = 10;

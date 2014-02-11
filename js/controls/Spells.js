@@ -80,16 +80,32 @@ controls.Spells = function (mouseControls) {
         }
       ];
 
+  var summon =  function (constructor) {
+    return function () {
+      mouseControls.currentTarget(
+        function (target) {
+          if (target.model.name == "Tile")
+            new constructor(target.model.boardPosition());
+          else
+            console.log("Summon only on owned tiles : " + target.model.name);
+        }, 
+        function () {
+          console.log("Summon only on owned tiles.");
+        }
+      );
+    }
+  };
+
   self.actions = 
     [ 
       {
         name : "explorer",
-        callBack : models.board.spawnExplorer,
+        callBack : summon(models.Explorer),
         cost : 10
       },
       {
         name : "fighter",
-        callBack : models.board.spawnFighter,
+        callBack : summon(models.Fighter),
         cost : 20
       },
       {

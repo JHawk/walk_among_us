@@ -1,6 +1,6 @@
 var models = models || {};
 
-models.Fighter = function (x, y) {
+models.Fighter = function (p) {
   var self = this;
 
   self.type = "Fighter";
@@ -9,7 +9,7 @@ models.Fighter = function (x, y) {
   self = _.extend(this, new style.Colors());
 
   self.color = self.fighterColor();
-  self.mesh = new meshes.Fighter().create(x,y,self.color);
+  self.mesh = new meshes.Fighter().create(p[0],p[1],self.color);
 
   self.hitPoints = 20;
   self.tickSpeedMs = 10;
