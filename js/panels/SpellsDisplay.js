@@ -46,4 +46,10 @@ panels.SpellsDisplay = function (spells) {
     display.show();
     self.centerEl();
   }();
+
+  self.selectedSpell = function () {
+    return display.find('.spellDetail.selected').attr('id');
+  };
+
+  panels.SpellsDisplay.spellsDetail = self;
 };

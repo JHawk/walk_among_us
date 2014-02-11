@@ -62,14 +62,6 @@ controls.Mouse = function (camera, scene) {
     });
   };
 
-  this.specialAttack = function (event) {
-    event.preventDefault();
-
-    self.onTarget(event, function (target) {
-      target.model.specialAttack();
-    });
-  };
-
   this.mousedown = function( event ) {
     if ( self.domElement !== document ) {
       self.domElement.focus();
@@ -80,7 +72,7 @@ controls.Mouse = function (camera, scene) {
 
     switch ( event.button ) {
       case 0: /*Left*/ self.selectElement(event); break;
-      case 2: /*Right*/ self.specialAttack(event); break;
+      case 2: /*Right*/ controls.Spells.spells.selectedSpell(); break;
     }
   };
 

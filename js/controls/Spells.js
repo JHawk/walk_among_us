@@ -137,6 +137,14 @@ controls.Spells = function (mouseControls) {
       // }
   ];
 
+  self.selectedSpell = function () {
+    var spell = panels.SpellsDisplay.spellsDetail.selectedSpell();
+    var action = _.find(self.actions, function (action) {
+      return action.name == spell;
+    });
+    action.callBack();
+  };
+
   controls.Spells.spells = self;
 
   return self;
