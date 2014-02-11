@@ -136,7 +136,7 @@ models.Board = function (width, height) {
   this.targetableWalls = [];
 
   this.updateTargetableWalls = function () {
-    self.targetableWalls = _.filter(models.Wall.selected, function (w) {
+    self.targetableWalls = _.filter(models.Explorable.selected, function (w) {
       return self.isNearEmptySpace(w.boardPosition());
     });
   };
@@ -147,13 +147,15 @@ models.Board = function (width, height) {
     return new models.Focus(c[0],c[1]);    
   };
 
+  var chanceOfGold = 0.05;
+
   this.walls = function () {
     _width.map(function(x) {
       _height.map(function(y) {
         if (self.isEmpty({x:x, y:y})) return;
 
         var position = [x,y];
-        var wall = new models.Wall(x,y);
+        var wall = (Math.random() > chanceOfGold) ? new models.Wall(x,y) : new models.Gold(x,y);
         self.grid.setWalkableAt(x, y, false);
         wall.onSelected(self.updateTargetableWalls);
         wall.onDeselected(self.updateTargetableWalls);

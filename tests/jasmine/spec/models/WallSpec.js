@@ -23,7 +23,7 @@ describe("models.Wall", function() {
       it("is added to the selected collection", function() {
         Wall.toggleSelection();
 
-        expect(models.Wall.selected).not.toBeEmpty();
+        expect(models.Explorable.selected).not.toBeEmpty();
       });
     });
   });

@@ -74,4 +74,6 @@ style.Colors = function () {
   this.fighterColor = function () {
     return _.sample(fighterColors);
   };
+
+  this.gold = 16766720;
 }
