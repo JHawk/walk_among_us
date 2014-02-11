@@ -1,7 +1,7 @@
 var controls = controls || {};
 
 function RightMouseDown () {return false;}
-document.oncontextmenu=RightMouseDown;
+document.oncontextmenu = RightMouseDown;
 
 controls.Mouse = function (camera, scene) {
   var self = this;
@@ -15,16 +15,20 @@ controls.Mouse = function (camera, scene) {
   var projector = new THREE.Projector();
   this.mouseStatus = 0;
 
+  self.position = function (event) {
+    return {
+      x: (event.clientX / window.innerWidth) * 2 - 1,
+      y: - (event.clientY / window.innerHeight) * 2 + 1
+    };
+  };
+
   this.raycasterMouse = function (event) {
-    var vector = new THREE.Vector3(
-        ( event.clientX / window.innerWidth ) * 2 - 1,
-      - ( event.clientY / window.innerHeight ) * 2 + 1,
-        0.5
-    );
-
+    var p = self.position(event);
+    var vector = new THREE.Vector3(p.x, p.y, 0.5);
     projector.unprojectVector( vector, camera );
+    var sub = vector.sub(camera.position).normalize();
 
-    return new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+    return new THREE.Raycaster(camera.position, sub);
   };
 
   this.targetObjects = function (event) {
@@ -39,7 +43,7 @@ controls.Mouse = function (camera, scene) {
 
     if ( intersects.length > 0 ) {
       var firstIntersection = intersects[0].object;
-      action(firstIntersection);
+      action(firstIntersection, self.position(event));
     } 
     else if (noTargets)
     {

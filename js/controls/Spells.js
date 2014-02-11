@@ -126,15 +126,21 @@ controls.Spells = function (mouseControls) {
         name : "enemy",
         callBack : models.board.spawnEnemy,
         cost : 0
+      },
+      {
+        name : "explosion",
+        callBack : function () {
+          mouseControls.currentTarget(
+            function (target, position) {
+              console.log("still need to get this position");
+            }, 
+            function () {
+              console.log("Motivate missed.");
+            }
+          );
+        },
+        cost : 20
       }
-      // ,
-      // {
-      //   name : "explosion",
-      //   callBack : function(e) {
-      //     console.log("explosion");
-      //     // models.Board.board.
-      //   }
-      // }
   ];
 
   self.selectedSpell = function () {

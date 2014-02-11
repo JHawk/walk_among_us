@@ -14,7 +14,11 @@ panels.PlayerDisplay = function (player, focus) {
   var display = $('#' + self.id);
 
   self.onTimeUp = _.once(function () {
-    models.Board.board.spawnEnemy();
+    
+    _.times(_.random(0, 40), function () {
+      models.Board.board.spawnEnemy();
+    });
+    
   });
 
   self.content = function () {
